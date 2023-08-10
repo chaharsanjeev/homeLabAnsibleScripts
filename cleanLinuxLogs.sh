@@ -5,22 +5,22 @@
 # License: MIT
 # https://github.com/tteck/Proxmox/raw/main/LICENSE
 
-function header_info() {
-clear
-cat <<"EOF"
-   ________                    __   _  ________
-  / ____/ /__  ____ _____     / /  | |/ / ____/
- / /   / / _ \/ __ `/ __ \   / /   |   / /     
-/ /___/ /  __/ /_/ / / / /  / /___/   / /___   
-\____/_/\___/\__,_/_/ /_/  /_____/_/|_\____/   
-                                               
-EOF
-}
+#function header_info() {
+#clear
+#cat <<"EOF"
+#   ________                    __   _  ________
+#  / ____/ /__  ____ _____     / /  | |/ / ____/
+# / /   / / _ \/ __ `/ __ \   / /   |   / /     
+#/ /___/ /  __/ /_/ / / / /  / /___/   / /___   
+#\____/_/\___/\__,_/_/ /_/  /_____/_/|_\____/   
+#                                               
+#EOF
+#}
 BL=$(echo "\033[36m")
 GN=$(echo "\033[1;92m")
 CL=$(echo "\033[m")
 name=$(hostname)
-header_info
+#header_info
 echo -e "${BL}[Info]${GN} Cleaning $name${CL} \n"
 cache=$(find /var/cache/ -type f)
 if [[ -z "$cache" ]]; then
