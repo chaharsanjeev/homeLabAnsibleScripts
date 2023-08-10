@@ -5,14 +5,14 @@
   - name: Download clean Logs Script
     get_url: 
       url: https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/cleanLinuxLogs.sh 
-      dest: /tmp/cleanLinuxLogs.sh
+      dest: cleanLinuxLogs.sh
     
   - name: Execute clean Logs Script
-    shell: /tmp/cleanLinuxLogs.sh
+    shell: cleanLinuxLogs.sh
 
   - name: Delete clean Logs Script
     file: 
-      path: /tmp/cleanLinuxLogs.sh 
+      path: cleanLinuxLogs.sh 
       state: absent
   
   - name: Update all installed packages using APT module
