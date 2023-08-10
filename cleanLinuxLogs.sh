@@ -26,7 +26,7 @@ echo -e "${BL}[Info]${GN} Cleaning $name${CL} \n"
 cache=$(find /var/cache/ -type f)
 if [[ -z "$cache" ]]; then
   echo -e "It appears there are no cached files on your system. \n"
-  sleep 2
+  sleep 1
 else
   echo -e "$cache \n"
   echo -e "${GN}Cache in $name${CL}"
@@ -36,15 +36,15 @@ else
     echo "Removing cache"
     find /var/cache -type f -delete
     echo "Successfully Removed cache"
-    sleep 2
+    sleep 1
   #fi
 fi
-header_info
+# header_info
 echo -e "${BL}[Info]${GN} Cleaning $name${CL} \n"
 logs=$(find /var/log/ -type f)
 if [[ -z "$logs" ]]; then
   echo -e "It appears there are no logs on your system. \n"
-  sleep 2
+  sleep 1
 else
   echo -e "$logs \n"
   echo -e "${GN}Logs in $name${CL}"
@@ -54,9 +54,9 @@ else
     echo "Removing logs"
     find /var/log -type f -delete
     echo "Successfully Removed logs"
-    sleep 2
+    sleep 1
   #fi
 fi
-header_info
+#header_info
 echo -e "${BL}[Info]${GN} Cleaning $name${CL} \n"
 echo -e "${GN}Populating apt lists${CL} \n"
