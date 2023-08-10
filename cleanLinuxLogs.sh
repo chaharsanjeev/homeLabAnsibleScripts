@@ -56,6 +56,6 @@ else
     sleep 2
   fi
 fi
-header_info
-echo -e "${BL}[Info]${GN} Cleaning $name${CL} \n"
-echo -e "${GN}Populating apt lists${CL} \n"
+# header_info
+# echo -e "${BL}[Info]${GN} Cleaning $name${CL} \n"
+# echo -e "${GN}Populating apt lists${CL} \n"
