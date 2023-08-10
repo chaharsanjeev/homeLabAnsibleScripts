@@ -12,7 +12,7 @@
         port: 587
         username: chahar.sanjeev@gmail.com
         password: tioteytizlwhgyht
-        to: John Smith chahar.sanjeev@gmail.com
+        to: chahar.sanjeev@gmail.com
         subject: Ansible-report
         body: System {{ ansible_hostname }} has been successfully provisioned.
       delegate_to: localhost
