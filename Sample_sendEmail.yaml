@@ -10,7 +10,7 @@
       community.general.mail:
         host: smtp.gmail.com
         port: 587
-        username: "{{ansible_env.smtp_username}}"
+        username: "{{smtp_username}}"
         password: tioteytizlwhgyht
         to: chahar.sanjeev@gmail.com
         subject: Testing Email from Ansible
