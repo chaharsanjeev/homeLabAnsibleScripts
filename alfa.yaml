@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  become: true
   tasks:
   - name: Download clean Logs Script
     get_url: 
