@@ -1,0 +1,20 @@
+---
+  
+- hosts: all
+  vars:
+    ansible_host_key_checking: false ##If you get an error about hosts not trusted
+  become: true
+
+  tasks:
+    - name: Sending an e-mail using Gmail SMTP servers
+      community.general.mail:
+        host: smtp.gmail.com
+        port: 587
+        username: chahar.sanjeev@gmail.com
+        password: tioteytizlwhgyht
+        to: chahar.sanjeev@gmail.com
+        subject: Testing Email from Ansible
+        body: System {{ ansible_hostname }} has been successfully send email
+      delegate_to: localhost
+
+        
