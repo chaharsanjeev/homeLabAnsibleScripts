@@ -1,3 +1,0 @@
-tasks:
-  - name: Ping
-    action: ping
