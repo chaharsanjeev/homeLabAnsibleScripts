@@ -12,7 +12,7 @@
         port: 587
         username: "{{smtp_username}}"
         password: "{{smtp_app_password}}"
-        to: chahar.sanjeev@gmail.com
+        to: "{{alert_emailAddress}}"
         subject: Testing Email from Ansible
         body: System {{ ansible_hostname }} has been successfully send email
       delegate_to: localhost
