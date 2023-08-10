@@ -30,14 +30,14 @@ if [[ -z "$cache" ]]; then
 else
   echo -e "$cache \n"
   echo -e "${GN}Cache in $name${CL}"
-  read -p "Would you like to remove the selected cache listed above? [y/N] " -n 1 -r
+  #read -p "Would you like to remove the selected cache listed above? [y/N] " -n 1 -r
   echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
+  #if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Removing cache"
     find /var/cache -type f -delete
     echo "Successfully Removed cache"
     sleep 2
-  fi
+  #fi
 fi
 header_info
 echo -e "${BL}[Info]${GN} Cleaning $name${CL} \n"
@@ -48,14 +48,14 @@ if [[ -z "$logs" ]]; then
 else
   echo -e "$logs \n"
   echo -e "${GN}Logs in $name${CL}"
-  read -p "Would you like to remove the selected logs listed above? [y/N] " -n 1 -r
+  #read -p "Would you like to remove the selected logs listed above? [y/N] " -n 1 -r
   echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
+  #if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Removing logs"
     find /var/log -type f -delete
     echo "Successfully Removed logs"
     sleep 2
-  fi
+  #fi
 fi
 header_info
 echo -e "${BL}[Info]${GN} Cleaning $name${CL} \n"
