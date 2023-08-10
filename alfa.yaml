@@ -12,6 +12,7 @@
   - name: Remove packages not needed anymore
     apt:
       autoremove: yes
+      autoclean: yes
 
   - name: Reboot when packages were updated
     reboot:
