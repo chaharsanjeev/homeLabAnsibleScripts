@@ -1,0 +1,44 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: Delete Script if Present
+    ansible.builtin.file:
+      path: /tmp/cleanLinuxLogs.sh
+      state: absent
+      
+  - name: Download Script from Repository
+    get_url: 
+      url: https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/cleanLinuxLogs.sh 
+      dest: /tmp/cleanLinuxLogs.sh
+
+  - name: Change Script Permission For Execute
+    ansible.builtin.file:
+      path: /tmp/cleanLinuxLogs.sh
+      mode: '7777'
+    
+  - name: Execute Clean Logs Script
+    shell: /tmp/cleanLinuxLogs.sh
+
+  - name: Delete Clean Logs Script
+    file: 
+      path: /tmp/cleanLinuxLogs.sh 
+      state: absent
+    
+  - name: Check If Reboot Required
+    stat:
+      path: /var/run/reboot-required
+    register: reboot_required_file
+
+  - name: Sending an e-mail using Gmail SMTP servers
+    community.general.mail:
+      sender: "HomeRack"
+      host: "{{smtp_host}}"
+      port: 587
+      username: "{{smtp_username}}"
+      password: "{{smtp_app_password}}"
+      to: "{{alert_emailAddress}}"
+      subject: HomeRack Machine Reboot Required - {{ ansible_hostname }}
+      body: Please reboot the machine - {{ ansible_hostname }}
+    delegate_to: localhost
+    when: reboot_required_file.stat.exists == true
