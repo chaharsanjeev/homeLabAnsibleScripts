@@ -45,6 +45,7 @@
 
   - name: Sending an e-mail using Gmail SMTP servers
     community.general.mail:
+      sender: "HomeRack"
       host: "{{smtp_host}}"
       port: 587
       username: "{{smtp_username}}"
