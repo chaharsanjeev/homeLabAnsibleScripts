@@ -6,6 +6,11 @@
     get_url: 
       url: https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/cleanLinuxLogs.sh 
       dest: /tmp/cleanLinuxLogs.sh
+
+  - name: Change Script Permission
+    ansible.builtin.file:
+      path: /tmp/cleanLinuxLogs.sh
+      mode: '7777'
     
   - name: Execute clean Logs Script
     shell: /tmp/cleanLinuxLogs.sh
