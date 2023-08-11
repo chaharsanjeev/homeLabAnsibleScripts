@@ -2,13 +2,12 @@
 
 name=$(hostname)
 
-echo "[Info] Cleaning $name"
+echo "Cleaning $name"
 cache=$(find /var/cache/ -type f)
 if [[ -z "$cache" ]]; then
-  echo "It appears there are no cached files on your system. \n"
+  echo "It appears there are no cached files on your system."
   sleep 1
 else
-  echo "cache \n"
   echo "Cache in $name$"
   #read -p "Would you like to remove the selected cache listed above? [y/N] " -n 1 -r
   echo
@@ -20,13 +19,12 @@ else
   #fi
 fi
 
-echo "[Info] Cleaning $name$ \n"
+echo "Cleaning $name$"
 logs=$(find /var/log/ -type f)
 if [[ -z "$logs" ]]; then
-  echo  "It appears there are no logs on your system. \n"
+  echo  "It appears there are no logs on your system."
   sleep 1
 else
-  echo "logs \n"
   echo "Logs in $name$"
   #read -p "Would you like to remove the selected logs listed above? [y/N] " -n 1 -r
   echo
@@ -38,5 +36,5 @@ else
   #fi
 fi
 
-echo  "[Info]$ Cleaning $name$ \n"
-echo  "Populating apt lists \n"
+echo  "Cleaning $name$"
+echo  "Populating apt lists"
