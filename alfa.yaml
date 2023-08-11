@@ -50,15 +50,7 @@
       username: "{{smtp_username}}"
       password: "{{smtp_app_password}}"
       to: "{{alert_emailAddress}}"
-      subject: Testing Email from Ansible
-      body: System {{ ansible_hostname }} has been successfully send email
+      subject: HomeRack Machine Reboot Required - {{ ansible_hostname }}
+      body: Please reboot the machine - {{ ansible_hostname }}
     delegate_to: localhost
     when: reboot_required_file.stat.exists == true
-
-
-  
-  #- name: Reboot when packages were updated
-  #  reboot:
-  #    post_reboot_delay: 60
-  #  when: apt_update_status.changed
-
