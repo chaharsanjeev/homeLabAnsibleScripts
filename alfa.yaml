@@ -39,9 +39,9 @@
       autoclean: yes
 
   - name: Check If Reboot Required
-  stat:
-    path: /var/run/reboot-required
-  register: reboot_required_file
+    stat:
+      path: /var/run/reboot-required
+    register: reboot_required_file
 
 
 
