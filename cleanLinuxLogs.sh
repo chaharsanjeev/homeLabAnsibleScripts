@@ -1,24 +1,17 @@
+# USED BY ANSIBLE SEMAPHORE TO CLEAN lINUX HOST MACHINES
 
 #!/usr/bin/env bash
 
-# Copyright (c) 2021-2023 tteck
-# Author: tteck (tteckster)
-# License: MIT
-# https://github.com/tteck/Proxmox/raw/main/LICENSE
-
-BL=$(echo "\033[36m")
-GN=$(echo "\033[1;92m")
-CL=$(echo "\033[m")
 name=$(hostname)
 
-echo "${BL}[Info]${GN} Cleaning $name${CL} \n"
+echo "$[Info]$ Cleaning $name$ \n"
 cache=$(find /var/cache/ -type f)
 if [[ -z "$cache" ]]; then
   echo "It appears there are no cached files on your system. \n"
   sleep 1
 else
   echo "$cache \n"
-  echo "${GN}Cache in $name${CL}"
+  echo "$Cache in $name$"
   #read -p "Would you like to remove the selected cache listed above? [y/N] " -n 1 -r
   echo
   #if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -29,14 +22,14 @@ else
   #fi
 fi
 
-echo "${BL}[Info]${GN} Cleaning $name${CL} \n"
+echo "$[Info]$ Cleaning $name$ \n"
 logs=$(find /var/log/ -type f)
 if [[ -z "$logs" ]]; then
   echo  "It appears there are no logs on your system. \n"
   sleep 1
 else
   echo "$logs \n"
-  echo "${GN}Logs in $name${CL}"
+  echo "$Logs in $name$"
   #read -p "Would you like to remove the selected logs listed above? [y/N] " -n 1 -r
   echo
   #if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -47,5 +40,5 @@ else
   #fi
 fi
 
-echo  "${BL}[Info]${GN} Cleaning $name${CL} \n"
-echo  "${GN}Populating apt lists${CL} \n"
+echo  "$[Info]$ Cleaning $name$ \n"
+echo  "$Populating apt lists$ \n"
