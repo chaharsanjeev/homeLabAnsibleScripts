@@ -2,25 +2,30 @@
 - hosts: all
   become: true
   tasks:
-  - name: Download clean Logs Script
+  - name: Delete Script if Present
+    ansible.builtin.file:
+      path: /tmp/cleanLinuxLogs.sh
+      state: absent
+      
+  - name: Download Script from Repository
     get_url: 
       url: https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/cleanLinuxLogs.sh 
       dest: /tmp/cleanLinuxLogs.sh
 
-  - name: Change Script Permission
+  - name: Change Script Permission For Execute
     ansible.builtin.file:
       path: /tmp/cleanLinuxLogs.sh
       mode: '7777'
     
-  - name: Execute clean Logs Script
+  - name: Execute Clean Logs Script
     shell: /tmp/cleanLinuxLogs.sh
 
-  - name: Delete clean Logs Script
+  - name: Delete Clean Logs Script
     file: 
       path: /tmp/cleanLinuxLogs.sh 
       state: absent
   
-  - name: Update all installed packages using APT module
+  - name: Update all Installed Packages
     apt:
       name: '*'
       state: latest
@@ -28,7 +33,7 @@
       only_upgrade: yes
     register: apt_update_status
 
-  - name: Remove packages not needed anymore
+  - name: Remove Packages Not Needed
     apt:
       autoremove: yes
       autoclean: yes
