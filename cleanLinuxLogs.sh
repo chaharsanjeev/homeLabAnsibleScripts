@@ -37,4 +37,4 @@ else
 fi
 
 echo  "Cleaning $name$"
-echo  "Populating apt lists"
+echo  'Populating apt lists'
