@@ -2,7 +2,7 @@
 
 name=$(hostname)
 
-echo "[Info]$ Cleaning $name$ \n"
+echo "[Info] Cleaning $name"
 cache=$(find /var/cache/ -type f)
 if [[ -z "$cache" ]]; then
   echo "It appears there are no cached files on your system. \n"
