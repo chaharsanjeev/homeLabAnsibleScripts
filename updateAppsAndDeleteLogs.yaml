@@ -9,7 +9,7 @@
       
   - name: Download Script from Repository
     get_url: 
-      url: https://github.com/chaharsanjeev/homeLabAnsibleScripts/blob/main/cleanLinuxLogs.sh
+      url: https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/cleanLinuxLogs.sh
       dest: /tmp/cleanLinuxLogs.sh
 
   - name: Change Script Permission For Execute
