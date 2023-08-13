@@ -5,4 +5,4 @@
   - name: Ping Host
     ping:
       register: var_ping
-      data: test
+      data: "pong"
