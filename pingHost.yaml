@@ -7,4 +7,4 @@
     register: var_ping
   - name: Debug
     debug:
-    var: var_ping
+      var: var_ping
