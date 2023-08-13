@@ -2,9 +2,21 @@
 - hosts: all
   become: true
   tasks:
-  - name: Ping Host Machine
+  - name: Ping Host Machine -  {{ ansible_hostname }}
     ansible.builtin.ping:
     register: var_ping
-  - name: Debug
-    debug:
-      var: var_ping
+ #- name: Debug
+ #  debug:
+ #    var: var_ping
+  - name: Sending an e-mail using Gmail SMTP servers - Host Machine Not Reachable
+    community.general.mail:
+      sender: "HomeRack"
+      host: "{{smtp_host}}"
+      port: 587
+      username: "{{smtp_username}}"
+      password: "{{smtp_app_password}}"
+      to: "{{alert_emailAddress}}"
+      subject: HomeRack Machine Down - {{ ansible_hostname }}
+      body: Homerack MAchine Down - {{ ansible_hostname }}
+    delegate_to: localhost
+    when:  when: var_ping != "OK"
