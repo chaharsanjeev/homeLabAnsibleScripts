@@ -1,1 +1,9 @@
-
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: Update Secondary DNS Server(Raspberry Pi - dns-s.sc) with Primary DNS Server(Proxmox - dns.sc)
+    ansible.builtin.script:
+      chdir: /root
+      cmd: /root/gravity-sync pull
+      
