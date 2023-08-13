@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: Delete Script if Present
+    ansible.builtin.file:
+      path: /tmp/cleanLinuxLogs.sh
+      state: absent
+      
+  - name: Download Script from Repository
+    get_url: 
+      url: https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/cleanLinuxLogs.sh
+      dest: /tmp/cleanLinuxLogs.sh
+
+  - name: Change Script Permission For Execute
+    ansible.builtin.file:
+      path: /tmp/cleanLinuxLogs.sh
+      mode: '7777'
+    
+  - name: Execute Clean Logs Script
+    shell: /tmp/cleanLinuxLogs.sh
+
+  - name: Delete Clean Logs Script
+    file: 
+      path: /tmp/cleanLinuxLogs.sh 
+      state: absent
