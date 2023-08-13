@@ -4,3 +4,4 @@
   tasks:
   - name: Ping Host
     ansible.builtin.ping:
+    register: var_ping
