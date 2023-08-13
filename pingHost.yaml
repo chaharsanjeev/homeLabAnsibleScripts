@@ -2,6 +2,9 @@
 - hosts: all
   become: true
   tasks:
-  - name: Ping Host
+  - name: Ping Host Machine
     ansible.builtin.ping:
     register: var_ping
+  - name: Debug
+    debug:
+    var: var_ping
