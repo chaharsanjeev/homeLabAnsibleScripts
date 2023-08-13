@@ -3,6 +3,6 @@
   become: true
   tasks:
   - name: Ping Host
-    ping:
+    ansible.builtin.ping:
       register: var_ping
       data: "pong"
