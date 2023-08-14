@@ -2,7 +2,7 @@
 - hosts: all
   become: true
   tasks:
-    - name: Ping Host Machine -  {{ ansible_hostname }}
+  - name: Ping Host Machine -  {{ ansible_hostname }}
     delegate_to: localhost
     shell: "ping -c4 {{ inventory_hostname }} "
     register: out
