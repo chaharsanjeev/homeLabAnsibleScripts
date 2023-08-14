@@ -5,9 +5,9 @@
   - name: Ping Host Machine -  {{ ansible_hostname }}
     ansible.builtin.ping:
     register: var_ping
- #- name: Debug
- #  debug:
- #    var: var_ping
+  - name: Debug
+    debug:
+      var: var_ping.data
   - name: Sending an e-mail using Gmail SMTP servers - Host Machine Not Reachable
     community.general.mail:
       sender: "HomeRack"
