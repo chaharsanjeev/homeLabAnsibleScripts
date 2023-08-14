@@ -19,4 +19,4 @@
       subject: HomeRack Machine Down - {{ ansible_hostname }}
       body: Homerack MAchine Down - {{ ansible_hostname }}
     delegate_to: localhost
-    when:  var_ping != "ok"
+    when:  var_ping.data != "pong"
