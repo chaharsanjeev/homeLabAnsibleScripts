@@ -3,7 +3,7 @@
   become: true
   gather_facts: no
   tasks:
-  - name: Ping Host Machine -  {{ ansible_hostname }}
+  - name: Ping Host Machine
     delegate_to: localhost
     shell: "ping -4 {{ inventory_hostname }} "
     register: out
