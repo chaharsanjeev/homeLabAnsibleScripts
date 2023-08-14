@@ -11,5 +11,17 @@
       register: var_ping
     - debug:
        msg: "{{var_ping.ping}}" 
+    - name: Sending an e-mail using Gmail SMTP servers - Host Machine Not Reachable
+      community.general.mail:
+        sender: "HomeRack"
+        host: "{{smtp_host}}"
+        port: 587
+        username: "{{smtp_username}}"
+        password: "{{smtp_app_password}}"
+        to: "{{alert_emailAddress}}"
+        subject: HomeRack Machine Down - {{ ansible_hostname }}
+        body: Homerack Machine Down - {{ ansible_hostname }}
+      delegate_to: localhost
+      when: "var_ping.ping != 'pong'"   
 
       
