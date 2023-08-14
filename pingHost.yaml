@@ -9,5 +9,5 @@
       action: ping
       ignore_errors: true
       register: var_ping
-    - debug:
-      var: var_ping
+    - debug: msg="{var_ping.stdout}"
+      
