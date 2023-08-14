@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  become: true
+  become: false
   tasks:
   - name: Ping Host Machine -  {{ ansible_hostname }}
     delegate_to: localhost
