@@ -9,7 +9,7 @@
       action: ping
       ignore_errors: true
       register: var_ping
-    - debug: msg="{{ var_ping.stdout | from_json }}"
+    - debug: msg="{{ var_ping | from_json }}"
     - name: save the Json data to a Variable as a Fact
       set_fact:
         jsondata: "{{ var_ping.stdout | from_json }}"
