@@ -2,7 +2,12 @@
 - hosts: host
   become: false
   gather_facts: false
+  connection: local
 
   tasks:
-    - name: Pinging Host
+    - name: Pinging Host Machine
       action: ping
+      ignore_errors: true
+      register: var_ping
+    - debug:
+      var: var_ping
