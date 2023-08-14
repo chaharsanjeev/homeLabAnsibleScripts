@@ -10,6 +10,6 @@
       ignore_errors: true
       register: var_ping
     - debug:
-       msg: "{{var_ping}}" 
+       msg: "{{var_ping.ping}}" 
 
       
