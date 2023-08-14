@@ -10,25 +10,19 @@
 
   - meta: clear_host_errors
 
-  - name: standard out
+  - name: Ping Response Standard Output - {{ ansible_hostname }} 
     debug:
       msg: "{{ out.stdout_lines }}"
 
-  - name: return code
+  - name: Ping Response Return Code - {{ ansible_hostname }} 
     debug:
       msg: "{{ out.rc }}"
 
-  - name: failed ping
+  - name: Host Machine Ping Failed - {{ ansible_hostname }} 
     debug:
       msg: "{{ inventory_hostname }} has 100% packet loss"
     when: "out.stdout_lines is search ('100% packet loss')"
     
-#  - name: Ping Host Machine -  {{ ansible_hostname }}
-#    ansible.builtin.ping:
-#    register: var_ping
-#  - name: Debug
-#    debug:
-#      var: var_ping.data
   - name: Sending an e-mail using Gmail SMTP servers - Host Machine Not Reachable
     community.general.mail:
       sender: "HomeRack"
@@ -38,6 +32,6 @@
       password: "{{smtp_app_password}}"
       to: "{{alert_emailAddress}}"
       subject: HomeRack Machine Down - {{ ansible_hostname }}
-      body: Homerack MAchine Down - {{ ansible_hostname }}
+      body: Homerack Machine Down - {{ ansible_hostname }}
     delegate_to: localhost
     when: "out.stdout_lines is search ('100% packet loss')"
