@@ -7,9 +7,9 @@
   tasks:
     - name: Pinging Host Machine
       action: ping
-      ignore_errors: true
+      ignore_errors: false
       register: var_ping
-      data: test
+
     - debug:
        msg: "{{var_ping.ping}}" 
     - name: Sending an e-mail using Gmail SMTP servers - Host Machine Not Reachable
