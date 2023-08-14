@@ -11,15 +11,15 @@
 
   - meta: clear_host_errors
 
-  - name: Ping Response Standard Output - "{{ ansible_hostname }}"
+  - name: Ping Response Standard Output
     debug:
       msg: "{{ out.stdout_lines }}"
 
-  - name: Ping Response Return Code - "{{ ansible_hostname }}" 
+  - name: Ping Response Return Code 
     debug:
       msg: "{{ out.rc }}"
 
-  - name: Host Machine Ping Failed - "{{ ansible_hostname }}" 
+  - name: Host Machine Ping Failed 
     debug:
       msg: "{{ inventory_hostname }} has 100% packet loss"
     when: "out.stdout_lines is search ('100% packet loss')"
