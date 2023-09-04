@@ -51,7 +51,7 @@
       username: "{{smtp_username}}"
       password: "{{smtp_app_password}}"
       to: "{{alert_emailAddress}}"
-      subject: HomeRack Machine Reboot Required - {{ ansible_hostname }}
+      subject: HomeRack Machine Reboot Required - Server Name: {{ ansible_hostname }}
       body: Please reboot the machine - {{ ansible_hostname }}
     delegate_to: localhost
     when: reboot_required_file.stat.exists == true
