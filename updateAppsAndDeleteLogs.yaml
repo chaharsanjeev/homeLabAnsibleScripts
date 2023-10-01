@@ -56,9 +56,9 @@
       token: "{{telegraph_token}}"
       api_args:
         chat_id: "{{telegraph_chatid}}"
-        parse_mode: "html"
-        text: "Message From Job Server&lt;br&gt;&lt;/br&gt;[Host - {{ ansible_hostname }}]&lt;br&gt;&lt;/br&gt;{{apt_update_status}}"
-        disable_web_page_preview: true
+        parse_mode: "plain"
+        text: "Message From Job Server \n\n [Host - {{ ansible_hostname }}]\n\n{{apt_update_status}}"
+        disable_web_page_preview: True
         disable_notification: False
   
 
