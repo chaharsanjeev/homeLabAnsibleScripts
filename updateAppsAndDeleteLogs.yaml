@@ -244,7 +244,7 @@
         disable_notification: False
 
   - name: Fail Job - Send Telegram Messages
-    when: reboot_required_file.stat.exists == true && telegram_error is failed
+    when: (reboot_required_file.stat.exists == true) and (telegram_error is failed)
     retries: 3
     delay: 3
     ansible.builtin.fail:
