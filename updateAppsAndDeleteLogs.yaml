@@ -45,12 +45,13 @@
     register: apt_update_status
 
   - name: Send Notify to Telegram
+    when: apt_update_status.rc != 0
     community.general.telegram:
       token: "{{telegraph_token}}"
       api_args:
         chat_id: "{{telegraph_chatid}}"
-        parse_mode: "plain"
-        text: "[Server Name - {{ ansible_hostname }}]  : {{apt_update_status}}"
+        parse_mode: "html"
+        text: "Message From Job Server<br>[Host - {{ ansible_hostname }}]<br><br>{{apt_update_status}}"
         disable_web_page_preview: true
         disable_notification: False
   
