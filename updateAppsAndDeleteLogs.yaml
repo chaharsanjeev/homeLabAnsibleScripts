@@ -51,7 +51,7 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "markdown"
-        text: {{apt_update_status.rc}}
+        text: "[Server Name - {{ ansible_hostname }}]  : {{apt_update_status.rc}}"
         disable_web_page_preview: true
         disable_notification: False
   
