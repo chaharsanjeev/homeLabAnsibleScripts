@@ -36,13 +36,25 @@
       state: absent
   
   - name: Update all Installed Packages
-    ignore_errors: False
+    ignore_errors: True
     apt:
       name: '*'
       state: latest
       update_cache: yes
       only_upgrade: yes
     register: apt_update_status
+
+  - name: Send Notify to Telegram
+    when: apt_update_status.rc != "0"
+    community.general.telegram:
+      token: "{{telegraph_token}}"
+      api_args:
+        chat_id: "{{telegraph_chatid}}"
+        parse_mode: "markdown"
+        text: {{apt_update_status.rc}}
+        disable_web_page_preview: true
+        disable_notification: False
+  
 
   - name: Remove Packages Not Needed
     register: reg_g
