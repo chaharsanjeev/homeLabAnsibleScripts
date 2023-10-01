@@ -3,29 +3,41 @@
   become: true
   tasks:
   - name: Delete Script if Present
+    register: reg_a
+    ignore_errors: True
     ansible.builtin.file:
       path: /tmp/cleanLinuxLogs.sh
       state: absent
       
   - name: Download Script from Repository
+    register: reg_b
+    ignore_errors: True
     get_url: 
       url: https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/cleanLinuxLogs.sh
       dest: /tmp/cleanLinuxLogs.sh
 
   - name: Change Script Permission For Execute
+    register: reg_c
+    ignore_errors: True
     ansible.builtin.file:
       path: /tmp/cleanLinuxLogs.sh
       mode: '7777'
     
   - name: Execute Clean Logs Script
+    register: reg_d
+    ignore_errors: True
     shell: /tmp/cleanLinuxLogs.sh
 
   - name: Delete Clean Logs Script
+    register: reg_e
+    ignore_errors: True
     file: 
       path: /tmp/cleanLinuxLogs.sh 
       state: absent
   
   - name: Update all Installed Packages
+    register: reg_f
+    ignore_errors: True
     apt:
       name: '*'
       state: latest
@@ -34,6 +46,8 @@
     register: apt_update_status
 
   - name: Remove Packages Not Needed
+    register: reg_g
+    ignore_errors: True
     apt:
       autoremove: yes
       autoclean: yes
