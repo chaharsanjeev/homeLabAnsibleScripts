@@ -36,7 +36,6 @@
       state: absent
   
   - name: Update all Installed Packages
-    register: reg_f
     ignore_errors: True
     apt:
       name: '*'
