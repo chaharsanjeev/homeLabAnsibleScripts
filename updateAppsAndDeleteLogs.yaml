@@ -49,15 +49,14 @@
       var: apt_update_status
       verbosity: 4
 
-
-  - name: Send Notify to Telegram
+  - name: Send Notify to Telegram - Update all Installed Packages Failed
     when: apt_update_status is failed
     community.general.telegram:
       token: "{{telegraph_token}}"
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "Message From Job Server \n\n [Host - {{ ansible_hostname }}]\n\n{{apt_update_status}}"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Updating Container Installed Packages\n\n{{apt_update_status}}"
         disable_web_page_preview: True
         disable_notification: False
   
