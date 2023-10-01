@@ -212,7 +212,7 @@
         disable_notification: False
 
   - name: Fail Job - Send Telegram Messages
-    when: reboot_required_file.stat.exists == true && telegram_error is failed
+    when: (reboot_required_file.stat.exists == true) and (telegram_error is failed)
     ansible.builtin.fail:
       msg: "Impacted Host: {{ansible_hostname}}\n\nError Sending Telegram Message\n\n{{telegram_error}}"
 
