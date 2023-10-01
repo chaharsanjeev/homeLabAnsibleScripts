@@ -57,7 +57,7 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "html"
-        text: "Message From Job Server<br>[Host - {{ ansible_hostname }}]&lt;br&gt;&lt;/br&gt;{{apt_update_status}}"
+        text: "Message From Job Server<br></br>[Host - {{ ansible_hostname }}]&lt;br&gt;&lt;/br&gt;{{apt_update_status}}"
         disable_web_page_preview: true
         disable_notification: False
   
