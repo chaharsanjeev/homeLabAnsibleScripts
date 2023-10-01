@@ -51,7 +51,7 @@
 
 
   - name: Send Notify to Telegram
-    when: apt_update_status.rc != 0
+    when: apt_update_status.failed = True
     community.general.telegram:
       token: "{{telegraph_token}}"
       api_args:
