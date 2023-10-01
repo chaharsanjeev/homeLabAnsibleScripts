@@ -5,6 +5,8 @@
   - name: Delete Script if Present
     register: reg_del_script
     ignore_errors: True
+    retries: 3
+    delay: 3
     ansible.builtin.file:
       path: /tmp/cleanLinuxLogs.sh
       state: absent
@@ -12,6 +14,8 @@
   - name: Send Notify to Telegram - Delete Script Failed
     when: reg_del_script is failed
     ignore_errors: False
+    retries: 3
+    delay: 3
     delegate_to: localhost
     community.general.telegram:
       token: "{{telegraph_token}}"
@@ -32,6 +36,8 @@
   - name: Download Script from Repository
     register: reg_download_script
     ignore_errors: True
+    retries: 3
+    delay: 3
     get_url: 
       url: https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/cleanLinuxLogs.sh
       dest: /tmp/cleanLinuxLogs.sh
@@ -39,6 +45,8 @@
   - name: Send Notify to Telegram - Download Script from Repository Failed
     when: reg_download_script is failed
     ignore_errors: False
+    retries: 3
+    delay: 3
     delegate_to: localhost
     community.general.telegram:
       token: "{{telegraph_token}}"
@@ -59,6 +67,8 @@
   - name: Change Script Permission For Execute
     register: reg_change_mode
     ignore_errors: True
+    retries: 3
+    delay: 3
     ansible.builtin.file:
       path: /tmp/cleanLinuxLogs.sh
       mode: '7777'
@@ -66,6 +76,8 @@
   - name: Send Notify to Telegram - Change Script Permission Failed
     when: reg_change_mode is failed
     ignore_errors: False
+    retries: 3
+    delay: 3
     delegate_to: localhost
     community.general.telegram:
       token: "{{telegraph_token}}"
@@ -86,11 +98,15 @@
   - name: Execute Clean Logs Script
     register: reg_clean_log_script
     ignore_errors: True
+    retries: 3
+    delay: 3
     shell: /tmp/cleanLinuxLogs.sh
 
   - name: Send Notify to Telegram - Execute Delete Log Script Failed
     when: reg_clean_log_script is failed
     ignore_errors: False
+    retries: 3
+    delay: 3
     delegate_to: localhost
     community.general.telegram:
       token: "{{telegraph_token}}"
@@ -111,6 +127,8 @@
   - name: Delete Clean Logs Script
     register: reg_delete_script
     ignore_errors: True
+    retries: 3
+    delay: 3
     file: 
       path: /tmp/cleanLinuxLogs.sh 
       state: absent
@@ -118,6 +136,8 @@
   - name: Send Notify to Telegram - Delete Clean Log Script Failed
     when: reg_delete_script is failed
     ignore_errors: False
+    retries: 3
+    delay: 3
     delegate_to: localhost
     community.general.telegram:
       token: "{{telegraph_token}}"
@@ -137,6 +157,8 @@
   
   - name: Update all Installed Packages
     ignore_errors: True
+    retries: 3
+    delay: 3
     apt:
       name: '*'
       state: latest
@@ -147,6 +169,8 @@
   - name: Send Notify to Telegram - Update all Installed Packages Failed
     when: apt_update_status is failed
     ignore_errors: False
+    retries: 3
+    delay: 3
     delegate_to: localhost
     community.general.telegram:
       token: "{{telegraph_token}}"
@@ -167,6 +191,8 @@
   - name: Remove Packages Not Needed
     register: reg_remove_packages
     ignore_errors: True
+    retries: 3
+    delay: 3
     apt:
       autoremove: yes
       autoclean: yes
@@ -174,6 +200,8 @@
   - name: Send Notify to Telegram - Remove Packages Not Needed
     when: reg_remove_packages is failed
     ignore_errors: False
+    retries: 3
+    delay: 3
     delegate_to: localhost
     community.general.telegram:
       token: "{{telegraph_token}}"
@@ -193,6 +221,8 @@
 
   - name: Check If Reboot Required
     ignore_errors: True
+    retries: 3
+    delay: 3
     stat:
       path: /var/run/reboot-required
     register: reboot_required_file
@@ -200,6 +230,8 @@
   - name: Send Notify to Telegram - Restart Machine
     when: reboot_required_file.stat.exists == true
     ignore_errors: False
+    retries: 3
+    delay: 3
     delegate_to: localhost
     register: telegram_error
     community.general.telegram:
@@ -212,7 +244,9 @@
         disable_notification: False
 
   - name: Fail Job - Send Telegram Messages
-    when: (reboot_required_file.stat.exists == true) and (telegram_error is failed)
+    when: reboot_required_file.stat.exists == true && telegram_error is failed
+    retries: 3
+    delay: 3
     ansible.builtin.fail:
       msg: "Impacted Host: {{ansible_hostname}}\n\nError Sending Telegram Message\n\n{{telegram_error}}"
 
