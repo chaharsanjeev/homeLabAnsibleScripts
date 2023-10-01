@@ -44,6 +44,12 @@
       only_upgrade: yes
     register: apt_update_status
 
+  - name: Print return information from the previous task
+    ansible.builtin.debug:
+      var: apt_update_status
+      verbosity: 4
+
+
   - name: Send Notify to Telegram
     when: apt_update_status.rc != 0
     community.general.telegram:
