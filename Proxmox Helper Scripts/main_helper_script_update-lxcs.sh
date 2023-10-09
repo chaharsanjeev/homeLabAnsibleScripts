@@ -68,7 +68,7 @@ rawurlencode() {
 
 sendtelegram(){
   local data="${1}"
-  curl -X POST --connect-timeout 5 --max-time 10  http://192.168.40.4:1880/telegram?msg=$( rawurlencode "$data" )
+  curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=$( rawurlencode "$data" )
 } # end function
 
 function update_container() {
