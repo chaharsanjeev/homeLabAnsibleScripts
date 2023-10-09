@@ -6,6 +6,31 @@
 
 #!/usr/bin/env bash
 
+rawurlencode() {
+  local string="${1}"
+  local strlen=${#string}
+  local encoded=""
+  local pos c o
+
+  for (( pos=0 ; pos<strlen ; pos++ )); do
+     c=${string:$pos:1}
+     case "$c" in
+        [-_.~a-zA-Z0-9] ) o="${c}" ;;
+        * ) printf -v o '%%%02x' "'$c"
+     esac
+     encoded+="${o}"
+  done
+  echo "${encoded}"    # You can either set a return variable (FASTER) 
+  REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
+} # end function
+
+sendtelegram(){
+  local data="Proxmox Server Below Proxmox Machines need restart since their Kernal was updated ${1}"
+  echo "${data}"
+#  curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=$( rawurlencode "$data" )
+} # end function
+
+
 sendtelegram "aaa"
 exit
 
@@ -50,30 +75,6 @@ function needs_reboot() {
         fi
     fi
     return 1
-} # end function
-
-rawurlencode() {
-  local string="${1}"
-  local strlen=${#string}
-  local encoded=""
-  local pos c o
-
-  for (( pos=0 ; pos<strlen ; pos++ )); do
-     c=${string:$pos:1}
-     case "$c" in
-        [-_.~a-zA-Z0-9] ) o="${c}" ;;
-        * ) printf -v o '%%%02x' "'$c"
-     esac
-     encoded+="${o}"
-  done
-  echo "${encoded}"    # You can either set a return variable (FASTER) 
-  REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
-} # end function
-
-sendtelegram(){
-  local data="Proxmox Server Below Proxmox Machines need restart since their Kernal was updated ${1}"
-  echo "${data}"
-#  curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=$( rawurlencode "$data" )
 } # end function
 
 function update_container() {
