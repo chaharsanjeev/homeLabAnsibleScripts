@@ -14,8 +14,7 @@ CL=$(echo "\033[m")
 
 echo "Loading..."
 whiptail --title "Proxmox VE Helper Scripts - Proxmox VE LXC Updater" --infobox "This Will Clean logs, cache and update apt lists on selected LXC Containers." 8 78
-
-
+sleep 3
 
 NODE=$(hostname)
 EXCLUDE_MENU=()
