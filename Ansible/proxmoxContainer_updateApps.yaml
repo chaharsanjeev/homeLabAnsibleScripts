@@ -71,7 +71,7 @@
     delay: 3
     ansible.builtin.file:
       path: /tmp/main_helper_script_update-lxcs.sh
-      mode: '7777'
+      mode: '777'
 
   - name: Send Notify to Telegram - Change Script Permission Failed
     when: reg_change_mode is failed
