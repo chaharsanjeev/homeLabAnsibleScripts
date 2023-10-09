@@ -46,7 +46,30 @@ function needs_reboot() {
         fi
     fi
     return 1
-}
+} # end function
+
+rawurlencode() {
+  local string="${1}"
+  local strlen=${#string}
+  local encoded=""
+  local pos c o
+
+  for (( pos=0 ; pos<strlen ; pos++ )); do
+     c=${string:$pos:1}
+     case "$c" in
+        [-_.~a-zA-Z0-9] ) o="${c}" ;;
+        * ) printf -v o '%%%02x' "'$c"
+     esac
+     encoded+="${o}"
+  done
+  echo "${encoded}"    # You can either set a return variable (FASTER) 
+  REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
+} # end function
+
+sendtelegram(){
+  local data="${1}"
+  curl -X POST http://192.168.40.4:1880/telegram?msg=$( rawurlencode "$data" )
+} # end function
 
 function update_container() {
   container=$1
@@ -104,5 +127,8 @@ if [ "${#containers_needing_reboot[@]}" -gt 0 ]; then
     for container_name in "${containers_needing_reboot[@]}"; do
         echo "$container_name"
     done
+
+sendtelegram "${#containers_needing_reboot[@]}"
+    
 fi
 echo ""
