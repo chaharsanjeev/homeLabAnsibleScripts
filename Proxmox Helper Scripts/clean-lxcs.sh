@@ -13,10 +13,13 @@ GN=$(echo "\033[1;92m")
 CL=$(echo "\033[m")
 
 echo "Loading..."
-whiptail --backtitle "Proxmox VE Helper Scripts" --title "Proxmox VE LXC Updater" --infobox "This Will Clean logs, cache and update apt lists on selected LXC Containers." 10 58
+whiptail --backtitle "Proxmox VE Helper Scripts" --title "Proxmox VE LXC Updater" --infobox "This Will Clean logs, cache and update apt lists on selected LXC Containers."
 NODE=$(hostname)
 EXCLUDE_MENU=()
 MSG_MAX_LENGTH=0
+
+exit
+
 while read -r TAG ITEM; do
   OFFSET=2
   ((${#ITEM} + OFFSET > MSG_MAX_LENGTH)) && MSG_MAX_LENGTH=${#ITEM}+OFFSET
