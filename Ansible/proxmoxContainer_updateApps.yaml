@@ -8,7 +8,7 @@
     retries: 3
     delay: 3
     ansible.builtin.file:
-      path: /tmp/cleanLinuxLogs.sh
+      path: /tmp/main_helper_script_update-lxcs.sh
       state: absent
 
   - name: Send Notify to Telegram - Delete Script Failed
@@ -39,8 +39,8 @@
     retries: 3
     delay: 3
     get_url: 
-      url: https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/cleanLinuxLogs.sh
-      dest: /tmp/cleanLinuxLogs.sh
+      url: https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/Proxmox%20Helper%20Scripts/main_helper_script_update-lxcs.sh
+      dest: /tmp/main_helper_script_update-lxcs.sh
       
   - name: Send Notify to Telegram - Download Script from Repository Failed
     when: reg_download_script is failed
@@ -70,7 +70,7 @@
     retries: 3
     delay: 3
     ansible.builtin.file:
-      path: /tmp/cleanLinuxLogs.sh
+      path: /tmp/main_helper_script_update-lxcs.sh
       mode: '7777'
 
   - name: Send Notify to Telegram - Change Script Permission Failed
@@ -95,15 +95,15 @@
 
 ###################################
 
-  - name: Execute Clean Logs Script
-    register: reg_clean_log_script
+  - name: Execute Update App Script
+    register: reg_update_app_script
     ignore_errors: True
     retries: 3
     delay: 3
-    shell: /tmp/cleanLinuxLogs.sh
+    shell: /tmp/main_helper_script_update-lxcs.sh
 
-  - name: Send Notify to Telegram - Execute Delete Log Script Failed
-    when: reg_clean_log_script is failed
+  - name: Send Notify to Telegram - Execute Update App Script Failed
+    when: reg_update_app_script is failed
     ignore_errors: False
     retries: 3
     delay: 3
@@ -113,27 +113,27 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nExecute Delete Log Script\n\n{{reg_clean_log_script}}"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nExecute Update App Script\n\n{{reg_update_app_script}}"
         disable_web_page_preview: True
         disable_notification: False
 
-  - name: Fail Job - Execute Delete Log Script Failed
-    when: reg_clean_log_script is failed
+  - name: Fail Job - Execute Update App Script Failed
+    when: reg_update_app_script is failed
     ansible.builtin.fail:
-      msg: "Impacted Host: {{ansible_hostname}}\n\nExecute Delete Log Script\n\n{{reg_clean_log_script}}"
+      msg: "Impacted Host: {{ansible_hostname}}\n\nExecute Update App Script\n\n{{reg_update_app_script}}"
 
 ###################################
 
-  - name: Delete Clean Logs Script
+  - name: Delete Update App Script
     register: reg_delete_script
     ignore_errors: True
     retries: 3
     delay: 3
     file: 
-      path: /tmp/cleanLinuxLogs.sh 
+      path: /tmp/main_helper_script_update-lxcs.sh 
       state: absent
 
-  - name: Send Notify to Telegram - Delete Clean Log Script Failed
+  - name: Send Notify to Telegram - Delete Update App Script
     when: reg_delete_script is failed
     ignore_errors: False
     retries: 3
@@ -144,14 +144,14 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nDelete Delete Clean Log Script\n\n{{reg_delete_script}}"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nDelete Delete Update App Script\n\n{{reg_delete_script}}"
         disable_web_page_preview: True
         disable_notification: False
   
-  - name: Fail Job - Delete Clean Log Script Failed
+  - name: Fail Job - Delete Update App Script Failed
     when: reg_delete_script is failed
     ansible.builtin.fail:
-      msg: "Impacted Host: {{ansible_hostname}}\n\nDelete Delete Clean Log Script\n\n{{reg_delete_script}}"
+      msg: "Impacted Host: {{ansible_hostname}}\n\nDelete Delete Update App Script\n\n{{reg_delete_script}}"
   
 ###################################
   
