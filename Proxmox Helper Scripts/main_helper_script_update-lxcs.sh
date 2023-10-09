@@ -6,6 +6,10 @@
 
 #!/usr/bin/env bash
 
+sendtelegram "aaa"
+exit
+
+
 # Copyright (c) 2021-2023 tteck
 # Author: tteck (tteckster)
 # License: MIT
@@ -67,7 +71,7 @@ rawurlencode() {
 } # end function
 
 sendtelegram(){
-  local data="Proxmox Server %0A%0ABelow Proxmox Machines need restart since their Kernal was updated %0A%0A${1}"
+  local data="Proxmox Server Below Proxmox Machines need restart since their Kernal was updated ${1}"
   echo "${data}"
 #  curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=$( rawurlencode "$data" )
 } # end function
