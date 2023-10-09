@@ -100,7 +100,8 @@
     ignore_errors: True
     retries: 3
     delay: 3
-    shell: /tmp/main_helper_script_update-lxcs.sh
+   # shell: /tmp/main_helper_script_update-lxcs.sh
+    script: sh /tmp/main_helper_script_update-lxcs.sh
 
   - name: Send Notify to Telegram - Execute Update App Script Failed
     when: reg_update_app_script is failed
