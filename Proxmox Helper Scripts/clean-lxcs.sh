@@ -1,3 +1,10 @@
+# Proxmox VE LXC Cleaner
+# This script provides options to delete logs and cache, and repopulate apt lists for Ubuntu and Debian systems.
+# Run the command below in the Proxmox VE Shell.
+# bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/clean-lxcs.sh)"
+#
+
+
 #!/usr/bin/env bash
 
 # Copyright (c) 2021-2023 tteck
