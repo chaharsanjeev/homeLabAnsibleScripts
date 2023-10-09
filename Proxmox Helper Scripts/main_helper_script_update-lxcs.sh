@@ -11,7 +11,7 @@ greeting () {
 }
 
 greeting "Joe"
-exit
+
 
 sendtelegram () {
   local data="Proxmox Server Below Proxmox Machines need restart since their Kernal was updated ${1}"
@@ -20,7 +20,7 @@ sendtelegram () {
 } # end function
 
 sendtelegram "aaa"
-
+exit
 
 
 
