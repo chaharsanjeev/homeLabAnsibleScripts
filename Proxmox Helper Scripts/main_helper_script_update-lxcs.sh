@@ -6,12 +6,6 @@
 
 #!/usr/bin/env bash
 
-greeting () {
-  echo "Hello $1"
-}
-
-greeting "Joe"
-
 
 sendtelegram () {
   local data="Proxmox Server Below Proxmox Machines need restart since their Kernal was updated ${1}"
