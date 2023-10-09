@@ -6,15 +6,31 @@
 
 #!/usr/bin/env bash
 
+# Below for  URL encoding - sanjeev
+rawurlencode() {
+  local string="${1}"
+  local strlen=${#string}
+  local encoded=""
+  local pos c o
+
+  for (( pos=0 ; pos<strlen ; pos++ )); do
+     c=${string:$pos:1}
+     case "$c" in
+        [-_.~a-zA-Z0-9] ) o="${c}" ;;
+        * )               printf -v o '%%%02x' "'$c"
+     esac
+     encoded+="${o}"
+  done
+  echo "${encoded}"    # You can either set a return variable (FASTER)
+  REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
+} # end function
 
 sendtelegram () {
-  local data="Proxmox Server %0A%0ABelow Proxmox Machines need restart since their Kernal was updated %0A%0A${1}"
-  echo "${data}"
+  local data="Proxmox Server __NEWLINE____NEWLINE__Below Proxmox Containers need restart since their Kernal was updated__NEWLINE____NEWLINE__ ${1} __NEWLINE__"
+  # echo "${data}"
   curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=$( rawurlencode "$data" )
 } # end function
 
-sendtelegram "aaa"
-exit
 
 
 
@@ -62,13 +78,27 @@ function needs_reboot() {
 
 function update_container() {
   container=$1
-  
+
   name=$(pct exec "$container" hostname)
   os=$(pct config "$container" | awk '/^ostype/ {print $2}')
   if [[ "$os" == "ubuntu" || "$os" == "debian" || "$os" == "fedora" ]]; then
     disk_info=$(pct exec "$container" df /boot | awk 'NR==2{gsub("%","",$5); printf "%s %.1fG %.1fG %.1fG", $5, $3/1024/1024, $2/1024/1024, $4/1024/1024 }')
     read -ra disk_info_array <<<"$disk_info"
     echo -e "${BL}[Info]${GN} Updating ${BL}$container${CL} : ${GN}$name${CL} - ${YW}Boot Disk: ${disk_info_array[0]}% full [${disk_info_array[1]}/${disk_info_array[2]} used, ${disk_info_array[3]} free]${CL}\n"
+
+    usedspace=${disk_info_array[0]}
+    maxallowed=70
+
+    if [ "$usedspace" -gt "$maxallowed" ]; then
+       echo "Send telegram - continer running out of space"
+       msg="Proxmox Server__NEWLINE____NEWLINE__Below Proxmox Containers running out of HDD space __NEWLINE____NEWLINE__Id: ${container} __NEWLINE__Name: ${name}.sc __NEWLINE__Total HDD Capicity: ${disk_info_array[2]}b __NEWLINE__Used Space: ${disk_info_array[1]}b [${disk_info_array[0]}% used] __NEWLINE__Free Space: ${disk_info_array[3]}b __NEWLINE__Alert Threshold Percentage: ${maxallowed}% __NEWLINE____NEWLINE__"
+       echo "$msg"
+       curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=$( rawurlencode "$msg" )
+       sleep 5
+    fi
+
+
+
   else
     echo -e "${BL}[Info]${GN} Updating ${BL}$container${CL} : ${GN}$name${CL} - ${YW}[No disk info for ${os}]${CL}\n"
   fi
@@ -84,7 +114,7 @@ containers_needing_reboot=()
 
 for container in $(pct list | awk '{if(NR>1) print $1}'); do
   if [[ " ${excluded_containers[@]} " =~ " $container " ]]; then
-    
+
     echo -e "${BL}[Info]${GN} Skipping ${BL}$container${CL}"
     sleep 1
   else
@@ -112,12 +142,19 @@ wait
 
 echo -e "${GN}The process is complete, and the selected containers have been updated.${CL}\n"
 if [ "${#containers_needing_reboot[@]}" -gt 0 ]; then
+    cntname=""
+    counter=1
+
     echo -e "${RD}The following containers require a reboot:${CL}"
     for container_name in "${containers_needing_reboot[@]}"; do
-        echo "$container_name"
+        echo "$counter - $container_name"
+        cntname+="$counter - $container_name __NEWLINE__"
+
+        ((counter++))
+
     done
 
-sendtelegram "${#containers_needing_reboot[@]}"
-    
+    sendtelegram "$cntname"
+
 fi
 echo ""
