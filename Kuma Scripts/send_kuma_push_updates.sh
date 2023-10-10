@@ -16,41 +16,32 @@ function fail {
 
 declare -a AllServices=() # declare empty array for services
 
-if [[ $machine_name = '192.168.10.8' ]]
-then
+if [[ $machine_name = '192.168.10.8' ]] ; then
     # backup.sc.home - Proxmox Backup Server
-    echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
     AllServices=("rsyslog,lZYavnlSjN" "proxmox-backup,3yY8DfH9dw")
-# elif [[ $machine_name = '192.168.10.x' ]]
-# then
+# elif [[ $machine_name = '192.168.10.x' ]] ; then
 #     
 #
-# elif [[ $machine_name = '192.168.10.x' ]]
-# then
+# elif [[ $machine_name = '192.168.10.x' ]] ; then
 #     
 #    
-# elif [[ $machine_name = '192.168.10.x' ]]
-# then
+# elif [[ $machine_name = '192.168.10.x' ]] ; then
 #    # 
 #    
-# elif [[ $machine_name = '192.168.10.x' ]]
-# then
+# elif [[ $machine_name = '192.168.10.x' ]] ; then
 #    # 
 #
-# elif [[ $machine_name = '192.168.10.x' ]]
-# then
+# elif [[ $machine_name = '192.168.10.x' ]] ; then
 #    # 
 #
-# elif [[ $machine_name = '192.168.10.x' ]]
-# then
+# elif [[ $machine_name = '192.168.10.x' ]] ; then
 #    # 
 #
-# elif [[ $machine_name = '192.168.10.x' ]]
-# then
+# elif [[ $machine_name = '192.168.10.x' ]] ; then
 #    # 
 #
-# elif [[ $machine_name = '192.168.10.x' ]]
-# then
+# elif [[ $machine_name = '192.168.10.x' ]] ; then
 #    # 
 else
   fail "ERROR: ${current_date_time} : Machine IP ${machine_name} not Configured in the bash script!"
