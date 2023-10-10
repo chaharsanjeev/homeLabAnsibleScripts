@@ -22,27 +22,36 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
     AllServices=("rsyslog,lZYavnlSjN" "proxmox-backup,3yY8DfH9dw")
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
 #     
+#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
 #     
+#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #    
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
-#    # 
+#  
+#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #    
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
-#    # 
+#    
+#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
-#    # 
+#
+#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
-#    # 
+#    
+#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
-#    # 
+#    
+#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
-#    # 
+#    
+#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+#
 else
   fail "ERROR: ${current_date_time} : Machine IP ${machine_name} not Configured in the bash script!"
 fi
