@@ -148,6 +148,9 @@ for container in $(pct list | awk '{if(NR>1) print $1}'); do
 done
 wait
 
+  curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=ddddddddddddd
+
+
 echo -e "${GN}The process is complete, and the selected containers have been updated.${CL}\n"
 if [ "${#containers_needing_reboot[@]}" -gt 0 ]; then
     cntname=""
