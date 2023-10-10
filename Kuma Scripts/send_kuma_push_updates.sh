@@ -1,5 +1,4 @@
 #!/bin/bash
-exec &>>  /var/log/kuma_service_status_push.log
 
 current_date_time="`date "+%Y-%m-%d %H:%M:%S"`"
 kuma_base_url='http://192.168.10.14:3001'
@@ -21,6 +20,29 @@ if [[ $machine_name = '192.168.10.8' ]]
 then
     # backup.sc.home - Proxmox Backup Server
     AllServices=("rsyslog,lZYavnlSjN" "proxmox-backup,3yY8DfH9dw")
+elif [[ $machine_name = '192.168.10.x' ]]
+    # 
+
+elif [[ $machine_name = '192.168.10.x' ]]
+    # 
+    
+elif [[ $machine_name = '192.168.10.x' ]]
+    # 
+    
+elif [[ $machine_name = '192.168.10.x' ]]
+    # 
+
+elif [[ $machine_name = '192.168.10.x' ]]
+    # 
+
+elif [[ $machine_name = '192.168.10.x' ]]
+    # 
+
+elif [[ $machine_name = '192.168.10.x' ]]
+    # 
+
+elif [[ $machine_name = '192.168.10.x' ]]
+    # 
 else
   fail "ERROR: ${current_date_time} : Machine IP ${machine_name} not Configured in the bash script!"
 fi
