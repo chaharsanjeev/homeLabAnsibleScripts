@@ -2,9 +2,6 @@
 - hosts: all
   become: true
   tasks:
-  #- name: Update Secondary DNS Server(Raspberry Pi - dns-s.sc) with Primary DNS Server(Proxmox - dns.sc)
-  #  shell: "gravity-sync pull"
-
   - name: Update Secondary DNS Server(Raspberry Pi - dns-s.sc) with Primary DNS Server(Proxmox - dns.sc)
     register: reg_gravity_pull
     ignore_errors: True
@@ -13,7 +10,26 @@
     shell: /bin/bash -c gravity-sync pull -s 103 111 >>/var/log/gravity-pull.log 2>/dev/null
     args:
       executable: /bin/bash
-  #  when: reg_download_script.changed
     environment:
       PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
+
+  - name: Send Notify to Telegram - Gravity Pull Failed
+    when: reg_gravity_pull is failed
+    ignore_errors: False
+    retries: 3
+    delay: 3
+    delegate_to: localhost
+    community.general.telegram:
+      token: "{{telegraph_token}}"
+      api_args:
+        chat_id: "{{telegraph_chatid}}"
+        parse_mode: "plain"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Gravity-Pull from DNS-S.sc to DNS.sc Server\n\n{{reg_gravity_pull}}"
+        disable_web_page_preview: True
+        disable_notification: False
+
+  - name: Fail Job - Gravity Pull Failed
+    when: reg_gravity_pull is failed
+    ansible.builtin.fail:
+      msg: "Impacted Host: {{ansible_hostname}}\n\nError Deleting Script\n\n{{reg_gravity_pull}}"
