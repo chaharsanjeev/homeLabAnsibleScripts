@@ -48,10 +48,10 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
   # Grafana/SysLog/Loki
   echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
   AllServices=("rsyslog,2TQFDkMLCV" "loki,XGES7jK8Na" "grafana-server,tGUQZC7FQn" "promtail,ygzHCqCmpL")
-# elif [[ $machine_name = '192.168.10.x' ]] ; then
-#
-#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
-#
+# elif [[ $machine_name = '192.168.10.7' ]] ; then
+  # Patch Server - Ansible
+  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+  AllServices=("rsyslog,PBR4iKFCU9" "semaphore,9VbNQJ5Zf2" "mariadb,Czlh2EaR7l")
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
 #    
 #  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
