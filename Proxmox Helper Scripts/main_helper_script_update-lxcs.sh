@@ -44,7 +44,11 @@ sendtelegram () {
 # https://github.com/tteck/Proxmox/raw/main/LICENSE
 
 
-set -eEuo pipefail
+set -euo pipefail
+false || echo "non-zero exit code"
+false || true
+echo done
+
 YW=$(echo "\033[33m")
 BL=$(echo "\033[36m")
 RD=$(echo "\033[01;31m")
