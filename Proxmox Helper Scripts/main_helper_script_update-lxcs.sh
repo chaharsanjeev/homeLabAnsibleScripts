@@ -158,4 +158,4 @@ if [ "${#containers_needing_reboot[@]}" -gt 0 ]; then
 fi
 
 echo "Process Completed"
-exit 0
+
