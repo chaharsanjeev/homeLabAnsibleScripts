@@ -28,9 +28,9 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
   # Secondary DNS Server dns-s.sc      
   echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
   AllServices=("rsyslog,P2ZbmFb2bh" "pihole-FTL,61XLgyl9cn" "unbound,7Kg1i4GEbn" )
-# elif [[ $machine_name = '192.168.10.x' ]] ; then
-#  
-#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+# elif [[ $machine_name = '192.168.10.5' ]] ; then
+  # Nginx Reverse Proxy proxy.sc  
+  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #    
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
 #    
