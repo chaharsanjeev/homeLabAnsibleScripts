@@ -20,11 +20,11 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
     # backup.sc.home - Proxmox Backup Server
     echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
     AllServices=("rsyslog,lZYavnlSjN" "proxmox-backup,3yY8DfH9dw")
-# elif [[ $machine_name = '192.168.10.3' ]] ; then
+ elif [[ $machine_name = '192.168.10.3' ]] ; then
    # dns.sc - DNS Primary Server     
    echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
    AllServices=("rsyslog,9mrcGFGuPy" "pihole-FTL,yI9pMYEXa1" "unbound,zOMfoMIzSg")
-# elif [[ $machine_name = '192.168.10.x' ]] ; then
+# elif [[ $machine_name = '192.168.10.4' ]] ; then
 #     
 #  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #    
