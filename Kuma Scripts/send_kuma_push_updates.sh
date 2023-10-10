@@ -1,11 +1,12 @@
 #!/bin/bash
 exec &>>  /var/log/kuma_service_status_push.log
 
-machine_name="$(hostname -i)" # Get Machine IP address
-echo "Machine IP: ${machine_name}"
-
 current_date_time="`date "+%Y-%m-%d %H:%M:%S"`"
 kuma_base_url='http://192.168.10.14:3001'
+
+machine_name="$(hostname -i)" # Get Machine IP address
+echo "${current_date_time} : Machine IP: ${machine_name}"
+echo "Uptime Kuma Push API BaseURL: ${kuma_base_url}"
 
 function fail {
     printf '%s\n' "$1" >&2 ## Send message to stderr.
