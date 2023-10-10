@@ -12,19 +12,14 @@ rawurlencode() {
   local encoded=""
   local pos c o
 
-  #for (( pos=0 ; pos<strlen ; pos++ )); do
-  pos=0
-  while [ "$pos" -lt strlen ]; do
+  for (( pos=0 ; pos<strlen ; pos++ )); do
      c=${string:$pos:1}
      case "$c" in
         [-_.~a-zA-Z0-9] ) o="${c}" ;;
         * )               printf -v o '%%%02x' "'$c"
      esac
      encoded+="${o}"
-     pos=$(( pos + 1 ))
-
   done
-  
   echo "${encoded}"    # You can either set a return variable (FASTER)
   REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
 } # end function
@@ -44,11 +39,7 @@ sendtelegram () {
 # https://github.com/tteck/Proxmox/raw/main/LICENSE
 
 
-set -euo pipefail
-false || echo "non-zero exit code"
-false || true
-echo done
-
+set -eEuo pipefail
 YW=$(echo "\033[33m")
 BL=$(echo "\033[36m")
 RD=$(echo "\033[01;31m")
@@ -148,9 +139,6 @@ for container in $(pct list | awk '{if(NR>1) print $1}'); do
 done
 wait
 
-  curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=ddddddddddddd
-
-
 echo -e "${GN}The process is complete, and the selected containers have been updated.${CL}\n"
 if [ "${#containers_needing_reboot[@]}" -gt 0 ]; then
     cntname=""
@@ -168,4 +156,5 @@ if [ "${#containers_needing_reboot[@]}" -gt 0 ]; then
     sendtelegram "$cntname"
 
 fi
+
 echo ""
