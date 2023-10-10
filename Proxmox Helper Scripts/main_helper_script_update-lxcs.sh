@@ -3,7 +3,7 @@
 # Run the command below in the Proxmox VE Shell.
 # bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/update-lxcs.sh)"
 
-#!/usr/bin/env bash
+#!/usr/local/bin
 
 # Below for  URL encoding - sanjeev
 rawurlencode() {
