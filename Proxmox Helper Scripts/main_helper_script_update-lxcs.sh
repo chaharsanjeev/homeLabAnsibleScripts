@@ -3,7 +3,7 @@
 # Run the command below in the Proxmox VE Shell.
 # bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/update-lxcs.sh)"
 
-#!/usr/local/bin
+#!/usr/bin/env bash
 
 # Below for  URL encoding - sanjeev
 rawurlencode() {
@@ -12,14 +12,19 @@ rawurlencode() {
   local encoded=""
   local pos c o
 
-  for (( pos=0 ; pos<strlen ; pos++ )); do
+  #for (( pos=0 ; pos<strlen ; pos++ )); do
+  pos=0
+  while [ "$pos" -lt strlen ]; do
      c=${string:$pos:1}
      case "$c" in
         [-_.~a-zA-Z0-9] ) o="${c}" ;;
         * )               printf -v o '%%%02x' "'$c"
      esac
      encoded+="${o}"
+     pos=$(( pos + 1 ))
+
   done
+  
   echo "${encoded}"    # You can either set a return variable (FASTER)
   REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
 } # end function
