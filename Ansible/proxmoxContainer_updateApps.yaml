@@ -22,7 +22,7 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Deleting Script\n\n{{reg_del_script}}"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Deleting Update LXCS Script\n\n{{reg_del_script}}"
         disable_web_page_preview: True
         disable_notification: False
 
@@ -54,7 +54,7 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Downloading Script\n\n{{reg_download_script}}"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Downloading Update LXCS Script\n\n{{reg_download_script}}"
         disable_web_page_preview: True
         disable_notification: False
 
@@ -85,7 +85,7 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Change Script Permission\n\n{{reg_change_mode}}"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Change Update LXCS Script Permission\n\n{{reg_change_mode}}"
         disable_web_page_preview: True
         disable_notification: False
 
@@ -119,7 +119,7 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nExecute Update App Script\n\n{{reg_update_app_script}}"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nExecute Update Update LXCS App Script\n\n{{reg_update_app_script}}"
         disable_web_page_preview: True
         disable_notification: False
 
@@ -150,7 +150,7 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nDelete Delete Update App Script\n\n{{reg_delete_script}}"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nDelete Delete Update Update LXCS App Script\n\n{{reg_delete_script}}"
         disable_web_page_preview: True
         disable_notification: False
   
@@ -183,7 +183,7 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Updating Installed Packages\n\n{{apt_update_status}}"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Updating Update LXCS Installed Packages\n\n{{apt_update_status}}"
         disable_web_page_preview: True
         disable_notification: False
    
@@ -214,7 +214,7 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nRemove Packages Not Needed\n\n{{reg_remove_packages}}"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nRemove Packages Update LXCS Not Needed\n\n{{reg_remove_packages}}"
         disable_web_page_preview: True
         disable_notification: False
 
@@ -245,7 +245,7 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nHost require reboot since kernal was updated"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nHost require reboot since kernel was updated"
         disable_web_page_preview: True
         disable_notification: False
 
