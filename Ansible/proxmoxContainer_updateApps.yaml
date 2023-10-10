@@ -96,28 +96,17 @@
 
 ###################################
 
-#  - name: Execute Update App Script
-#    register: reg_update_app_script
-#    ignore_errors: True
-#    retries: 3
-#    delay: 3
-#   # shell: /tmp/main_helper_script_update-lxcs.sh
-#    ansible.builtin.script: /tmp/main_helper_script_update-lxcs.sh
-#
   - name: Execute Update App Script
     register: reg_update_app_script
     ignore_errors: True
     retries: 3
     delay: 3
-    shell: /bin/bash -c /tmp/main_helper_script_update-lxcs.sh
+    shell: /bin/bash -c /tmp/main_helper_script_update-lxcs.sh -s 103 111 >>/var/log/proxmoxContainer_updateApps.log 2>/dev/null
     args:
       executable: /bin/bash
     when: reg_download_script.changed
     environment:
       PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
-
-    
 
   - name: Send Notify to Telegram - Execute Update App Script Failed
     when: reg_update_app_script is failed
