@@ -109,12 +109,12 @@
     ignore_errors: True
     retries: 3
     delay: 3
-    shell: ./tmp/main_helper_script_update-lxcs.sh
+    shell: /bin/bash -c /tmp/main_helper_script_update-lxcs.sh
     args:
       executable: /bin/bash
     when: reg_download_script.changed
     environment:
-      PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+      PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 
     
