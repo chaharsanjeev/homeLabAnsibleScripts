@@ -44,10 +44,10 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
   # Nginx Reverse Proxy proxy.sc  
   echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
   AllServices=("rsyslog,UkVl9kn22H")
-# elif [[ $machine_name = '192.168.10.x' ]] ; then
-#    
-#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
-#
+ elif [[ $machine_name = '192.168.10.9' ]] ; then
+  # Grafana/SysLog/Loki
+  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+  AllServices=("rsyslog,2TQFDkMLCV" "loki,XGES7jK8Na" "grafana-server,tGUQZC7FQn" "promtail,ygzHCqCmpL")
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
 #
 #  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
