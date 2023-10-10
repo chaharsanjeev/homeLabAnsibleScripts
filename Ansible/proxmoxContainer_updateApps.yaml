@@ -109,7 +109,7 @@
     ignore_errors: True
     retries: 3
     delay: 3
-    shell: bash /tmp/main_helper_script_update-lxcs.sh
+    shell: ./tmp/main_helper_script_update-lxcs.sh
     when: reg_download_script.changed
 
 
