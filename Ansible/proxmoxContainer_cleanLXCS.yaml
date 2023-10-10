@@ -1,0 +1,196 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: Delete Script if Present
+    register: reg_del_script
+    ignore_errors: True
+    retries: 3
+    delay: 3
+    ansible.builtin.file:
+      path: /tmp/main_helper_script_clean-lxcs.sh
+      state: absent
+
+  - name: Send Notify to Telegram - Delete Script Failed
+    when: reg_del_script is failed
+    ignore_errors: False
+    retries: 3
+    delay: 3
+    delegate_to: localhost
+    community.general.telegram:
+      token: "{{telegraph_token}}"
+      api_args:
+        chat_id: "{{telegraph_chatid}}"
+        parse_mode: "plain"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Deleting LXCS Cleanup Script\n\n{{reg_del_script}}"
+        disable_web_page_preview: True
+        disable_notification: False
+
+  - name: Fail Job - Delete Script Failed
+    when: reg_del_script is failed
+    ansible.builtin.fail:
+      msg: "Impacted Host: {{ansible_hostname}}\n\nError Deleting LXCS Cleanup Script\n\n{{reg_del_script}}"
+    
+###################################
+
+  - name: Download Script from Repository
+    register: reg_download_script
+    ignore_errors: True
+    retries: 3
+    delay: 3
+    get_url: 
+      url: https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/Proxmox%20Helper%20Scripts/main_helper_script_clean-lxcs.sh
+      dest: /tmp/main_helper_script_clean-lxcs.sh
+      mode: 'u+rwx'
+      
+  - name: Send Notify to Telegram - Download Script from Repository Failed
+    when: reg_download_script is failed
+    ignore_errors: False
+    retries: 3
+    delay: 3
+    delegate_to: localhost
+    community.general.telegram:
+      token: "{{telegraph_token}}"
+      api_args:
+        chat_id: "{{telegraph_chatid}}"
+        parse_mode: "plain"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Downloading LXCS Cleanup Script\n\n{{reg_download_script}}"
+        disable_web_page_preview: True
+        disable_notification: False
+
+  - name: Fail Job - Download Script from Repository Failed
+    when: reg_download_script is failed
+    ansible.builtin.fail:
+      msg: "Impacted Host: {{ansible_hostname}}\n\nError Downloading LXCS Cleanup Script\n\n{{reg_download_script}}"
+
+###################################
+
+  - name: Change Script Permission For Execute
+    register: reg_change_mode
+    ignore_errors: True
+    retries: 3
+    delay: 3
+    ansible.builtin.file:
+      path: /tmp/main_helper_script_clean-lxcs.sh
+      mode: '777'
+
+  - name: Send Notify to Telegram - Change Script Permission Failed
+    when: reg_change_mode is failed
+    ignore_errors: False
+    retries: 3
+    delay: 3
+    delegate_to: localhost
+    community.general.telegram:
+      token: "{{telegraph_token}}"
+      api_args:
+        chat_id: "{{telegraph_chatid}}"
+        parse_mode: "plain"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Change LXCS Cleanup Script Permission\n\n{{reg_change_mode}}"
+        disable_web_page_preview: True
+        disable_notification: False
+
+  - name: Fail Job - Change Script Permission Failed
+    when: reg_change_mode is failed
+    ansible.builtin.fail:
+      msg: "Impacted Host: {{ansible_hostname}}\n\nError Change LXCS Cleanup Script Permission\n\n{{reg_change_mode}}"
+
+###################################
+
+  - name: Execute LXCS Cleanup Script
+    register: reg_update_app_script
+    ignore_errors: True
+    retries: 3
+    delay: 3
+    shell: /bin/bash -c /tmp/main_helper_script_clean-lxcs.sh -s 103 111 >>/var/log/proxmoxContainer_cleanLXCS.log 2>/dev/null
+    args:
+      executable: /bin/bash
+    when: reg_download_script.changed
+    environment:
+      PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+  - name: Send Notify to Telegram - Execute LXCS Cleanup Script Failed
+    when: reg_update_app_script is failed
+    ignore_errors: False
+    retries: 3
+    delay: 3
+    delegate_to: localhost
+    community.general.telegram:
+      token: "{{telegraph_token}}"
+      api_args:
+        chat_id: "{{telegraph_chatid}}"
+        parse_mode: "plain"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nExecute Update LXCS Cleanup Script\n\n{{reg_update_app_script}}"
+        disable_web_page_preview: True
+        disable_notification: False
+
+  - name: Fail Job - Execute Update App Script Failed
+    when: reg_update_app_script is failed
+    ansible.builtin.fail:
+      msg: "Impacted Host: {{ansible_hostname}}\n\nExecute LXCS Cleanup Script\n\n{{reg_update_app_script}}"
+
+###################################
+
+  - name: Delete Update LXCS Cleanup Script
+    register: reg_delete_script
+    ignore_errors: True
+    retries: 3
+    delay: 3
+    file: 
+      path: /tmp/main_helper_script_clean-lxcs.sh 
+      state: absent
+
+  - name: Send Notify to Telegram - Delete LXCS Cleanup Script
+    when: reg_delete_script is failed
+    ignore_errors: False
+    retries: 3
+    delay: 3
+    delegate_to: localhost
+    community.general.telegram:
+      token: "{{telegraph_token}}"
+      api_args:
+        chat_id: "{{telegraph_chatid}}"
+        parse_mode: "plain"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nDelete Delete LXCS Cleanup Script\n\n{{reg_delete_script}}"
+        disable_web_page_preview: True
+        disable_notification: False
+  
+  - name: Fail Job - Delete Update App Script Failed
+    when: reg_delete_script is failed
+    ansible.builtin.fail:
+      msg: "Impacted Host: {{ansible_hostname}}\n\nDelete Delete LXCS Cleanup Script\n\n{{reg_delete_script}}"
+  
+  
+###################################
+
+  - name: Check If Reboot Required
+    ignore_errors: True
+    retries: 3
+    delay: 3
+    stat:
+      path: /var/run/reboot-required
+    register: reboot_required_file
+
+  - name: Send Notify to Telegram - Restart Machine
+    when: reboot_required_file.stat.exists == true
+    ignore_errors: False
+    retries: 3
+    delay: 3
+    delegate_to: localhost
+    register: telegram_error
+    community.general.telegram:
+      token: "{{telegraph_token}}"
+      api_args:
+        chat_id: "{{telegraph_chatid}}"
+        parse_mode: "plain"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nHost require reboot since kernal was updated"
+        disable_web_page_preview: True
+        disable_notification: False
+
+  - name: Fail Job - Send Telegram Messages
+    when: (reboot_required_file.stat.exists == true) and (telegram_error is failed)
+    retries: 3
+    delay: 3
+    ansible.builtin.fail:
+      msg: "Impacted Host: {{ansible_hostname}}\n\nError Sending Telegram Message\n\n{{telegram_error}}"
+
+###################################
