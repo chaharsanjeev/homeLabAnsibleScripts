@@ -3,7 +3,14 @@
 current_date_time="`date "+%Y-%m-%d %H:%M:%S"`"
 kuma_base_url='http://192.168.10.14:3001'
 
-machine_name="$(hostname -i)" # Get Machine IP address
+# check if input argument IP of the source machine is passed
+if [ -n "$1" ] ; then
+  echo "${current_date_time} : Input IP Argument Passed: $1"
+  machine_name="$1" # Get Machine IP address
+else
+  machine_name="$(hostname -i)" # Get Machine IP address
+fi
+
 echo "${current_date_time} : Machine IP: ${machine_name}"
 echo "${current_date_time} : Uptime Kuma Push API BaseURL = ${kuma_base_url}"
 
