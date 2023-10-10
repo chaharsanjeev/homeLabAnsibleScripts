@@ -2,5 +2,17 @@
 - hosts: all
   become: true
   tasks:
+  #- name: Update Secondary DNS Server(Raspberry Pi - dns-s.sc) with Primary DNS Server(Proxmox - dns.sc)
+  #  shell: "gravity-sync pull"
+
   - name: Update Secondary DNS Server(Raspberry Pi - dns-s.sc) with Primary DNS Server(Proxmox - dns.sc)
-    shell: "gravity-sync pull"
+    register: reg_gravity_pull
+    ignore_errors: True
+    retries: 3
+    delay: 3
+    shell: /bin/bash -c gravity-sync pull -s 103 111 >>/var/log/gravity-pull.log 2>/dev/null
+    args:
+      executable: /bin/bash
+  #  when: reg_download_script.changed
+    environment:
+      PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
