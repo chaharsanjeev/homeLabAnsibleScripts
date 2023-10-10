@@ -111,6 +111,8 @@
     delay: 3
     shell: ./tmp/main_helper_script_update-lxcs.sh
     when: reg_download_script.changed
+    environment:
+      PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
 
 
     
