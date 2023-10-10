@@ -8,14 +8,10 @@
 current_date_time="`date "+%Y-%m-%d %H:%M:%S"`"
 kuma_base_url='http://192.168.10.14:3001'
 
-
-echo "-----------$1"
-echo " 33333333333333 -  $#"
-
 # check if input argument IP of the source machine is passed
 if [ "$#" -eq 1 ] ; then
   echo "${current_date_time} : Input IP Argument Passed: $1"
-  machine_name="$1" # Get iput argument IP
+  machine_name="$1" # Get input argument IP
 else
   machine_name="$(hostname -i)" # Get Machine IP address
 fi
