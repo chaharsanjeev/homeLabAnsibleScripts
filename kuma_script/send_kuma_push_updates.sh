@@ -95,3 +95,21 @@ for serviceDetail in "${AllServices[@]}"; do
 done
 
 #########################################################################
+# below specific to Patch/Ansible Server
+if [[ $machine_name = '192.168.10.7' ]] ; then
+    ansible localhost -m ping -u root | grep 'SUCCESS' &> /dev/null
+    if [ $? == 0 ]; then
+           echo "${current_date_time} : [Host: $(hostname -f)] - Ansible localhost running"
+       srv_st="up"
+    else
+       srv_st="down"
+       echo  "${current_date_time} : [Host: $(hostname -f)] -  Ansible localhost not running"
+    fi
+
+    result=$(curl --fail --no-progress-meter --insecure --retry 3 "${kuma_base_url}/api/push/G8Qlw2EpoW?status=$srv_st" 2>&1)
+    if [ $? -ne 0 ]; then
+        echo "Failed: $result" >&2
+        echo "${current_date_time} : [Host: $(hostname -f)] - Failed: $result" >&2
+    fi
+fi
+#########################################################################
