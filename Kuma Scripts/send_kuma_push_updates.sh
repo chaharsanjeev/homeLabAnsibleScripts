@@ -19,6 +19,7 @@ declare -a AllServices=() # declare empty array for services
 if [[ $machine_name = '192.168.10.8' ]]
 then
     # backup.sc.home - Proxmox Backup Server
+    echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     AllServices=("rsyslog,lZYavnlSjN" "proxmox-backup,3yY8DfH9dw")
 # elif [[ $machine_name = '192.168.10.x' ]]
 # then
