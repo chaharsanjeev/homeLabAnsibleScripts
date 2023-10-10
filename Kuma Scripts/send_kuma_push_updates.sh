@@ -1,5 +1,5 @@
 #!/bin/bash
-# exec &>>  /var/log/kuma_service_status_push.log
+exec &>>  /var/log/kuma_service_status_push.log
 
 machine_name="$(hostname -i)" # Get Machine IP address
 echo "Machine IP: ${machine_name}"
