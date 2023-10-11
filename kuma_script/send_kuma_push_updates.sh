@@ -56,13 +56,21 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
    # Node-Red   
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("rsyslog,jpGdnyGGc6" "nodered,WaMnPbkAmx")
-# elif [[ $machine_name = '192.168.10.x' ]] ; then
-#    
+# elif [[ $machine_name = '192.168.40.5' ]] ; then
+#  MQTT Server
+#  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
+#
 #  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #
+#  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
+#
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
-#    
+#
+#  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
+#
 #  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+#
+#  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
 #
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
 #    
