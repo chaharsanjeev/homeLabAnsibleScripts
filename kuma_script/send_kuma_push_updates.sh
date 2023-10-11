@@ -64,23 +64,23 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
    # Zigbee server
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("rsyslog,Hp82tHRSTw" "zigbee2mqtt,jetIFm0mCm")
-# elif [[ $machine_name = '192.168.10.x' ]] ; then
+ elif [[ $machine_name = '192.168.40.8' ]] ; then
+   #ESP-Home    
+   echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+   AllServices=("rsyslog,lFonsrL2el" "esphomeDashboard,b4AFd8FkLP")
+# elif [[ $machine_name = '192.168.x.x' ]] ; then
 #    
 #  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #
-# elif [[ $machine_name = '192.168.10.x' ]] ; then
+# elif [[ $machine_name = '192.168.x.x' ]] ; then
 #    
 #  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #
-# elif [[ $machine_name = '192.168.10.x' ]] ; then
+# elif [[ $machine_name = '192.168.x.x' ]] ; then
 #    
 #  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #
-# elif [[ $machine_name = '192.168.10.x' ]] ; then
-#    
-#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
-#
-# elif [[ $machine_name = '192.168.10.x' ]] ; then
+# elif [[ $machine_name = '192.168.x.x' ]] ; then
 #    
 #  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
 #
