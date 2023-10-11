@@ -66,29 +66,27 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
    AllServices=("rsyslog,Hp82tHRSTw" "zigbee2mqtt,jetIFm0mCm")
  elif [[ $machine_name = '192.168.40.8' ]] ; then
    #ESP-Home    
-   echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+   echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("rsyslog,lFonsrL2el" "esphomeDashboard,b4AFd8FkLP")
  elif [[ $machine_name = '192.168.40.9' ]] ; then
    # Z-Wave Server
-   echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+   echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("zwave-js-ui,F19XypN0Sp" "rsyslog,WU0ebUAm2f")
-#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+# elif [[ $machine_name = '192.168.x.x' ]] ; then
+#    
+#  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
 #
 # elif [[ $machine_name = '192.168.x.x' ]] ; then
 #    
-#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+#  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
 #
 # elif [[ $machine_name = '192.168.x.x' ]] ; then
 #    
-#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
-#
-# elif [[ $machine_name = '192.168.x.x' ]] ; then
-#    
-#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+#  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
 #
 # elif [[ $machine_name = '192.168.10.x' ]] ; then
 #    
-#  echo "${current_date_time} : [Host: $(hostname -f)/$(hostname -i) ] - Start Push For Services"
+#  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
 #
 else
   fail "**********  ERROR ********** : ${current_date_time} : Machine IP ${machine_name} not Configured in the bash script!"
