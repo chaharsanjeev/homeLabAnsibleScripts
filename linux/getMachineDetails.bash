@@ -1,0 +1,91 @@
+#!/bin/bash
+
+## Ensure MQTT client is install on this Linux machine
+## sudo apt-get install mosquitto-clients
+
+declare -a MQTT_HOST="ha.sc"
+declare -a MQTT_PORT=1883
+declare -a MQTT_UID="mqtt_user"
+declare -a MQTT_PWD="Tuhina@0404"
+declare -a MQTT_TOPIC="linux/$(hostname).sc"
+declare -a KERNAL_NAME=$(cat /etc/*-release | egrep "PRETTY_NAME|VERSION_ID" | cut -d = -f 2 | tr -d '"' |  xargs)
+
+
+declare -a HOST_NAME=$(hostname).sc
+declare -a HOST_IP=$(hostname -I | awk '{print $1}')
+
+declare -a RAM_TOTAL=0
+declare -a RAM_USED=0
+declare -a RAM_FREE=0
+
+declare -a HDD_TOTAL=0
+declare -a HDD_USED=0
+declare -a HDD_FREE=0
+
+declare -a SYSTEM_UPTIME=""
+
+declare -a RECENT_APT_UPDATE_TIMESTAMP=""
+
+
+############## GET RAM USAGE  #######################
+function getMachineRAM(){
+      COMMAND_OP=$(free --mega -h | head -n 2 | tail -1)
+
+      IFS=' ' read -a arr <<< "$COMMAND_OP"
+
+      RAM_TOTAL="${arr[1]/M}"
+      RAM_USED="${arr[2]/M}"
+      RAM_FREE="${arr[3]/M}"
+} # End function - getRAMDetails
+
+
+################# GET HDD USAGE
+function getMachineHDD
+{
+    COMMAND_OP=$(df --output=size,used,avail --total  --human-readable --block-size=1M | head -n 2 | tail -1)
+    IFS=' ' read -a arr <<< "$COMMAND_OP"
+
+    HDD_TOTAL="${arr[0]}"
+    HDD_USED="${arr[1]}"
+    HDD_FREE="${arr[2]}"
+} # End Function
+
+##################### GEt Recent Boot date & time
+function getUptime()
+{
+
+  COMMAND_OP=$(uptime -s)
+  SYSTEM_UPTIME="$COMMAND_OP"
+
+} # End function
+
+
+############### Recent APT Update Timestamp
+function getAPTUpdateTimestamp
+{
+  RECENT_APT_UPDATE_TIMESTAMP=$(stat -c %Y /var/cache/apt/)
+} # End fucntion
+
+
+getMachineRAM
+getMachineHDD
+getUptime
+getAPTUpdateTimestamp
+
+json=$(cat <<-END
+    {
+        "host_name": "${HOST_NAME}",
+        "host_ip": "${HOST_IP}",
+        "RAM_TOTAL_MB": ${RAM_TOTAL},
+        "RAM_USED_MB": ${RAM_USED},
+        "RAM_FREE_MB": ${RAM_FREE},
+        "HDD_TOTAL_MB": ${HDD_TOTAL},
+        "HDD_USED_MB": ${HDD_USED},
+        "HDD_FREE_MB": ${HDD_FREE},
+        "SYSTEM_UPTIME": "${SYSTEM_UPTIME}",
+        "RECENT_APT_UPDATE_TIMESTAMP": "${RECENT_APT_UPDATE_TIMESTAMP}",
+        "KERNAL": "${KERNAL_NAME}"
+    }
+END
+)
+mosquitto_pub -h "${MQTT_HOST}" -p "${MQTT_PORT}" -u "${MQTT_UID}" -P "${MQTT_PWD}" --insecure -i "Linux_machine" -r -t "${MQTT_TOPIC}" -m "${json}"
