@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash -e
 
 echo -e "\033[1;36msanju\033[0m"
 
