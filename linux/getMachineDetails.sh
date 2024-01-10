@@ -10,7 +10,7 @@ declare -a MQTT_PWD="Tuhina@0404"
 declare -a MQTT_TOPIC="linux/$(hostname).sc"
 declare -a KERNAL_NAME=$(cat /etc/*-release | egrep "PRETTY_NAME|VERSION_ID" | cut -d = -f 2 | tr -d '"' |  xargs)
 
-declare -a LAST_SEEN="$(date)"
+declare -a LAST_SEEN="$(date +"%Y-%m-%dT%H:%M:%S%z")"
 
 declare -a HOST_NAME=$(hostname).sc
 declare -a HOST_IP=$(hostname -I | awk '{print $1}')
