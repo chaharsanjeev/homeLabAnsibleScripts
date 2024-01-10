@@ -86,7 +86,7 @@ json=$(cat <<-END
         "SYSTEM_UPTIME": "${SYSTEM_UPTIME}",
         "RECENT_APT_UPDATE_TIMESTAMP": "${RECENT_APT_UPDATE_TIMESTAMP}",
         "KERNAL": "${KERNAL_NAME}",
-        "LAST_SEEN": "${LAST_SEEN}"
+        "LAST_SEEN": "b"
     }
 END
 )
