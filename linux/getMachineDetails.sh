@@ -84,7 +84,8 @@ json=$(cat <<-END
         "HDD_FREE_MB": ${HDD_FREE},
         "SYSTEM_UPTIME": "${SYSTEM_UPTIME}",
         "RECENT_APT_UPDATE_TIMESTAMP": "${RECENT_APT_UPDATE_TIMESTAMP}",
-        "KERNAL": "${KERNAL_NAME}"
+        "KERNAL": "${KERNAL_NAME}",
+        "LAST_SEEN": "${date}"
     }
 END
 )
