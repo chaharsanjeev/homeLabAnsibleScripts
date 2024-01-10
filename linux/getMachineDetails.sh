@@ -30,7 +30,8 @@ declare -a RECENT_APT_UPDATE_TIMESTAMP=""
 
 ############## GET RAM USAGE  #######################
 function getMachineRAM(){
-      COMMAND_OP=$(free --mega -h | head -n 2 | tail -1)
+      # COMMAND_OP=$(free --mega -h | head -n 2 | tail -1)
+       COMMAND_OP=$(free --mega | head -n 2 | tail -1)
 
       IFS=' ' read -a arr <<< "$COMMAND_OP"
 
