@@ -67,7 +67,6 @@ function getAPTUpdateTimestamp
   RECENT_APT_UPDATE_TIMESTAMP=$(stat -c %Y /var/cache/apt/)
 } # End fucntion
 
-
 getMachineRAM
 getMachineHDD
 getUptime
