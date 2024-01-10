@@ -10,7 +10,7 @@ declare -a MQTT_PWD="Tuhina@0404"
 declare -a MQTT_TOPIC="linux/$(hostname).sc"
 declare -a KERNAL_NAME=$(cat /etc/*-release | egrep "PRETTY_NAME|VERSION_ID" | cut -d = -f 2 | tr -d '"' |  xargs)
 
-declare -a LAST_SEEN="aaa"
+declare -a LAST_SEEN="$(date)"
 
 declare -a HOST_NAME=$(hostname).sc
 declare -a HOST_IP=$(hostname -I | awk '{print $1}')
@@ -86,7 +86,7 @@ json=$(cat <<-END
         "SYSTEM_UPTIME": "${SYSTEM_UPTIME}",
         "RECENT_APT_UPDATE_TIMESTAMP": "${RECENT_APT_UPDATE_TIMESTAMP}",
         "KERNAL": "${KERNAL_NAME}",
-        "LAST_SEEN": "b"
+        "LAST_SEEN": "${LAST_SEEN}"
     }
 END
 )
