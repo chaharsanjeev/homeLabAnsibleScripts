@@ -56,7 +56,7 @@ function getMachineHDD
 function getUptime()
 {
 
-  COMMAND_OP=$(uptime -s | date -Iseconds) ## return datetime in ISO format
+  COMMAND_OP=$(uptime -s | date -u +"%Y-%m-%dT%H:%M:%S.000Z") ## return datetime in ISO format
   SYSTEM_UPTIME="$COMMAND_OP"
 
 } # End function
