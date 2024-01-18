@@ -31,35 +31,30 @@ declare -a AllServices=() # declare empty array for services
 if [[ $machine_name = '192.168.10.8' ]] ; then
    # backup.sc.home - Proxmox Backup Server
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   # AllServices=("rsyslog,lZYavnlSjN" "proxmox-backup,3yY8DfH9dw")
    AllServices=("proxmox-backup,3yY8DfH9dw")
  elif [[ $machine_name = '192.168.10.3' ]] ; then
    # dns.sc - DNS Primary Server     
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   # AllServices=("rsyslog,9mrcGFGuPy" "pihole-FTL,yI9pMYEXa1" "unbound,zOMfoMIzSg")
    AllServices=("pihole-FTL,yI9pMYEXa1" "unbound,zOMfoMIzSg")
  elif [[ $machine_name = '192.168.10.4' ]] ; then
    # Secondary DNS Server dns-s.sc      
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   # AllServices=("rsyslog,P2ZbmFb2bh" "pihole-FTL,61XLgyl9cn" "unbound,7Kg1i4GEbn" )
    AllServices=("pihole-FTL,61XLgyl9cn" "unbound,7Kg1i4GEbn" )
  elif [[ $machine_name = '192.168.10.5' ]] ; then
    # Nginx Reverse Proxy proxy.sc  
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    # AllServices=("rsyslog,UkVl9kn22H")
- # elif [[ $machine_name = '192.168.10.9' ]] ; then
-   # Grafana/SysLog/Loki
-   # echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   # AllServices=("rsyslog,2TQFDkMLCV" "loki,XGES7jK8Na" "grafana-server,tGUQZC7FQn" "promtail,ygzHCqCmpL")
+ elif [[ $machine_name = '192.168.10.16' ]] ; then
+   # Marid-DB
+   echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
+   AllServices=("mariadb,xxxxx")
  elif [[ $machine_name = '192.168.10.7' ]] ; then
    # Patch Server - Ansible
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   # AllServices=("rsyslog,PBR4iKFCU9" "semaphore,9VbNQJ5Zf2" "mariadb,Czlh2EaR7l")
    AllServices=("semaphore,9VbNQJ5Zf2" "mariadb,Czlh2EaR7l")
  elif [[ $machine_name = '192.168.40.4' ]] ; then
    # Node-Red 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   # AllServices=("rsyslog,jpGdnyGGc6" "nodered,WaMnPbkAmx")
    AllServices=("nodered,WaMnPbkAmx")
  # elif [[ $machine_name = '192.168.40.5' ]] ; then
    # MQTT Server
@@ -68,22 +63,18 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
  elif [[ $machine_name = '192.168.40.7' ]] ; then
    # Zigbee server
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   # AllServices=("rsyslog,Hp82tHRSTw" "zigbee2mqtt,jetIFm0mCm")
    AllServices=("zigbee2mqtt,jetIFm0mCm")
  elif [[ $machine_name = '192.168.40.8' ]] ; then
    #ESP-Home    
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   # AllServices=("rsyslog,lFonsrL2el" "esphomeDashboard,b4AFd8FkLP")
    AllServices=("esphomeDashboard,b4AFd8FkLP")
  elif [[ $machine_name = '192.168.40.9' ]] ; then
    # Z-Wave Server
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   # AllServices=("zwave-js-ui,F19XypN0Sp" "rsyslog,WU0ebUAm2f")
    AllServices=("zwave-js-ui,F19XypN0Sp")
  elif [[ $machine_name = '192.168.10.15' ]] ; then
    # Apache Server
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   # AllServices=("apache2,6V2ZzA4nuc" "rsyslog,tPSlGYmlyA") 
    AllServices=("apache2,6V2ZzA4nuc") 
 # elif [[ $machine_name = '192.168.x.x' ]] ; then
 #    
