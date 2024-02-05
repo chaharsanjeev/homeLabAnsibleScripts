@@ -45,9 +45,9 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    # AllServices=("rsyslog,UkVl9kn22H")
  elif [[ $machine_name = '192.168.10.16' ]] ; then
-   # Marid-DB
+   # Maria-DB
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   AllServices=("mariadb,xxxxx")
+   AllServices=("mariadb,D2ymdp5lUn")
  elif [[ $machine_name = '192.168.10.7' ]] ; then
    # Patch Server - Ansible
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
