@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: Send Notify to Telegram - Gravity Pull Failed
+    retries: 3
+    delay: 3
+    delegate_to: localhost
+    community.general.telegram:
+      token: "{{telegraph_token}}"
+      api_args:
+        chat_id: "{{telegraph_chatid}}"
+        parse_mode: "plain"
+        text: "Test Teleragram Messages From Ansible"
+        disable_web_page_preview: True
+        disable_notification: False
