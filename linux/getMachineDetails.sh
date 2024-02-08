@@ -52,12 +52,13 @@ function getMachineHDD
     HDD_FREE="${arr[2]}"
 } # End Function
 
-##################### GEt Recent Boot date & time
+##################### Get Recent Boot date & time
 function getUptime()
 {
 
   # COMMAND_OP=$(uptime -s | date -u +"%Y-%m-%dT%H:%M:%S.000Z") ## return datetime in ISO format
-  COMMAND_OP=$(uptime -s | date -u ) ## return datetime in ISO format
+  # COMMAND_OP=$(uptime -s | date -u ) ## return datetime in ISO format
+  COMMAND_OP=$(uptime -p ) ## return as "up 2 weeks, 6 days, 17 hours, 19 minutes"
 
 
   SYSTEM_UPTIME="$COMMAND_OP"
