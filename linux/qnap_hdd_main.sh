@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "hello world-5"
+echo "hello world-6"
 
 rm -f qnap_hdd_details.*
 
