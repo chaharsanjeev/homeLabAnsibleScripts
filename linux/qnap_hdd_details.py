@@ -10,10 +10,10 @@ NODE_RED_ENPOINT_URL = 'http://nodered.sc:1880/nas_hdd_details'
 #####################################
 
 
-
 ##################### common functions 
 def substring_after(s, delim):
     return s.partition(delim)[2]
+
 ######################## end functions
 
 
@@ -81,12 +81,19 @@ print(json_string)
 print('\n\n')
 print('\n\n')
 
-stream = os.popen('curl -X POST ' + ' "'+NODE_RED_ENPOINT_URL+'" -H "Content-Type: application/text" -d \'' + json_string + '\'')
 
+stream = os.popen('uptime')
+output = stream.readlines()
+output = ' '.join(str(x.strip()) for x in output) 
+output = output.split(',')[0] # remove every thing after comma 
+output = output.split(' ')
+output.pop(0)
+output = ' '.join(str(x.strip()) for x in output) 
+other_details = 'uptime=' + output;
+
+stream = os.popen('curl -X POST ' + ' "'+NODE_RED_ENPOINT_URL+'" -H "Content-Type: application/text" -d \'' + json_string + '__##__##__' + other_details + '\'')
 
 print('\n\n')
-#print(strr)
 print('\n\n')
 output = stream.readlines()
-#print('\n\n\n Response Details')
-#print(output)
+print('\n\nResponse from Node-RED:  ' + ' '.join(str(x.strip()) for x in output) )
