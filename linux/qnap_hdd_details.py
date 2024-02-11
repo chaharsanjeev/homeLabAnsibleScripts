@@ -9,7 +9,6 @@ NODE_RED_ENPOINT_URL = 'http://nodered.sc:1880/nas_hdd_details'
 ARRAY_SEPERATOR = '__##__##__'
 #####################################
 
-
 ##################### common functions 
 def substring_after(s, delim):
     return s.partition(delim)[2]
