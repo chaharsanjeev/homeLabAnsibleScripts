@@ -6,7 +6,7 @@ import json
 QNAP_UID = 'schahar'
 QNAP_PWD = 'Tuhina@0404'
 NODE_RED_ENPOINT_URL = 'http://nodered.sc:1880/nas_hdd_details'
-
+ARRAY_SEPERATOR = '__##__##__'
 #####################################
 
 
@@ -81,7 +81,7 @@ print(json_string)
 print('\n\n')
 print('\n\n')
 
-
+#Get Uptime
 stream = os.popen('uptime')
 output = stream.readlines()
 output = ' '.join(str(x.strip()) for x in output) 
@@ -89,9 +89,20 @@ output = output.split(',')[0] # remove every thing after comma
 output = output.split(' ')
 output.pop(0)
 output = ' '.join(str(x.strip()) for x in output) 
-other_details = '' + output;
+other_details =  output;
 
-stream = os.popen('curl -X POST ' + ' "'+NODE_RED_ENPOINT_URL+'" -H "Content-Type: application/text" -d \'' + json_string + '__##__##__' + other_details + '\'')
+#Get Kernal Name
+stream = os.popen('cat /etc/*-release | egrep "PRETTY_NAME|VERSION_ID" | cut -d = -f 2 | tr -d '"' |  xargs')
+output = stream.readlines()
+output = ' '.join(str(x.strip()) for x in output) 
+output = output.split(' ')
+output.pop(0)
+output = ' '.join(str(x.strip()) for x in output) 
+other_details = other_details + ARRAY_SEPERATOR + output
+                
+
+
+stream = os.popen('curl -X POST ' + ' "'+NODE_RED_ENPOINT_URL+'" -H "Content-Type: application/text" -d \'' + json_string + ARRAY_SEPERATOR + other_details + '\'')
 
 print('\n\n')
 print('\n\n')
