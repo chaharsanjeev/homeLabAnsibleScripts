@@ -89,7 +89,7 @@ output = output.split(',')[0] # remove every thing after comma
 output = output.split(' ')
 output.pop(0)
 output = ' '.join(str(x.strip()) for x in output) 
-other_details = 'uptime=' + output;
+other_details = '' + output;
 
 stream = os.popen('curl -X POST ' + ' "'+NODE_RED_ENPOINT_URL+'" -H "Content-Type: application/text" -d \'' + json_string + '__##__##__' + other_details + '\'')
 
