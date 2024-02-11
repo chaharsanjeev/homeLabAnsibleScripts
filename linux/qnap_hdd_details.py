@@ -16,7 +16,6 @@ def substring_after(s, delim):
 
 ######################## end functions
 
-
 class drive:
     def __init__(self, name, totalsize,free,used,free_per):
         self.name = name
