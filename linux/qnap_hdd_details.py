@@ -99,9 +99,7 @@ output = output.split(' ')
 output.pop(0)
 output = ' '.join(str(x.strip()) for x in output) 
 other_details = other_details + ARRAY_SEPERATOR + output
-                
-
-
+             
 stream = os.popen('curl -X POST ' + ' "'+NODE_RED_ENPOINT_URL+'" -H "Content-Type: application/text" -d \'' + json_string + ARRAY_SEPERATOR + other_details + '\'')
 
 print('\n\n')
