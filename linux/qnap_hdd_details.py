@@ -91,7 +91,7 @@ output = ' '.join(str(x.strip()) for x in output)
 other_details =  output;
 
 #Get Kernal Name
-stream = os.popen('cat /etc/*-release | egrep "PRETTY_NAME|VERSION_ID" | cut -d = -f 2 | tr -d \'"\' |  xargs')
+stream = os.popen('cat /etc/*-release | egrep "PRETTY_NAME" | cut -d = -f 2 | tr -d \'"\' |  xargs')
 output = stream.readlines()
 output = ' '.join(str(x.strip()) for x in output) 
 output = output.split(' ')
