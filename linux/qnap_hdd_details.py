@@ -95,7 +95,6 @@ stream = os.popen('cat /etc/*-release | egrep "PRETTY_NAME" | cut -d = -f 2 | tr
 output = stream.readlines()
 output = ' '.join(str(x.strip()) for x in output) 
 output = output.split(' ')
-output.pop(0)
 output = ' '.join(str(x.strip()) for x in output) 
 other_details = other_details + ARRAY_SEPERATOR + output
              
