@@ -66,7 +66,7 @@ for x in output:
   free_size = int(list_of_strings[0][::-1].strip()) # get first element and reverse string
   totalsize = int(list_of_strings[1][::-1].strip()) # get first element and reverse string
   used = totalsize - free_size
-  free_per = int(round((float(free_size) / float(totalsize))*100))
+  free_per = int(round((float(used) / float(totalsize))*100))
   del list_of_strings[:2] #remove first two elements which is total capicity and free availabel size 
   drv_name = (' '.join(str(x.strip()) for x in list_of_strings))[::-1].strip() # append remaining array element and string reverse it and trim it
   lst.append(drive(name=drv_name, totalsize=totalsize,free=free_size, used=used, free_per=free_per )) 
