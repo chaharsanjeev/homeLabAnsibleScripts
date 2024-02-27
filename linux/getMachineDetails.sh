@@ -45,7 +45,8 @@ function getMachineRAM(){
 function getMachineHDD
 {
     if [ "$HOSTNAME" = "backup" ]; then
-        printf '%s\n' "on the right host"
+       COMMAND_OP=$(df --output=size,used,avail,target --total  --human-readable --block-size=1G -t ext4 /mnt/datastore/NAS-VM-Backups | head -n 2 | tail -1)
+       IFS=' ' read -a arr <<< "$COMMAND_OP" 
     else
        COMMAND_OP=$(df --output=size,used,avail --total  --human-readable --block-size=1M | head -n 2 | tail -1)
        IFS=' ' read -a arr <<< "$COMMAND_OP"
