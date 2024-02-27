@@ -44,8 +44,15 @@ function getMachineRAM(){
 ################# GET HDD USAGE
 function getMachineHDD
 {
-    COMMAND_OP=$(df --output=size,used,avail --total  --human-readable --block-size=1M | head -n 2 | tail -1)
-    IFS=' ' read -a arr <<< "$COMMAND_OP"
+    if [ "$HOSTNAME" = "backup" ]; then
+        printf '%s\n' "on the right host"
+    else
+       COMMAND_OP=$(df --output=size,used,avail --total  --human-readable --block-size=1M | head -n 2 | tail -1)
+       IFS=' ' read -a arr <<< "$COMMAND_OP"
+    fi
+
+    # COMMAND_OP=$(df --output=size,used,avail --total  --human-readable --block-size=1M | head -n 2 | tail -1)
+    # IFS=' ' read -a arr <<< "$COMMAND_OP"
 
     HDD_TOTAL="${arr[0]}"
     HDD_USED="${arr[1]}"
