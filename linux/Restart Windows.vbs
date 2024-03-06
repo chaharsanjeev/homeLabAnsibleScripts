@@ -9,7 +9,7 @@
 	For Each objService in colListOfServices
 		If (LCase(objService.State) = LCase("Running")) Then
 			objService.StopService()
-			WScript.Sleep (5*60*1000) ''Wait for 5 minutes to ensure its completly stopped
+			WScript.Sleep (1*60*1000) ''Wait for 1 minute to ensure its completly stopped
 		End If
 	Next
 	
@@ -17,7 +17,7 @@
 	''Restart Windows Now
 	Dim objShell
 	Set objShell = WScript.CreateObject("WScript.Shell")
-	objShell.Run "C:\WINDOWS\system32\shutdown.exe -r -t 180 -d p:0:0"  'restart windows - before this wait for 3 minutes and reason for restart is "Planned"
+	objShell.Run "C:\WINDOWS\system32\shutdown.exe -r -t 30 -d p:0:0"  'restart windows - before this wait for 30 seconds and reason for restart is "Planned"
 	
 	
 	

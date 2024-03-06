@@ -52,20 +52,115 @@
 
 	'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 	''Get System Uptime 
-    Dim oOSs, oOS, lUpTime
-    Set oOSs = objWMIService.ExecQuery("SELECT SystemUpTime FROM Win32_PerfFormattedData_PerfOS_System")
-    For Each oOS In oOSs
-        lUpTime = oOS.SystemUpTime
+    'Dim oOSs, oOS, lUpTime
+    'Set oOSs = objWMIService.ExecQuery("SELECT SystemUpTime FROM Win32_PerfFormattedData_PerfOS_System")
+    'For Each oOS In oOSs
+    '    lUpTime = oOS.SystemUpTime
+	'		
+    '    If lUpTime < 3600  Then 
+    '        uptime = Int(oOS.SystemUpTime / 60) & " minutes"
+	'ElseIf lUpTime < 86400 Then
+    '        uptime = Int(oOS.SystemUpTime / 3600) & " hours"
+    '    Else
+    '        uptime = Int(oOS.SystemUpTime / 86400) & " days"
+    '    End If
+    'Next
+	
+	Dim objShell,ret,text,fso,file 
 		
-        If lUpTime < 3600  Then 
-            uptime = Int(oOS.SystemUpTime / 60) & " minutes"
-		ElseIf lUpTime < 86400 Then
-            uptime = Int(oOS.SystemUpTime / 3600) & " hours"
-        Else
-            uptime = Int(oOS.SystemUpTime / 86400) & " days"
-        End If
-    Next
+	Dim tempFolder
+	Dim tempFile 
+	
+	Set fso  = CreateObject("Scripting.FileSystemObject")
+	
+	tempFolder = fso.GetSpecialFolder(2)
+	tempFile = tempFolder + "\output.txt"
+	
+	Set objShell = WScript.CreateObject("WScript.Shell")
+	ret = objShell.Run("cmd /c systeminfo | find " + Chr(34) + "System Boot Time:" + Chr(34) + " > " + tempFile, 0, true)
+	
+	Set file = fso.OpenTextFile(tempFile, 1)
+	text = file.ReadAll
+	file.Close
+	fso.DeleteFile(tempFile)
+	
+	If (text <> "") Then 
+		text = Trim(Replace(text,"System Boot Time:",""))
+		text = Replace(text,","," ")
 
+		Dim seconds,minutes, hours,days, weeks,work
+
+		work = DateDiff("s",text,Now)
+
+		seconds = work Mod 60
+		work = work \ 60
+		minutes = work Mod 60
+		work = work \ 60
+		hours = work Mod 24
+		work = work \ 24
+		days = work Mod 7
+		work = work \ 7
+		weeks = work
+
+		Dim s: s = ""
+		Dim renderStarted: renderStarted = False
+
+		If (weeks <> 0) Then
+			renderStarted = True
+			s = s & ", " & CStr(weeks)
+			If (weeks = 1) Then
+				s = s & " week "
+			Else
+				s = s & " weeks "
+			End If
+		End If
+
+		If (days <> 0 OR renderStarted) Then
+			renderStarted = True
+			s = s & ", " &  CStr(days)
+			If (days = 1) Then
+				s = s & " day "
+			Else
+				s = s & " days "
+			End If
+		End If
+
+		If (hours <> 0 OR renderStarted) Then
+			renderStarted = True
+			s = s & ", " & CStr(hours)
+			If (hours = 1) Then
+				s = s & " hour "
+			Else
+				s = s & " hours "
+			End If
+			
+		End If
+
+		If (minutes <> 0 OR renderStarted) Then
+			renderStarted = True
+			s = s & ", " & CStr(minutes)
+			If (minutes = 1) Then
+				s = s & " minute "
+			Else
+				s = s & " minutes "
+			End If
+		End If
+
+		's = s & ", " & CStr(seconds)
+		'If (seconds = 1) Then
+		'	s = s & " sec "
+		'Else
+		'	s = s & " secs "
+		'End If
+
+		s = Trim(s)
+		if (Left(s,1) = ",") Then 
+			s = Right(s,Len(s)-1)
+		End If
+		s = "up " + Trim(s)
+	
+		uptime = s
+	End If
 	'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 	'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -89,6 +184,3 @@
 	XMLHttp.send Replace(json,"'","""") + Seperator + uptime + Seperator + kernal
 	'Debug.print XMLHttp.responseText
 	Set XMLHttp = Nothing
-
-
-
