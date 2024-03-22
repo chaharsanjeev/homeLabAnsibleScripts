@@ -50,6 +50,9 @@
 
 	json = "[" +  json + "]"
 
+	WScript.Echo vbNewLine +  "Disk Usage: " + json + vbNewLine 
+
+
 	'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 	''Get System Uptime 
     'Dim oOSs, oOS, lUpTime
@@ -163,6 +166,8 @@
 	End If
 	'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+	WScript.Echo vbNewLine +  "Uptime: " + uptime 
+
 	'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 	''Get OS Name
 	Dim oCols
@@ -174,6 +179,8 @@
         kernal = oCol.Caption
     Next
  
+	WScript.Echo vbNewLine +  "Kernal: " + kernal
+	
 	'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
  
 	Dim XMLHttp
@@ -182,5 +189,12 @@
 	XMLHttp.Open "POST", "http://nodered.sc:1880/nvr_hdd_details", False
 	XMLHttp.setRequestHeader "Content-Type", "application/text"
 	XMLHttp.send Replace(json,"'","""") + Seperator + uptime + Seperator + kernal
-	'Debug.print XMLHttp.responseText
+	WScript.Echo vbNewLine +  "HTTP Response: " + XMLHttp.responseText + vbNewLine 
+	
+	If XMLHttp.Status >= 400 And XMLHttp.Status <= 599 Then
+      Wscript.Echo "Error Occurred : " & XMLHttp.status & " - " & XMLHttp.statusText
+Else
+      Wscript.Echo "Success : " & XMLHttp.status & " - " & XMLHttp.ResponseText
+End If
+
 	Set XMLHttp = Nothing
