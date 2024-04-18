@@ -7,11 +7,12 @@ declare -a MYSQL_HOST="db.sc"
 declare -a MYSQL_USERNAME="admin"
 declare -a MYSQL_PASSWORD="Tuhina@0404"
 
-declare -a MQTT_HOST="ha.sc"
-declare -a MQTT_PORT=1883
-declare -a MQTT_UID="mqtt_user"
-declare -a MQTT_PWD="Tuhina@0404"
-declare -a MQTT_TOPIC="linux/$(hostname).sc"
+# declare -a MQTT_HOST="ha.sc"
+# declare -a MQTT_PORT=1883
+# declare -a MQTT_UID="mqtt_user"
+# declare -a MQTT_PWD="Tuhina@0404"
+# declare -a MQTT_TOPIC="linux/$(hostname).sc"
+
 declare -a KERNAL_NAME=$(cat /etc/*-release | egrep "PRETTY_NAME|VERSION_ID" | cut -d = -f 2 | tr -d '"' |  xargs)
 
 declare -a LAST_SEEN="$(date +"%Y-%m-%dT%H:%M:%S%z")"
@@ -106,12 +107,8 @@ json=$(cat <<-END
     }
 END
 )
-mosquitto_pub -h "${MQTT_HOST}" -p "${MQTT_PORT}" -u "${MQTT_UID}" -P "${MQTT_PWD}" --insecure -i "Linux_machine" -r -t "${MQTT_TOPIC}" -m "${json}"
+# mosquitto_pub -h "${MQTT_HOST}" -p "${MQTT_PORT}" -u "${MQTT_UID}" -P "${MQTT_PWD}" --insecure -i "Linux_machine" -r -t "${MQTT_TOPIC}" -m "${json}"
 
-
-declare -a numberVariable=10
 declare -a variable="dns--hhh"
 
-mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET kernal = \"${variable}\" WHERE UUID = \"${numberVariable}\""
-
-
+mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET kernal = \"${variable}\" WHERE server_ip = \"${HOST_IP}\""
