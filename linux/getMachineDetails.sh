@@ -3,6 +3,10 @@
 ## Ensure MQTT client is install on this Linux machine
 ## sudo apt-get install mosquitto-clients
 
+declare -a MYSQL_HOST="db.sc"
+declare -a MYSQL_USERNAME="admin"
+declare -a MYSQL_PASSWORD="Tuhina@0404"
+
 declare -a MQTT_HOST="ha.sc"
 declare -a MQTT_PORT=1883
 declare -a MQTT_UID="mqtt_user"
@@ -103,3 +107,11 @@ json=$(cat <<-END
 END
 )
 mosquitto_pub -h "${MQTT_HOST}" -p "${MQTT_PORT}" -u "${MQTT_UID}" -P "${MQTT_PWD}" --insecure -i "Linux_machine" -r -t "${MQTT_TOPIC}" -m "${json}"
+
+
+declare -a numberVariable=10
+declare -a variable="dns--hhh"
+
+mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET kernal = \"${variable}\" WHERE UUID = \"${numberVariable}\""
+
+
