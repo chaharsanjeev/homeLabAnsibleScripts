@@ -27,6 +27,7 @@ declare -a RAM_FREE=0
 declare -a HDD_TOTAL=0
 declare -a HDD_USED=0
 declare -a HDD_FREE=0
+declare -a HDD_USED_PERECENT=0
 
 declare -a SYSTEM_UPTIME=""
 
@@ -63,6 +64,7 @@ function getMachineHDD
     HDD_TOTAL="${arr[0]}"
     HDD_USED="${arr[1]}"
     HDD_FREE="${arr[2]}"
+    HDD_USED_PERECENT=HDD_USED/HDD_TOTAL
 } # End Function
 
 ##################### Get Recent Boot date & time
@@ -90,25 +92,27 @@ getMachineHDD
 getUptime
 getAPTUpdateTimestamp
 
-json=$(cat <<-END
-    {
-        "host_name": "${HOST_NAME}",
-        "host_ip": "${HOST_IP}",
-        "RAM_TOTAL_MB": ${RAM_TOTAL},
-        "RAM_USED_MB": ${RAM_USED},
-        "RAM_FREE_MB": ${RAM_FREE},
-        "HDD_TOTAL_MB": ${HDD_TOTAL},
-        "HDD_USED_MB": ${HDD_USED},
-        "HDD_FREE_MB": ${HDD_FREE},
-        "SYSTEM_UPTIME": "${SYSTEM_UPTIME}",
-        "RECENT_APT_UPDATE_TIMESTAMP": "${RECENT_APT_UPDATE_TIMESTAMP}",
-        "KERNAL": "${KERNAL_NAME}",
-        "LAST_SEEN": "${LAST_SEEN}"
-    }
-END
-)
+# json=$(cat <<-END
+#    {
+#        "host_name": "${HOST_NAME}",
+#        "host_ip": "${HOST_IP}",
+#        "RAM_TOTAL_MB": ${RAM_TOTAL},
+#        "RAM_USED_MB": ${RAM_USED},
+#        "RAM_FREE_MB": ${RAM_FREE},
+#        "HDD_TOTAL_MB": ${HDD_TOTAL},
+#        "HDD_USED_MB": ${HDD_USED},
+#        "HDD_FREE_MB": ${HDD_FREE},
+#        "SYSTEM_UPTIME": "${SYSTEM_UPTIME}",
+#        "RECENT_APT_UPDATE_TIMESTAMP": "${RECENT_APT_UPDATE_TIMESTAMP}",
+#        "KERNAL": "${KERNAL_NAME}",
+#        "LAST_SEEN": "${LAST_SEEN}"
+#    }
+# END
+# )
+
 # mosquitto_pub -h "${MQTT_HOST}" -p "${MQTT_PORT}" -u "${MQTT_UID}" -P "${MQTT_PWD}" --insecure -i "Linux_machine" -r -t "${MQTT_TOPIC}" -m "${json}"
 
-declare -a variable="dns--hhh"
+mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET server_name=\"${HOST_NAME}\" and HDD_USED_PERCENT=${HDD_USED_PERECENT} WHERE server_ip = \"${HOST_IP}\""
 
-mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET kernal = \"${variable}\" WHERE server_ip = \"${HOST_IP}\""
+
+
