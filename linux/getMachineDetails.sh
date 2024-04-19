@@ -27,12 +27,10 @@ declare -a RAM_FREE=0
 declare -a HDD_TOTAL=0
 declare -a HDD_USED=0
 declare -a HDD_FREE=0
-declare -a HDD_USED_PERECENT=0
 
 declare -a SYSTEM_UPTIME=""
 
 declare -a RECENT_APT_UPDATE_TIMESTAMP=""
-
 
 ############## GET RAM USAGE  #######################
 function getMachineRAM(){
@@ -64,7 +62,6 @@ function getMachineHDD
     HDD_TOTAL="${arr[0]}"
     HDD_USED="${arr[1]}"
     HDD_FREE="${arr[2]}"
-    HDD_USED_PERECENT=HDD_USED/HDD_TOTAL
 } # End Function
 
 ##################### Get Recent Boot date & time
@@ -112,7 +109,5 @@ getAPTUpdateTimestamp
 
 # mosquitto_pub -h "${MQTT_HOST}" -p "${MQTT_PORT}" -u "${MQTT_UID}" -P "${MQTT_PWD}" --insecure -i "Linux_machine" -r -t "${MQTT_TOPIC}" -m "${json}"
 
-mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET server_name=\"${HOST_NAME}\" and HDD_USED_PERCENT=${HDD_USED_PERECENT} WHERE server_ip = \"${HOST_IP}\""
-
-
+mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET server_name=\"${HOST_NAME}\", HDD_TOTAL=\"${HDD_TOTAL}\", HDD_USED=\"${HDD_USED}\" WHERE server_ip = \"${HOST_IP}\""
 
