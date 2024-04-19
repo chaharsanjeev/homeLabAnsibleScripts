@@ -88,7 +88,7 @@ getMachineHDD
 getUptime
 getAPTUpdateTimestamp
 
- json=$(cat <<-END
+json=$(cat <<-END
     {
         "host_name": "${HOST_NAME}",
         "host_ip": "${HOST_IP}",
@@ -103,8 +103,8 @@ getAPTUpdateTimestamp
         "KERNAL": "${KERNAL_NAME}",
         "LAST_SEEN": "${LAST_SEEN}"
     }
- END
- )
+END
+)
 
 echo $json
 
