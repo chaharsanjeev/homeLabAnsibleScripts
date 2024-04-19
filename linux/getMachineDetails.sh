@@ -88,23 +88,25 @@ getMachineHDD
 getUptime
 getAPTUpdateTimestamp
 
-# json=$(cat <<-END
-#    {
-#        "host_name": "${HOST_NAME}",
-#        "host_ip": "${HOST_IP}",
-#        "RAM_TOTAL_MB": ${RAM_TOTAL},
-#        "RAM_USED_MB": ${RAM_USED},
-#        "RAM_FREE_MB": ${RAM_FREE},
-#        "HDD_TOTAL_MB": ${HDD_TOTAL},
-#        "HDD_USED_MB": ${HDD_USED},
-#        "HDD_FREE_MB": ${HDD_FREE},
-#        "SYSTEM_UPTIME": "${SYSTEM_UPTIME}",
-#        "RECENT_APT_UPDATE_TIMESTAMP": "${RECENT_APT_UPDATE_TIMESTAMP}",
-#        "KERNAL": "${KERNAL_NAME}",
-#        "LAST_SEEN": "${LAST_SEEN}"
-#    }
-# END
-# )
+ json=$(cat <<-END
+    {
+        "host_name": "${HOST_NAME}",
+        "host_ip": "${HOST_IP}",
+        "RAM_TOTAL_MB": ${RAM_TOTAL},
+        "RAM_USED_MB": ${RAM_USED},
+        "RAM_FREE_MB": ${RAM_FREE},
+        "HDD_TOTAL_MB": ${HDD_TOTAL},
+        "HDD_USED_MB": ${HDD_USED},
+        "HDD_FREE_MB": ${HDD_FREE},
+        "SYSTEM_UPTIME": "${SYSTEM_UPTIME}",
+        "RECENT_APT_UPDATE_TIMESTAMP": "${RECENT_APT_UPDATE_TIMESTAMP}",
+        "KERNAL": "${KERNAL_NAME}",
+        "LAST_SEEN": "${LAST_SEEN}"
+    }
+ END
+ )
+
+echo $json
 
 # mosquitto_pub -h "${MQTT_HOST}" -p "${MQTT_PORT}" -u "${MQTT_UID}" -P "${MQTT_PWD}" --insecure -i "Linux_machine" -r -t "${MQTT_TOPIC}" -m "${json}"
 
