@@ -114,3 +114,5 @@ declare -a sql="UPDATE server_status SET  LAST_MODIFIED_DATE_TIME= \"${LAST_SEEN
 echo "Update SQL : ${sql}"
 
 mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e  "${sql}"
+
+# End
