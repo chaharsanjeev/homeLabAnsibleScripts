@@ -71,17 +71,16 @@ function getUptime()
   # COMMAND_OP=$(uptime -s | date -u +"%Y-%m-%dT%H:%M:%S.000Z") ## return datetime in ISO format
   # COMMAND_OP=$(uptime -s | date -u ) ## return datetime in ISO format
   COMMAND_OP=$(uptime -p ) ## return as "up 2 weeks, 6 days, 17 hours, 19 minutes"
-
   SYSTEM_UPTIME="$COMMAND_OP"
-
 } # End function
-
 
 ############### Recent APT Update Timestamp
 function getAPTUpdateTimestamp
 {
   RECENT_APT_UPDATE_TIMESTAMP=$(stat -c %Y /var/cache/apt/)
-} # End fucntion
+  RECENT_APT_UPDATE_TIMESTAMP=$(date -d @"${RECENT_APT_UPDATE_TIMESTAMP}")
+  RECENT_APT_UPDATE_TIMESTAMP=$(date -d"${RECENT_APT_UPDATE_TIMESTAMP}" +"%Y-%m-%d %H:%M:%S")
+} # End function
 
 getMachineRAM
 getMachineHDD
@@ -108,11 +107,9 @@ getAPTUpdateTimestamp
 
 # mosquitto_pub -h "${MQTT_HOST}" -p "${MQTT_PORT}" -u "${MQTT_UID}" -P "${MQTT_PWD}" --insecure -i "Linux_machine" -r -t "${MQTT_TOPIC}" -m "${json}"
 
-# mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET RAM_USED_MB=\"${RAM_USED}\" , RAM_TOTAL_MB=\"${RAM_TOTAL}\", server_name=\"${HOST_NAME}\", HDD_TOTAL_MB=\"${HDD_TOTAL}\", HDD_USED_MB=\"${HDD_USED}\" WHERE server_ip = \"${HOST_IP}\""
-
 declare -a sql="UPDATE server_status SET KERNAL_NAME= \"${KERNAL_NAME}\" , RECENT_APT_UPDATE=\"${RECENT_APT_UPDATE_TIMESTAMP}\" , SYSTEM_UPTIME= \"${SYSTEM_UPTIME}\" , LAST_MODIFIED_DATE_TIME= CURRENT_TIMESTAMP, RAM_USED_MB=\"${RAM_USED}\" , RAM_TOTAL_MB=\"${RAM_TOTAL}\", server_name=\"${HOST_NAME}\", HDD_TOTAL_MB=\"${HDD_TOTAL}\", HDD_USED_MB=\"${HDD_USED}\" WHERE server_ip = \"${HOST_IP}\""
 
-echo "Update SQL : ${sql}"
+echo "Update SQL: ${sql}"
 
 mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e  "${sql}"
 
