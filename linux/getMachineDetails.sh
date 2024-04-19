@@ -88,7 +88,7 @@ getMachineHDD
 getUptime
 getAPTUpdateTimestamp
 
-#json=$(cat <<-END
+# json=$(cat <<-END
 #    {
 #        "host_name": "${HOST_NAME}",
 #        "host_ip": "${HOST_IP}",
@@ -112,4 +112,3 @@ echo "${RAM_TOTAL}"
 # mosquitto_pub -h "${MQTT_HOST}" -p "${MQTT_PORT}" -u "${MQTT_UID}" -P "${MQTT_PWD}" --insecure -i "Linux_machine" -r -t "${MQTT_TOPIC}" -m "${json}"
 
 mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET RAM_USED_MB=\"${RAM_USED}\" , RAM_TOTAL_MB=\"${RAM_TOTAL}\", server_name=\"${HOST_NAME}\", HDD_TOTAL_MB=\"${HDD_TOTAL}\", HDD_USED_MB=\"${HDD_USED}\" WHERE server_ip = \"${HOST_IP}\""
-
