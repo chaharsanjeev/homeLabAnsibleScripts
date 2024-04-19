@@ -110,7 +110,7 @@ getAPTUpdateTimestamp
 
 # mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET RAM_USED_MB=\"${RAM_USED}\" , RAM_TOTAL_MB=\"${RAM_TOTAL}\", server_name=\"${HOST_NAME}\", HDD_TOTAL_MB=\"${HDD_TOTAL}\", HDD_USED_MB=\"${HDD_USED}\" WHERE server_ip = \"${HOST_IP}\""
 
-declare -a sql="UPDATE server_status SET KERNAL_NAME= "\${KERNAL_NAME}\" , RECENT_APT_UPDATE=\"${RECENT_APT_UPDATE_TIMESTAMP}\" , SYSTEM_UPTIME= \"${SYSTEM_UPTIME}\" , LAST_MODIFIED_DATE_TIME= CURRENT_TIMESTAMP, RAM_USED_MB=\"${RAM_USED}\" , RAM_TOTAL_MB=\"${RAM_TOTAL}\", server_name=\"${HOST_NAME}\", HDD_TOTAL_MB=\"${HDD_TOTAL}\", HDD_USED_MB=\"${HDD_USED}\" WHERE server_ip = \"${HOST_IP}\""
+declare -a sql="UPDATE server_status SET KERNAL_NAME= \"${KERNAL_NAME}\" , RECENT_APT_UPDATE=\"${RECENT_APT_UPDATE_TIMESTAMP}\" , SYSTEM_UPTIME= \"${SYSTEM_UPTIME}\" , LAST_MODIFIED_DATE_TIME= CURRENT_TIMESTAMP, RAM_USED_MB=\"${RAM_USED}\" , RAM_TOTAL_MB=\"${RAM_TOTAL}\", server_name=\"${HOST_NAME}\", HDD_TOTAL_MB=\"${HDD_TOTAL}\", HDD_USED_MB=\"${HDD_USED}\" WHERE server_ip = \"${HOST_IP}\""
 
 echo "Update SQL : ${sql}"
 
