@@ -108,5 +108,5 @@ getAPTUpdateTimestamp
 
 # mosquitto_pub -h "${MQTT_HOST}" -p "${MQTT_PORT}" -u "${MQTT_UID}" -P "${MQTT_PWD}" --insecure -i "Linux_machine" -r -t "${MQTT_TOPIC}" -m "${json}"
 
-mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET RAM_USED=\"${RAM_USED_MB}\", RAM_TOTAL=\"${RAM_TOTAL_MB}\" server_name=\"${HOST_NAME}\", HDD_TOTAL=\"${HDD_TOTAL}\", HDD_USED=\"${HDD_USED}\" WHERE server_ip = \"${HOST_IP}\""
+mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e "UPDATE server_status SET RAM_USED=\"${RAM_USED_MB}\", RAM_TOTAL=\"${RAM_TOTAL_MB}\", server_name=\"${HOST_NAME}\", HDD_TOTAL=\"${HDD_TOTAL}\", HDD_USED=\"${HDD_USED}\" WHERE server_ip = \"${HOST_IP}\""
 
