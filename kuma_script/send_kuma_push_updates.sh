@@ -57,8 +57,8 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
    # Patch Server - Ansible
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("semaphore,9VbNQJ5Zf2" "mariadb,Czlh2EaR7l")
- elif [[ $machine_name = '192.168.40.4' ]] ; then
-   # Node-Red 
+ elif [[ $machine_name = 'nodered.sc' ]] ; then
+   # Node-Red  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("nodered,WaMnPbkAmx")
  # elif [[ $machine_name = '192.168.40.5' ]] ; then
