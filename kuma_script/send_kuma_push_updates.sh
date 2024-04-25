@@ -33,7 +33,7 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
    # backup.sc.home - Proxmox Backup Server
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("proxmox-backup,3yY8DfH9dw")
- elif [[ $machine_name = '192.168.10.12' ]] ; then
+ elif [[ $machine_name = 'dns.sc' ]] ; then
    # dns.sc - DNS Primary Server  - NEW UPDATE    
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("pihole-FTL,yI9pMYEXa1" "unbound,zOMfoMIzSg")
