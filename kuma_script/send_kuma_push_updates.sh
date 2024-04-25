@@ -6,7 +6,7 @@
 #
 
 current_date_time="`date "+%Y-%m-%d %H:%M:%S"`"
-kuma_base_url='http://192.168.10.14:3001'
+kuma_base_url='http://192.168.10.17:3001'
 
 # check if input argument IP of the source machine is passed
 if [ "$#" -eq 1 ] ; then
