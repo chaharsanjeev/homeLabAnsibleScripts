@@ -1,12 +1,13 @@
 #!/bin/bash
 
-## Ensure MQTT client is install on this Linux machine
-## sudo apt-get install mosquitto-clients
-
+## Ensure to install the mysql client using the below
+## apt install default-mysql-client
 declare -a MYSQL_HOST="db.sc"
 declare -a MYSQL_USERNAME="admin"
 declare -a MYSQL_PASSWORD="Tuhina@0404"
 
+## Ensure MQTT client is installed on this Linux machine
+## sudo apt-get install mosquitto-clients
 # declare -a MQTT_HOST="ha.sc"
 # declare -a MQTT_PORT=1883
 # declare -a MQTT_UID="mqtt_user"
