@@ -14,7 +14,7 @@ if [ "$#" -eq 1 ] ; then
   machine_name="$1" # Get input argument IP
 else
   # machine_name="$(hostname -i)" # Get Machine IP address
-  machine_name="$(hostname -fqdn)" # Get Machine dns name from PVE dns name
+  machine_name="$(hostname --fqdn)" # Get Machine dns name from PVE dns name
 fi
 
 echo "${current_date_time} : Machine IP: ${machine_name}"
