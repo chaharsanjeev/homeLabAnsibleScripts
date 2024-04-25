@@ -32,14 +32,14 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
    # backup.sc.home - Proxmox Backup Server
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("proxmox-backup,3yY8DfH9dw")
- elif [[ $machine_name = '192.168.10.3' ]] ; then
-   # dns.sc - DNS Primary Server     
+ elif [[ $machine_name = '192.168.10.12' ]] ; then
+   # dns.sc - DNS Primary Server  - NEW UPDATE    
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("pihole-FTL,yI9pMYEXa1" "unbound,zOMfoMIzSg")
- elif [[ $machine_name = '192.168.10.4' ]] ; then
-   # Secondary DNS Server dns-s.sc      
-   echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   AllServices=("pihole-FTL,61XLgyl9cn" "unbound,7Kg1i4GEbn" )
+ # elif [[ $machine_name = '192.168.10.4' ]] ; then
+ #  # Secondary DNS Server dns-s.sc      
+ #  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
+ #  AllServices=("pihole-FTL,61XLgyl9cn" "unbound,7Kg1i4GEbn" )
  elif [[ $machine_name = '192.168.10.5' ]] ; then
    # Nginx Reverse Proxy proxy.sc  
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
