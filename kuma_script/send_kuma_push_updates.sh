@@ -37,6 +37,10 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
    # dns.sc - DNS Primary Server  - NEW UPDATE    
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("pihole-FTL,yI9pMYEXa1" "unbound,zOMfoMIzSg")
+ elif [[ $machine_name = 'homepage.sc' ]] ; then
+   # homepage.sc - Homepage Server  - NEW UPDATE    
+   echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
+   #AllServices=()
  # elif [[ $machine_name = '192.168.10.4' ]] ; then
  #  # Secondary DNS Server dns-s.sc      
  #  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
