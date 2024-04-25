@@ -49,7 +49,7 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
    # Nginx Reverse Proxy proxy.sc  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    # AllServices=("rsyslog,UkVl9kn22H")
- elif [[ $machine_name = '192.168.10.16' ]] ; then
+ elif [[ $machine_name = 'db.sc' ]] ; then
    # Maria-DB
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("mariadb,D2ymdp5lUn")
