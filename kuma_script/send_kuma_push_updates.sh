@@ -77,8 +77,8 @@ if [[ $machine_name = '192.168.10.8' ]] ; then
    # Z-Wave Server
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("zwave-js-ui,F19XypN0Sp")
- elif [[ $machine_name = '192.168.10.15' ]] ; then
-   # Apache Server
+ elif [[ $machine_name = 'apache.sc' ]] ; then
+   # Apache Server  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("apache2,6V2ZzA4nuc") 
 # elif [[ $machine_name = '192.168.x.x' ]] ; then
