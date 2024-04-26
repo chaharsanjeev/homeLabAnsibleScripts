@@ -29,8 +29,8 @@ function fail {
 
 declare -a AllServices=() # declare empty array for services
 
-if [[ $machine_name = '192.168.10.8' ]] ; then
-   # backup.sc.home - Proxmox Backup Server
+if [[ $machine_name = 'backup.sc.home' ]] ; then
+   # backup.sc.home - Proxmox Backup Server - NEW UPDATE
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("proxmox-backup,3yY8DfH9dw")
  elif [[ $machine_name = 'dns.sc' ]] ; then
