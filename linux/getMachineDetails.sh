@@ -30,6 +30,10 @@ declare -a HDD_TOTAL=0
 declare -a HDD_USED=0
 declare -a HDD_FREE=0
 
+declare -a PVE_BACKUP_HDD_TOTAL=0
+declare -a PVE_BACKUP_HDD_USED=0
+declare -a PVE_BACKUP_HDD_FREE=0
+
 declare -a SYSTEM_UPTIME=""
 
 declare -a RECENT_APT_UPDATE_TIMESTAMP=""
@@ -66,6 +70,16 @@ function getMachineHDD
     HDD_TOTAL="${arr[0]}"
     HDD_USED="${arr[1]}"
     HDD_FREE="${arr[2]}"
+
+     if [ "$HOSTNAME" = "backup" ]; then 
+           # get storage for backup server storage
+           COMMAND_OP=$(df --output=size,used,avail,target --total  --human-readable --block-size=1M -t ext4 /mnt/datastore/NAS-VM-Backups | head -n 2 | tail -1)
+            //PBS_BACKUP_STORAGE_USAGE
+            PVE_BACKUP_HDD_TOTAL="${arr[0]}"
+            PVE_BACKUP_HDD_USED="${arr[1]}"
+            PVE_BACKUP_HDD_FREE="${arr[2]}"
+     fi 
+    
 } # End Function
 
 ##################### Get Recent Boot date & time
