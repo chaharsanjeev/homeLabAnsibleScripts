@@ -74,6 +74,7 @@ function getMachineHDD
      if [ "$HOSTNAME" = "backup" ]; then 
            # get storage for backup server storage
            COMMAND_OP=$(df --output=size,used,avail,target --total  --human-readable --block-size=1M -t ext4 /mnt/datastore/NAS-VM-Backups | head -n 2 | tail -1)
+           IFS=' ' read -a arr <<< "$COMMAND_OP" 
             //PBS_BACKUP_STORAGE_USAGE
             PVE_BACKUP_HDD_TOTAL="${arr[0]}"
             PVE_BACKUP_HDD_USED="${arr[1]}"
