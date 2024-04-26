@@ -51,7 +51,9 @@ function getMachineRAM(){
 function getMachineHDD
 {
     if [ "$HOSTNAME" = "backup" ]; then
-       COMMAND_OP=$(df --output=size,used,avail,target --total  --human-readable --block-size=1M -t ext4 /mnt/datastore/NAS-VM-Backups | head -n 2 | tail -1)
+       //COMMAND_OP=$(df --output=size,used,avail,target --total  --human-readable --block-size=1M -t ext4 /mnt/datastore/NAS-VM-Backups | head -n 2 | tail -1)
+       COMMAND_OP=$(df --output=size,used,avail,target --total  --human-readable --block-size=1M -t ext4 /dev/mapper/pbs-root | head -n 2 | tail -1)
+       
        IFS=' ' read -a arr <<< "$COMMAND_OP" 
     else
        COMMAND_OP=$(df --output=size,used,avail --total  --human-readable --block-size=1M | head -n 2 | tail -1)
