@@ -96,7 +96,7 @@ if [[ $machine_name = 'backup.sc.home' ]] ; then
 #  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
 #
 else
-  fail "**********  ERROR ********** : ${current_date_time} : Machine IP ${machine_name} not Configured in the bash script!"
+  fail "**********  ERROR ********** : ${current_date_time} : Machine ${machine_name} not Configured in the bash script!"
 fi
 
 #########################################################################
