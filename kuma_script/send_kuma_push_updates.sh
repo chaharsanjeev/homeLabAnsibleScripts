@@ -53,7 +53,7 @@ if [[ $machine_name = 'backup.sc.home' ]] ; then
    # Maria-DB  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("mariadb,D2ymdp5lUn")
- elif [[ $machine_name = 'patch.sc' ]] ; then
+ elif [[ $machine_name = 'ansible.sc' ]] ; then
    # Patch Server - Ansible - NEW UPDATE - xxxxxxxxxxxxxxxxxxxxxxxx
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("semaphore,9VbNQJ5Zf2" "mariadb,Czlh2EaR7l")
