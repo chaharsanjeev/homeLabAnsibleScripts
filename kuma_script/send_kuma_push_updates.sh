@@ -81,8 +81,10 @@ if [[ $machine_name = 'backup.sc.home' ]] ; then
    # Apache Server  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("apache2,6V2ZzA4nuc") 
-# elif [[ $machine_name = '192.168.x.x' ]] ; then
-#    
+ elif [[ $machine_name = 'homebridge.sc' ]] ; then
+  # Home Bridge Server  - NEW UPDATE 
+   echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
+   AllServices=("homebridge,YROk7uncfP") 
 #  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
 #
 # elif [[ $machine_name = '192.168.x.x' ]] ; then
