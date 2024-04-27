@@ -69,12 +69,12 @@ if [[ $machine_name = 'backup.sc.home' ]] ; then
    # Zigbee server
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("zigbee2mqtt,jetIFm0mCm")
- elif [[ $machine_name = '192.168.40.8' ]] ; then
-   #ESP-Home    
+ elif [[ $machine_name = 'esp.sc' ]] ; then
+   #ESP-Home     - NEW UPDATE
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("esphomeDashboard,b4AFd8FkLP")
- elif [[ $machine_name = '192.168.40.9' ]] ; then
-   # Z-Wave Server
+ elif [[ $machine_name = 'zwave.sc' ]] ; then
+   # Z-Wave Server- NEW UPDATE
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("zwave-js-ui,F19XypN0Sp")
  elif [[ $machine_name = 'apache.sc' ]] ; then
