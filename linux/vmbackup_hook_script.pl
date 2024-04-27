@@ -2,4 +2,4 @@
 
 use strict;
 
-print "HOOK: " ;
+print "\n\nHOOK: \n\n" ;
