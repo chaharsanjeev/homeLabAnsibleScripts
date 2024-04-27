@@ -66,7 +66,7 @@ if [[ $machine_name = 'backup.sc.home' ]] ; then
    # echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    # AllServices=("rsyslog,EfpMPVREt4" "emqx,JIeg9ZKjQf")
  elif [[ $machine_name = 'zigbee.sc' ]] ; then
-   # Zigbee server
+   # Zigbee server - NEW UPDATE
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("zigbee2mqtt,jetIFm0mCm")
  elif [[ $machine_name = 'esp.sc' ]] ; then
