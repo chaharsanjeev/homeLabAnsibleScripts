@@ -61,11 +61,11 @@ if [[ $machine_name = 'backup.sc.home' ]] ; then
    # Node-Red  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("nodered,WaMnPbkAmx")
- # elif [[ $machine_name = '192.168.40.5' ]] ; then
+ # elif [[ $machine_name = 'mqtt.sc' ]] ; then
    # MQTT Server
    # echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    # AllServices=("rsyslog,EfpMPVREt4" "emqx,JIeg9ZKjQf")
- elif [[ $machine_name = '192.168.40.7' ]] ; then
+ elif [[ $machine_name = 'zigbee.sc' ]] ; then
    # Zigbee server
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("zigbee2mqtt,jetIFm0mCm")
