@@ -56,7 +56,7 @@ if [[ $machine_name = 'backup.sc.home' ]] ; then
  elif [[ $machine_name = 'ansible.sc' ]] ; then
    # Patch Server - Ansible - NEW UPDATE - xxxxxxxxxxxxxxxxxxxxxxxx
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
-   AllServices=("semaphore,9VbNQJ5Zf2" "mariadb,Czlh2EaR7l")
+   AllServices=("semaphore,9VbNQJ5Zf2")
  elif [[ $machine_name = 'nodered.sc' ]] ; then
    # Node-Red  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
@@ -128,7 +128,7 @@ done
 
 #########################################################################
 # below specific to Patch/Ansible Server
-if [[ $machine_name = '192.168.10.7' ]] ; then
+if [[ $machine_name = 'ansible.sc' ]] ; then
     ansible localhost -m ping -u root | grep 'SUCCESS' &> /dev/null
     if [ $? == 0 ]; then
            echo "${current_date_time} : [Host: $(hostname -f)] - Ansible localhost running"
