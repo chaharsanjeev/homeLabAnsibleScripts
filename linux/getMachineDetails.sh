@@ -79,6 +79,8 @@ function getMachineHDD
             PVE_BACKUP_HDD_TOTAL="${arr[0]}"
             PVE_BACKUP_HDD_USED="${arr[1]}"
             PVE_BACKUP_HDD_FREE="${arr[2]}"
+     elif [[ "$HOSTNAME" == "vm" ]]; then
+           # get additional storage for VM
      fi 
     
 } # End Function
