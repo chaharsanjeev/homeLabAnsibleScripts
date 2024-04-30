@@ -48,7 +48,7 @@ GN=$(echo "\033[1;92m")
 CL=$(echo "\033[m")
 
 echo "Loading..."
-whiptail --title "Proxmox VE Helper Scripts - Proxmox VE LXC Updater" --infobox "This Will Update LXC Containers." 8 78
+# whiptail --title "Proxmox VE Helper Scripts - Proxmox VE LXC Updater" --infobox "This Will Update LXC Containers." 8 78
 
 
 NODE=$(hostname)
