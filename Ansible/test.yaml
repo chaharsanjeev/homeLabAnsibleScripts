@@ -8,7 +8,8 @@
     ignore_errors: True
     retries: 3
     delay: 3
-    shell: /bin/bash -c /tmp/main_helper_script_update-lxcs.sh -s 103 111 >>/var/log/proxmoxContainer_updateApps.log 2>/dev/null
+    #shell: /bin/bash -c /tmp/main_helper_script_update-lxcs.sh -s 103 111 >>/var/log/proxmoxContainer_updateApps.log 2>/dev/null
+    shell: /bin/bash -c /tmp/main_helper_script_update-lxcs.sh -s 103 111 | tee out.txt ; test ${PIPESTATUS[0]} -eq 0
     args:
       executable: /bin/bash
     environment:
