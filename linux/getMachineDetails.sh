@@ -4,7 +4,10 @@
 ##  # send service Linux details to Database - every 25 mins
 ## */25 * * * * PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash -c "$(wget -qLO - https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/linux/getMachineDetails.sh)" >>/var/log/haSensor.log 2>/dev/null
 
-## Ensure to install the mysql client using the below apt install default-mysql-client
+## Ensure to install the mysql client using the below 
+## apt install default-mysql-client
+
+
 declare -a MYSQL_HOST="db.sc"
 declare -a MYSQL_USERNAME="admin"
 declare -a MYSQL_PASSWORD="Tuhina@0404"
