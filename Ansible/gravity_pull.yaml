@@ -14,7 +14,7 @@
       PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 
-  - name: Send Notify to Telegram - Gravity Pull Failed
+  - name: Send Notify to Telegram - Gravity Push Failed
     when: reg_gravity_pull is failed
     ignore_errors: False
     retries: 3
@@ -25,11 +25,11 @@
       api_args:
         chat_id: "{{telegraph_chatid}}"
         parse_mode: "plain"
-        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Gravity-Pull from DNS-S.sc to DNS.sc Server\n\n{{reg_gravity_pull}}"
+        text: "From Job Server(monitor.sc) \n\nImpacted Host: {{ansible_hostname}}\n\nError Gravity-Sync push from dns.sc to dns-s.sc Server\n\n{{reg_gravity_pull}}"
         disable_web_page_preview: True
         disable_notification: False
 
-  - name: Fail Job - Gravity Pull Failed
+  - name: Fail Job - Gravity Push Failed
     when: reg_gravity_pull is failed
     ansible.builtin.fail:
       msg: "Impacted Host: {{ansible_hostname}}\n\nError Deleting Script\n\n{{reg_gravity_pull}}"
