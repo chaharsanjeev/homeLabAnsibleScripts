@@ -7,7 +7,7 @@
     ignore_errors: True
     retries: 3
     delay: 3
-    shell: /bin/bash -c "gravity-sync pull" -s 103 111 >>/var/log/gravity-pull.log 2>/dev/null
+    shell: /bin/bash -c "gravity-sync push" -s 103 111 >>/var/log/gravity-pull.log 2>/dev/null
     args:
       executable: /bin/bash
     environment:
