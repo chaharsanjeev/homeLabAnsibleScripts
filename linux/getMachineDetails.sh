@@ -16,7 +16,7 @@ declare -a KERNAL_NAME=$(cat /etc/*-release | egrep "PRETTY_NAME|VERSION_ID" | c
 
 # declare -a LAST_SEEN="$(date +"%Y-%m-%dT%H:%M:%S%z")"
 
-declare -a HOST_NAME=$(hostname).sc
+declare -a HOST_NAME=$(hostname) ## .sc
 declare -a HOST_IP=$(hostname -I | awk '{print $1}')
 
 declare -a RAM_TOTAL=0
