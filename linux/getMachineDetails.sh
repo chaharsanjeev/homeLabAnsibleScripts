@@ -16,8 +16,13 @@ declare -a KERNAL_NAME=$(cat /etc/*-release | egrep "PRETTY_NAME|VERSION_ID" | c
 
 # declare -a LAST_SEEN="$(date +"%Y-%m-%dT%H:%M:%S%z")"
 
-declare -a HOST_NAME=$(hostname) ## .sc
+declare -a HOST_NAME=$(hostname).sc
 declare -a HOST_IP=$(hostname -I | awk '{print $1}')
+
+if [ "$HOST_IP" = "192.168.10.11" ]; then
+   HOST_NAME=$(hostname)
+fi
+
 
 declare -a RAM_TOTAL=0
 declare -a RAM_USED=0
@@ -138,7 +143,6 @@ getMachineRAM
 getMachineHDD
 getUptime
 getAPTUpdateTimestamp
-
 
 # fire common SQL first
 # declare -a sql="UPDATE server_status SET SERVER_MULTIPLE_DRIVE= \"${JSON_ARRAY}\", PBS_BACKUP_STORAGE_TOTAL_MB= \"${PVE_BACKUP_HDD_TOTAL}\", PBS_BACKUP_STORAGE_USED_MB= \"${PVE_BACKUP_HDD_USED}\", KERNAL_NAME= \"${KERNAL_NAME}\" , RECENT_APT_UPDATE=\"${RECENT_APT_UPDATE_TIMESTAMP}\" , SYSTEM_UPTIME= \"${SYSTEM_UPTIME}\" , LAST_MODIFIED_DATE_TIME= CURRENT_TIMESTAMP, RAM_USED_MB=\"${RAM_USED}\" , RAM_TOTAL_MB=\"${RAM_TOTAL}\", SERVER_DNS=\"${HOST_NAME}\", HDD_TOTAL_MB=\"${HDD_TOTAL}\", HDD_USED_MB=\"${HDD_USED}\" WHERE SERVER_IP = \"${HOST_IP}\""
