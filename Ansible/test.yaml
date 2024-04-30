@@ -8,11 +8,9 @@
     ignore_errors: True
     retries: 3
     delay: 3
-    # shell: /bin/bash -c /tmp/main_helper_script_update-lxcs.sh -s 103 111 >>/var/log/proxmoxContainer_updateApps.log 2>/dev/null
-    shell: /bin/bash -c /tmp/main_helper_script_update-lxcs.sh -s 230 230 >>/var/log/proxmoxContainer_updateApps.log 2>/dev/null
+    shell: /bin/bash -c /tmp/main_helper_script_update-lxcs.sh -s 103 111 >>/var/log/proxmoxContainer_updateApps.log 2>/dev/null
     args:
       executable: /bin/bash
-    when: reg_download_script.changed
     environment:
       PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
