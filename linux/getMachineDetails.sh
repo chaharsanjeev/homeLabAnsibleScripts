@@ -7,7 +7,6 @@
 ## Ensure to install the mysql client using the below 
 ## apt install default-mysql-client
 
-
 declare -a MYSQL_HOST="db.sc"
 declare -a MYSQL_USERNAME="admin"
 declare -a MYSQL_PASSWORD="Tuhina@0404"
