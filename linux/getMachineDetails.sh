@@ -99,7 +99,7 @@ function getMachineHDD
 				fi
 		  }; # End while loop
 
-		done < <(df --output=size,used,avail,target --total  --human-readable --block-size=1G  /mnt/pve/* | tail -n +2);
+		done < <(df --output=size,used,avail,target --total  --human-readable --block-size=1G  /mnt/pve/* | tail -n +2 | head -n -1);
 		unset oL;
 
 	    if [ -n "${JSON_ARRAY}" ]; then
