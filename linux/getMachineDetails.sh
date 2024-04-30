@@ -9,14 +9,6 @@ declare -a MYSQL_HOST="db.sc"
 declare -a MYSQL_USERNAME="admin"
 declare -a MYSQL_PASSWORD="Tuhina@0404"
 
-## Ensure MQTT client is installed on this Linux machine
-## sudo apt-get install mosquitto-clients
-# declare -a MQTT_HOST="ha.sc"
-# declare -a MQTT_PORT=1883
-# declare -a MQTT_UID="mqtt_user"
-# declare -a MQTT_PWD="Tuhina@0404"
-# declare -a MQTT_TOPIC="linux/$(hostname).sc"
-
 declare -a KERNAL_NAME=$(cat /etc/*-release | egrep "PRETTY_NAME|VERSION_ID" | cut -d = -f 2 | tr -d '"' |  xargs)
 
 # declare -a LAST_SEEN="$(date +"%Y-%m-%dT%H:%M:%S%z")"
@@ -45,6 +37,8 @@ declare -a JSON_ARRAY=""
 declare -a temp=""
 declare -a replace=""
 
+declare -a sql=""
+
 ############## GET RAM USAGE  #######################
 function getMachineRAM(){
       # COMMAND_OP=$(free --mega -h | head -n 2 | tail -1)
@@ -61,10 +55,10 @@ function getMachineRAM(){
 ################# GET HDD USAGE
 function getMachineHDD
 {
-     unset  JSON_ARRAY
+    unset  JSON_ARRAY
 
     if [ "$HOSTNAME" = "backup" ]; then
-       //COMMAND_OP=$(df --output=size,used,avail,target --total  --human-readable --block-size=1M -t ext4 /mnt/datastore/NAS-VM-Backups | head -n 2 | tail -1)
+       ## COMMAND_OP=$(df --output=size,used,avail,target --total  --human-readable --block-size=1M -t ext4 /mnt/datastore/NAS-VM-Backups | head -n 2 | tail -1)
        COMMAND_OP=$(df --output=size,used,avail,target --total  --human-readable --block-size=1M -t ext4 /dev/mapper/pbs-root | head -n 2 | tail -1)
        
        IFS=' ' read -a arr <<< "$COMMAND_OP" 
@@ -72,9 +66,6 @@ function getMachineHDD
        COMMAND_OP=$(df --output=size,used,avail --total  --human-readable --block-size=1M | head -n 2 | tail -1)
        IFS=' ' read -a arr <<< "$COMMAND_OP"
     fi
-
-    # COMMAND_OP=$(df --output=size,used,avail --total  --human-readable --block-size=1M | head -n 2 | tail -1)
-    # IFS=' ' read -a arr <<< "$COMMAND_OP"
 
     HDD_TOTAL="${arr[0]}"
     HDD_USED="${arr[1]}"
@@ -84,45 +75,41 @@ function getMachineHDD
            # get storage for backup server storage
            COMMAND_OP=$(df --output=size,used,avail,target --total  --human-readable --block-size=1M -t ext4 /mnt/datastore/NAS-VM-Backups | head -n 2 | tail -1)
            IFS=' ' read -a arr <<< "$COMMAND_OP"
-            //PBS_BACKUP_STORAGE_USAGE
+            ## PBS_BACKUP_STORAGE_USAGE
             PVE_BACKUP_HDD_TOTAL="${arr[0]}"
             PVE_BACKUP_HDD_USED="${arr[1]}"
             PVE_BACKUP_HDD_FREE="${arr[2]}"
      elif [[ "$HOSTNAME" == "vm" ]]; then
-           # get additional storage for VM
-
+          # get additional storage for VM
           JSON_ARRAY=""
 
-	  while IFS= read -a oL ; do {  # reads single/one line
-	    BBB=($oL)
-	    temp="${BBB[3]}"
-            replace=""
+		  while IFS= read -a oL ; do {  # reads single/one line
+			BBB=($oL)
+			temp="${BBB[3]}"
+				replace=""
 
-            temp="${temp/\/mnt\/pve\//$replace}"
+				temp="${temp/\/mnt\/pve\//$replace}"
 
-            JSON_LINE="{'totalsize': ${BBB[0]}, 'used': ${BBB[1]}, 'name': '${temp}', 'free': ${BBB[2]}}"
+				JSON_LINE="{'totalsize': ${BBB[0]}, 'used': ${BBB[1]}, 'name': '${temp}', 'free': ${BBB[2]}}"
 
-            if [ -z "${JSON_ARRAY}" ]; then
-              JSON_ARRAY="[${JSON_LINE}"
-            else
-              JSON_ARRAY+=",${JSON_LINE}"
-            fi
+				if [ -z "${JSON_ARRAY}" ]; then
+				  JSON_ARRAY="[${JSON_LINE}"
+				else
+				  JSON_ARRAY+=",${JSON_LINE}"
+				fi
+		  }; # End while loop
 
-	  };
+		done < <(df --output=size,used,avail,target --total  --human-readable --block-size=1G  /mnt/pve/* | tail -n +2);
+		unset oL;
 
-	  done < <(df --output=size,used,avail,target --total  --human-readable --block-size=1G  /mnt/pve/* | tail -n +2);
-	  unset oL;
-
-	   if [ -n "${JSON_ARRAY}" ]; then
+	    if [ -n "${JSON_ARRAY}" ]; then
                JSON_ARRAY+="]"
-           fi
+        fi
 
-           # replace all single quotes with double quotes
-           # JSON_ARRAY="${JSON_ARRAY//\'/\"}"
-
+        # replace all single quotes with double quotes
+        # JSON_ARRAY="${JSON_ARRAY//\'/\"}"
 	   # echo  "${JSON_ARRAY}"
-
-     fi 
+    fi 
     
 } # End Function
 
@@ -149,30 +136,22 @@ getMachineHDD
 getUptime
 getAPTUpdateTimestamp
 
-# json=$(cat <<-END
-#    {
-#        "host_name": "${HOST_NAME}",
-#        "host_ip": "${HOST_IP}",
-#        "RAM_TOTAL_MB": ${RAM_TOTAL},
-#        "RAM_USED_MB": ${RAM_USED},
-#        "RAM_FREE_MB": ${RAM_FREE},
-#        "HDD_TOTAL_MB": ${HDD_TOTAL},
-#        "HDD_USED_MB": ${HDD_USED},
-#        "HDD_FREE_MB": ${HDD_FREE},
-#        "SYSTEM_UPTIME": "${SYSTEM_UPTIME}",
-#        "RECENT_APT_UPDATE_TIMESTAMP": "${RECENT_APT_UPDATE_TIMESTAMP}",
-#        "KERNAL": "${KERNAL_NAME}",
-#        "LAST_SEEN": "${LAST_SEEN}"
-#    }
-#END
-#)
 
-# mosquitto_pub -h "${MQTT_HOST}" -p "${MQTT_PORT}" -u "${MQTT_UID}" -P "${MQTT_PWD}" --insecure -i "Linux_machine" -r -t "${MQTT_TOPIC}" -m "${json}"
-
-declare -a sql="UPDATE server_status SET SERVER_MULTIPLE_DRIVE= \"${JSON_ARRAY}\", PBS_BACKUP_STORAGE_TOTAL_MB= \"${PVE_BACKUP_HDD_TOTAL}\", PBS_BACKUP_STORAGE_USED_MB= \"${PVE_BACKUP_HDD_USED}\", KERNAL_NAME= \"${KERNAL_NAME}\" , RECENT_APT_UPDATE=\"${RECENT_APT_UPDATE_TIMESTAMP}\" , SYSTEM_UPTIME= \"${SYSTEM_UPTIME}\" , LAST_MODIFIED_DATE_TIME= CURRENT_TIMESTAMP, RAM_USED_MB=\"${RAM_USED}\" , RAM_TOTAL_MB=\"${RAM_TOTAL}\", SERVER_DNS=\"${HOST_NAME}\", HDD_TOTAL_MB=\"${HDD_TOTAL}\", HDD_USED_MB=\"${HDD_USED}\" WHERE SERVER_IP = \"${HOST_IP}\""
-
-echo "Update SQL: ${sql}"
-
+# fire common SQL first
+# declare -a sql="UPDATE server_status SET SERVER_MULTIPLE_DRIVE= \"${JSON_ARRAY}\", PBS_BACKUP_STORAGE_TOTAL_MB= \"${PVE_BACKUP_HDD_TOTAL}\", PBS_BACKUP_STORAGE_USED_MB= \"${PVE_BACKUP_HDD_USED}\", KERNAL_NAME= \"${KERNAL_NAME}\" , RECENT_APT_UPDATE=\"${RECENT_APT_UPDATE_TIMESTAMP}\" , SYSTEM_UPTIME= \"${SYSTEM_UPTIME}\" , LAST_MODIFIED_DATE_TIME= CURRENT_TIMESTAMP, RAM_USED_MB=\"${RAM_USED}\" , RAM_TOTAL_MB=\"${RAM_TOTAL}\", SERVER_DNS=\"${HOST_NAME}\", HDD_TOTAL_MB=\"${HDD_TOTAL}\", HDD_USED_MB=\"${HDD_USED}\" WHERE SERVER_IP = \"${HOST_IP}\""
+sql="UPDATE server_status SET KERNAL_NAME= \"${KERNAL_NAME}\" , RECENT_APT_UPDATE=\"${RECENT_APT_UPDATE_TIMESTAMP}\" , SYSTEM_UPTIME= \"${SYSTEM_UPTIME}\" , LAST_MODIFIED_DATE_TIME= CURRENT_TIMESTAMP, RAM_USED_MB=\"${RAM_USED}\" , RAM_TOTAL_MB=\"${RAM_TOTAL}\", SERVER_DNS=\"${HOST_NAME}\", HDD_TOTAL_MB=\"${HDD_TOTAL}\", HDD_USED_MB=\"${HDD_USED}\" WHERE SERVER_IP = \"${HOST_IP}\""
+echo "Common Update SQL: ${sql}"
 mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e  "${sql}"
+
+if [ "$HOSTNAME" = "backup" ]; then
+	sql="UPDATE server_status SET PBS_BACKUP_STORAGE_TOTAL_MB= \"${PVE_BACKUP_HDD_TOTAL}\", PBS_BACKUP_STORAGE_USED_MB= \"${PVE_BACKUP_HDD_USED}\", PBS_BACKUP_STORAGE_LAST_UPDATED=CURRENT_TIMESTAMP WHERE SERVER_IP = \"${HOST_IP}\""
+	echo "Backup Server Update SQL: ${sql}"
+	mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e  "${sql}"
+
+elif [[ "$HOSTNAME" == "vm" ]]; then
+	sql="UPDATE server_status SET SERVER_MULTIPLE_DRIVE= \"${JSON_ARRAY}\", SERVER_MULTIPLE_DRIVE_LAST_UPDATED= CURRENT_TIMESTAMP WHERE SERVER_IP = \"${HOST_IP}\""
+	echo "Proxmox Server Update SQL: ${sql}"
+	mysql --host="${MYSQL_HOST}" --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" -D "personal" -e  "${sql}"
+fi
 
 # End
