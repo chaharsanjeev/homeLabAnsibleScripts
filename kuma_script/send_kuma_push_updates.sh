@@ -41,10 +41,10 @@ if [[ $machine_name = 'backup.sc.home' ]] ; then
    # homepage.sc - Homepage Server  - NEW UPDATE    
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    #AllServices=()
- # elif [[ $machine_name = '192.168.10.4' ]] ; then
- #  # Secondary DNS Server dns-s.sc      
- #  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
- #  AllServices=("pihole-FTL,61XLgyl9cn" "unbound,7Kg1i4GEbn" )
+  elif [[ $machine_name = 'dns-s.sc' ]] ; then
+   #  Secondary DNS Server dns-s.sc - NEW UPDATE    
+   echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
+   AllServices=("pihole-FTL,LKR6yvNNB5" "unbound,puyI6NEH1v" )
  elif [[ $machine_name = 'proxy.sc' ]] ; then
    # Nginx Reverse Proxy proxy.sc  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
