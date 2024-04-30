@@ -52,7 +52,7 @@ if ($phase eq 'job-init' || $phase eq 'job-start' || $phase eq 'job-end'  || $ph
 
     # example: copy resulting backup file to another host using scp
     if ($phase eq 'backup-end') {
-        system("./etc/vzdump-hook-sub-insert-mysql.sh ".$vmid);
+        system("./etc/vzdump-hook-sub-insert-mysql.sh".$vmid);
     } # end if
 
     # example: copy resulting log file to another host using scp
