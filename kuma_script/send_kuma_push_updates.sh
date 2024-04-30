@@ -4,7 +4,6 @@
 # 1 - Option source machine IP Address
 #
 #
-
 current_date_time="`date "+%Y-%m-%d %H:%M:%S"`"
 kuma_base_url='http://192.168.10.17:3001'
 
