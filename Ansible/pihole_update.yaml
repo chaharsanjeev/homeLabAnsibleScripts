@@ -2,30 +2,30 @@
 - hosts: all
   become: true
   tasks:
-  - name: Update Pi-Hole Packages
+  - name: Update apt packages
     apt:
-  	force_apt_get: yes
-  	autoclean: yes
-  	autoremove: yes
-  	update_cache: yes
-  	upgrade: dist
+      force_apt_get: yes
+      autoclean: yes
+      autoremove: yes
+      update_cache: yes
+      upgrade: dist
 
-   - name: Check if reboot is needed
-     stat:
-        path: /var/run/reboot-required
-     register: reboot_required
+- name: Check if reboot is needed
+  stat:
+    path: /var/run/reboot-required
+  register: reboot_required
 
-  - name: Reboot Pi-Hole
-    reboot:
-    when: reboot_required.stat.exists
-
-  - name: Update pi-hole package
-    register: reg_update_app_script
-    ignore_errors: false
-    retries: 3
-    delay: 3
-    shell: /bin/bash -c "pihole -up" -s 103 111 >>/var/log/pihole_update.log 2>/dev/null
-    args:
-      executable: /bin/bash
-    environment:
-      PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+- name: Reboot
+  reboot:
+  when: reboot_required.stat.exists
+  
+- name: Update pi-hole package
+  register: reg_update_app_script
+  ignore_errors: false
+  retries: 3
+  delay: 3
+  shell: /bin/bash -c "pihole -up" -s 103 111 >>/var/log/pihole_update.log 2>/dev/null
+  args:
+    executable: /bin/bash
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
