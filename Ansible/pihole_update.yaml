@@ -29,3 +29,12 @@
       executable: /bin/bash
     environment:
       PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+  - name: Check if reboot is needed
+    stat:
+      path: /var/run/reboot-required
+    register: reboot_required
+  
+  - name: Reboot
+    reboot:
+    when: reboot_required.stat.exists
