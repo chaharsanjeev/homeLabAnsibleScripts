@@ -1,0 +1,735 @@
+---
+# yaml-language-server: $schema=http://frigate.sc:5000/api/config/schema.json
+
+############################### MQTT  ############################
+mqtt:
+  enabled: True
+  host: mqtt.sc 
+  port: 1883
+  topic_prefix: frigate
+  client_id: frigate
+  user: '{FRIGATE_MQTT_USERNAME}'
+  password: '{FRIGATE_MQTT_PASSWORD}'
+  #tls_client_cert: None
+  #tls_client_key: None
+  #tls_insecure: true     # tls_insecure (true/false) for enabling TLS verification of
+  stats_interval: 60      # interval in seconds for publishing stats
+
+
+############################### START DETECTORS  ##################################
+# Optional: Detectors configuration. Defaults to a single CPU detector
+detectors:
+  Coral_USB_1:
+    type: edgetpu     # Frigate provided types include 'cpu', 'edgetpu', 'openvino', 'tensorrt' and 'rknn' (default: cpu)
+    device: usb:0
+  Coral_USB_2:
+    type: edgetpu     # Frigate provided types include 'cpu', 'edgetpu', 'openvino', 'tensorrt' and 'rknn' (default: cpu)
+    device: usb:1
+
+
+############################### START DATABASE SECTION  ############################
+# Optional: Database configuration
+database:
+  path: /config/frigate.db    # The path to store the SQLite DB
+
+
+############################### START MODEL SECTION ################################
+# Optional: model modifications
+model:
+  # path: /edgetpu_model.tflite       # Optional: path to the model (default: automatic based on detector)
+  # labelmap_path: /labelmap.txt      # Optional: path to the labelmap
+  width: 320                          # Required: Object detection model input width
+  height: 320                         # Required: Object detection model input height
+  #input_pixel_format: rgb             # Optional: Object detection model input colorspace; Valid values are rgb, bgr, or yuv.
+  #input_tensor: nhwc                  # Optional: Object detection model input tensor format; Valid values are nhwc or nchw
+  #model_type: ssd                     # Optional: Object detection model type, currently only used with the OpenVINO detector; Valid values are ssd, yolox
+  #labelmap:                           # Optional: Label name modifications. These are merged into the standard labelmap.
+  #  2: vehicle
+
+
+############################### START DETECT SECTION ################################
+# Optional: Detect configuration
+# NOTE: Can be overridden at the camera level
+detect:
+  width: 1280         # Optional: width of the frame for the input with the detect role (default: use native stream resolution)
+  height: 720         # Optional: height of the frame for the input with the detect role (default: use native stream resolution)
+  fps: 5              # Optional: desired fps for your camera for the input with the detect role. Recommended value of 5. Ideally, try and reduce your FPS on the camera.
+  enabled: true       # Optional: enables detection for the camera (default: True)
+  #min_initialized: 2  # Optional: Number of consecutive detection hits required for an object to be initialized in the tracker. (default: 1/2 the frame rate)
+  #max_disappeared: 25 # Optional: Number of frames without a detection before Frigate considers an object to be gone. (default: 5x the frame rate)
+  #stationary:         # Optional: Configuration for stationary object tracking
+        ### Optional: Frequency for confirming stationary objects (default: same as threshold)
+        ### When set to 1, object detection will run to confirm the object still exists on every frame.
+        ### If set to 10, object detection will run to confirm the object still exists on every 10th frame.
+    #interval: 50
+    #threshold: 50   # Optional: Number of frames without a position change for an object to be considered stationary (default: 10x the frame rate or 10s)
+    ### Optional: Define a maximum number of frames for tracking a stationary object (default: not set, track forever)
+    ### This can help with false positives for objects that should only be stationary for a limited amount of time.
+    ### It can also be used to disable stationary object tracking. For example, you may want to set a value for person, but leave
+    ### car at the default.
+    ### WARNING: Setting these values overrides default behavior and disables stationary object tracking.
+    ###          There are very few situations where you would want it disabled. It is NOT recommended to
+    ###          copy these values from the example config into your config unless you know they are needed.
+    #max_frames:
+      ### Optional: Default for all object types (default: not set, track forever)
+    #  default: 3000
+      ### Optional: Object specific values
+    #  objects:
+    #    person: 1000
+  ### Optional: Milliseconds to offset detect annotations by (default: shown below).
+  ### There can often be latency between a recording and the detect process,
+  ### especially when using separate streams for detect and record.
+  ### Use this setting to make the timeline bounding boxes more closely align
+  ### with the recording. The value can be positive or negative.
+  ### TIP: Imagine there is an event clip with a person walking from left to right.
+  ###      If the event timeline bounding box is consistently to the left of the person
+  ###      then the value should be decreased. Similarly, if a person is walking from
+  ###      left to right and the bounding box is consistently ahead of the person
+  ###      then the value should be increased.
+  ### TIP: This offset is dynamic so you can change the value and it will update existing
+  ###      events, this makes it easy to tune.
+  ### WARNING: Fast moving objects will likely not have the bounding box align.
+  #annotation_offset: 0
+
+
+############################### START OJECTS SECTION ################################
+### Optional: Object configuration
+### NOTE: Can be overridden at the camera level
+objects:
+  ### Optional: list of objects to track from labelmap.txt (default: person)
+  track:
+  - person
+  - car
+  - dog
+  ### Optional: mask to prevent all object types from being detected in certain areas (default: no mask)
+  ### Checks based on the bottom center of the bounding box of the object.
+  ### NOTE: This mask is COMBINED with the object type specific mask below
+  #mask: 0,0,1000,0,1000,200,0,200
+  ### Optional: filters to reduce false positives for specific object types
+  #filters:
+    #person:
+      #min_area: 5000     # Optional: minimum width*height of the bounding box for the detected object (default: 0)
+      #max_area: 100000  # Optional: maximum width*height of the bounding box for the detected object (default: 24000000)
+      #min_ratio: 0.5    # Optional: minimum width/height of the bounding box for the detected object (default: 0)
+      #max_ratio: 2.0    # Optional: maximum width/height of the bounding box for the detected object (default: 24000000)
+      #min_score: 0.5    # Optional: minimum score for the object to initiate tracking (default: 0.5)
+      #threshold: 0.7    # Optional: minimum decimal percentage for tracked object's computed score to be considered a true positive (default: 0.7)
+      #mask: 0,0,1000,0,1000,200,0,200 # Optional: mask to prevent this object type from being detected in certain areas (default: no mask), Checks based on the bottom center of the bounding box of the object
+
+
+############################### START FFMPEG SECTION ################################
+# Optional: ffmpeg configuration
+# More information about presets at https://docs.frigate.video/configuration/ffmpeg_presets
+ffmpeg:
+  global_args: -hide_banner -loglevel warning -threads 2  # Optional: global ffmpeg args (default: -hide_banner -loglevel warning -threads 2)
+  hwaccel_args: preset-nvidia-h264                        # Optional: global hwaccel args (default: []). NOTE: See hardware acceleration docs for your specific device
+  input_args: preset-rtsp-generic                         # Optional: global input args (preset-rtsp-generic)
+  #output_args:                                           # Optional: global output args
+  #  detect: -threads 2 -f rawvideo -pix_fmt yuv420p      # Optional: output args for detect streams (default: -threads 2 -f rawvideo -pix_fmt yuv420p)
+  #  record: preset-record-generic                        # Optional: output args for record streams (default: preset-record-generic)
+  #  rtmp: preset-rtmp-generic                            # Optional: output args for rtmp streams (default: preset-rtmp-generic)
+  ### Optional: Time in seconds to wait before ffmpeg retries connecting to the camera. (default: 10)
+  ### If set too low, frigate will retry a connection to the camera's stream too frequently, using up the limited streams some cameras can allow at once
+  ### If set too high, then if a ffmpeg crash or camera stream timeout occurs, you could potentially lose up to a maximum of retry_interval second(s) of footage
+  ### NOTE: this can be a useful setting for Wireless / Battery cameras to reduce how much footage is potentially lost during a connection timeout.
+  #retry_interval: 10
+
+
+############################### START MOTION SECTION ################################
+# Optional: Motion configuration
+# NOTE: Can be overridden at the camera level
+motion:
+  ### Optional: The threshold passed to cv2.threshold to determine if a pixel is different enough to be counted as motion. (default: 30)
+  ### Increasing this value will make motion detection less sensitive and decreasing it will make motion detection more sensitive.
+  ### The value should be between 1 and 255.
+  threshold: 30
+  ### Optional: The percentage of the image used to detect lightning or other substantial changes where motion detection needs to recalibrate. (default: 0.8)
+  ### Increasing this value will make motion detection more likely to consider lightning or ir mode changes as valid motion.
+  ### Decreasing this value will make motion detection more likely to ignore large amounts of motion such as a person approaching a doorbell camera.
+  #lightning_threshold: 0.8
+  ### Optional: Minimum size in pixels in the resized motion image that counts as motion (default: 10)
+  ### Increasing this value will prevent smaller areas of motion from being detected. Decreasing will
+  ### make motion detection more sensitive to smaller moving objects.
+  ### As a rule of thumb:
+  ###  - 10 - high sensitivity
+  ###  - 30 - medium sensitivity
+  ###  - 50 - low sensitivity
+  #contour_area: 10
+  ### Optional: Alpha value passed to cv2.accumulateWeighted when averaging frames to determine the background (default: 0.01)
+  ### Higher values mean the current frame impacts the average a lot, and a new object will be averaged into the background faster.
+  ### Low values will cause things like moving shadows to be detected as motion for longer.
+  ### https://www.geeksforgeeks.org/background-subtraction-in-an-image-using-concept-of-running-average/
+  #frame_alpha: 0.01
+  ### Optional: Height of the resized motion frame  (default: 100)
+  ### Higher values will result in more granular motion detection at the expense of higher CPU usage.
+  ### Lower values result in less CPU, but small changes may not register as motion.
+  #frame_height: 100
+  ### Optional: motion mask
+  ### NOTE: see docs for more detailed info on creating masks
+  #mask: 0,900,1080,900,1080,1920,0,1920
+  ### Optional: improve contrast (default: shown below)
+  ### Enables dynamic contrast improvement. This should help improve night detections at the cost of making motion detection more sensitive
+  ### for daytime.
+  #improve_contrast: True
+  ### Optional: Delay when updating camera motion through MQTT from ON -> OFF (default: 30).
+  #mqtt_off_delay: 30
+
+
+############################### START RECORD SECTION ################################
+### Optional: Record configuration
+### NOTE: Can be overridden at the camera level
+### As of Frigate 0.12 if there is less than an hour left of storage, the oldest 2 hours of recordings will be deleted.
+record:
+  enabled: true               # Optional: Enable recording (default: false). If recording is disabled in the config, turning it on via the UI or MQTT later will have no effect.
+  expire_interval: 60         # Optional: Number of minutes to wait between cleanup runs (default: 60). This can be used to reduce the frequency of deleting recording segments from disk if you want to minimize i/o
+  sync_recordings: true       # Optional: Sync recordings with disk on startup and once a day (default: false).
+  retain:                     # Optional: Retention settings for recording
+    days: 30                  # Optional: Number of days to retain recordings regardless of events.This should be set to 0 and retention should be defined in events section below if you only want to retain recordings of events.
+    mode: motion              # Optional: Mode for retention. Available options are: all, motion, and active_objects. this mode only applies when the days setting above is greater than 0
+  events:                     # Optional: Event recording settings
+    pre_capture: 3            # Optional: Number of seconds before the event to include (default: 5)
+    post_capture: 3           # Optional: Number of seconds after the event to include (default: 5)
+    # objects:                  # Optional: Objects to save recordings for. (default: all tracked objects) : https://docs.frigate.video/configuration/objects
+    required_zones: []  # Optional: Restrict recordings to objects that entered any of the listed zones (default: no required zones)
+    retain:     # Optional: Retention settings for recordings of events
+      default: 120          # Required: Default retention days (default: 10)
+      mode: motion          # Optional: Mode for retention. Values - all, motion,active_objects
+      objects:              # Optional: Per object retention days
+        person: 120         # number of days to retuan for person
+  export:   ### Optional: Recording Export Settings
+      ### Optional: Timelapse Output Args (default: shown below).
+      ### NOTE: The default args are set to fit 24 hours of recording into 1 hour playback.
+      ### See https://stackoverflow.com/a/58268695 for more info on how these args work.
+      ### As an example: if you wanted to go from 24 hours to 30 minutes that would be going
+      ### from 86400 seconds to 1800 seconds which would be 1800 / 86400 = 0.02.
+      ### The -r (framerate) dictates how smooth the output video is.
+      ### So the args would be -vf setpts=0.02*PTS -r 30 in that case.
+    timelapse_args: -vf setpts=0.04*PTS -r 30
+
+############################### START SNAPSHOT SECTION ################################
+# Optional: Configuration for the jpg snapshots written to the clips directory for each event
+# NOTE: Can be overridden at the camera level
+snapshots:
+  enabled: true         # Optional: Enable writing jpg snapshot to /media/frigate/clips (default: false)
+  clean_copy: true      # Optional: save a clean PNG copy of the snapshot image (default: true)
+  timestamp: true       # Optional: print a timestamp on the snapshots (default: false)
+  bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
+  crop: false           # Optional: crop the snapshot (default: false)
+  height: 175           # Optional: height to resize the snapshot to (default: original size)
+  #required_zones: []    # Optional: Restrict snapshots to objects that entered any of the listed zones (default: no required zones)
+  retain:               # Optional: Camera override for retention settings (default: global values)
+    default: 120        # Required: Default retention days (default: 10)
+    objects:            # Optional: Per object retention days
+      person: 120
+  quality: 100     # Optional: quality of the encoded jpeg, 0-100 (default: 70)
+
+
+############################### START LIVE SECTION ################################
+### Optional: jsmpeg stream configuration for WebUI
+live:
+  stream_name: camera_name    # Optional: Set the name of the stream that should be used for live view  in frigate WebUI. (default: name of camera)
+  ### Optional: Set the height of the jsmpeg stream. (default: 720)
+  ### This must be less than or equal to the height of the detect stream. Lower resolutions
+  ### reduce bandwidth required for viewing the jsmpeg stream. Width is computed to match known aspect ratio.
+  height: 720
+  ### Optional: Set the encode quality of the jsmpeg stream (default: shown below)
+  ### 1 is the highest quality, and 31 is the lowest. Lower quality feeds utilize less CPU resources.
+  quality: 8
+
+
+############################### START TIMESTAMP SECTION ################################
+### Optional: in-feed timestamp style configuration
+### NOTE: Can be overridden at the camera level
+timestamp_style:
+  position: tl                    # Optional: Position of the timestamp (default: tl) , "tl" (top left), "tr" (top right), "bl" (bottom left), "br" (bottom right)
+  #format: "%m/%d/%Y %H:%M:%S"     # Optional: Format specifier conform to the Python package "datetime" (default: "%m/%d/%Y %H:%M:%S") ; ex: german: "%d.%m.%Y %H:%M:%S"
+  #color:                          # Optional: Color of font. All Required when color is specified
+  #  red: 255
+  #  green: 255
+  #  blue: 255
+  #thickness: 2          # Optional: Line thickness of font (default: shown below)
+  ### Optional: Effect of lettering (default: shown below)
+  ###           None (No effect),
+  ###           "solid" (solid background in inverse color of font)
+  ###           "shadow" (shadow for font)
+  #effect: solid
+
+
+############################### START RTPM SECTION ################################
+rtmp:
+  enabled: false # obslete
+
+############################### START UI SECTION ################################
+# Optional
+ui:
+  live_mode: webrtc             # Optional: Set the default live mode for cameras in the UI (default: mse); VALUES: jsmpeg,mse,webrtc
+  # timezone: America/Denver    # Optional: Set a timezone to use in the UI (default: use browser local time)
+  use_experimental: false       # Optional: Use an experimental recordings / camera view UI (default: shown below)
+  time_format: browser          # Optional: Set the time format used. Options are browser, 12hour, or 24hour (default: shown below)
+  ### Optional: Set the date style for a specified length.
+  ### Options are: full, long, medium, short
+  ### Examples:
+  ###    short: 2/11/23
+  ###    medium: Feb 11, 2023
+  ###    full: Saturday, February 11, 2023
+  ### (default: short).
+  date_style: short
+  ### Optional: Set the time style for a specified length.
+  ### Options are: full, long, medium, short
+  ### Examples:
+  ###    short: 8:14 PM
+  ###    medium: 8:15:22 PM
+  ###    full: 8:15:22 PM Mountain Standard Time # (default: medium).
+  time_style: medium
+  ### Optional: Ability to manually override the date / time styling to use strftime format
+  ### https://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html
+  ### possible values are shown above (default: not set)
+  #strftime_fmt: "%Y/%m/%d %H:%M"
+
+
+############################### START TELEMENTRY SECTION ################################
+# Optional: Telemetry configuration
+telemetry:
+  network_interfaces:   # Optional: Enabled network interfaces for bandwidth stats monitoring (default: empty list, let nethogs search all)
+  - eth
+  - enp
+  - eno
+  - ens
+  - wl
+  - lo
+  stats:            # Optional: Configure system stats
+    #amd_gpu_stats: True         # Enable AMD GPU stats (default: true)
+    intel_gpu_stats: true       # Enable Intel GPU stats (default: true)
+    network_bandwidth: true   # Enable network bandwidth stats monitoring for camera ffmpeg processes, go2rtc, and object detectors. (default: false)# NOTE: The container must either be privileged or have cap_net_admin, cap_net_raw capabilities enabled.
+  version_check: true # Optional: Enable the latest version outbound check (default: shown below)
+
+
+############################### START LOGGER SECTION ################################
+# Optional: logger verbosity settings
+logger:
+  default: info         # Optional: Default log verbosity; Available log levels are: debug, info, warning, error, critical
+  #logs:                 # Optional: Component specific logger overrides
+  #  frigate.event: debug
+  # frigate.app : debug
+  # frigate.mqtt : debug
+  # frigate.object_detection : debug
+  # detector.<detector_name> : debug
+  # watchdog.<camera_name> : debug
+  # ffmpeg.<camera_name>.<sorted_roles> : debug
+
+
+
+
+
+######################### START ENVIRONMENT VARIABLE SECTION ########################
+
+# Optional: set environment variables
+#environment_vars:
+#  EXAMPLE_VAR: value
+
+
+############################### START BIRDEYE SECTION ##############################
+# Optional: birdseye configuration
+# NOTE: Can (enabled, mode) be overridden at the camera level
+birdseye:
+  enabled: true                   # Optional: Enable birdseye view
+  restream: false                 # Optional: Restream birdseye via RTSP. NOTE: Enabling this will set birdseye to run 24/7 which may increase CPU usage somewhat.
+  width: 1280                     # Optional: Width of the output resolution
+  height: 720                     # Optional: Height of the output resolution
+  quality: 8                      # Optional: Encoding quality of the mpeg1 feed. 1 is the highest quality, and 31 is the lowest. Lower quality feeds utilize less CPU resources.
+  mode: objects                   # Optional: Mode of the view. Available options are: objects, motion, and continuous
+  inactivity_threshold: 30        # Optional: Threshold for camera activity to stop showing camera
+  layout:                         # Optional: Configure the birdseye layout
+    scaling_factor: 2.0           # Optional: Scaling factor for the layout calculator
+    max_cameras: 1                # Optional: Maximum number of cameras to show at one time, showing the most recent (default: show all cameras)
+
+############################### START GO-2-RTC SECTION  ############################
+###  access the go2rtc stream info at http://frigate_ip:5000/api/go2rtc/streams which can be helpful to debug as well as provide useful information about your camera streams.
+go2rtc:
+  webrtc:
+    candidates:
+    - 192.168.30.5:8555
+    - stun:8555
+  streams:
+    office_front_main: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-front.sc/cam/realmonitor?channel=1&subtype=0
+    office_front_sub: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-front.sc/cam/realmonitor?channel=1&subtype=2
+
+    porch_front_main: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-porch-front.sc/cam/realmonitor?channel=1&subtype=0
+    porch_front_sub: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-porch-front.sc/cam/realmonitor?channel=1&subtype=2
+
+    garage_front_main: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-front.sc/cam/realmonitor?channel=1&subtype=0
+    garage_front_sub: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-front.sc/cam/realmonitor?channel=1&subtype=2
+
+    patio_back_main: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-patio-back.sc/cam/realmonitor?channel=1&subtype=0
+    patio_back_sub: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-patio-back.sc/cam/realmonitor?channel=1&subtype=2
+
+    office_side_main: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-side.sc/cam/realmonitor?channel=1&subtype=0
+    office_side_sub: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-side.sc/cam/realmonitor?channel=1&subtype=2
+
+    dining_front_main: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-dining-front.sc/cam/realmonitor?channel=1&subtype=0
+    dining_front_sub: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-dining-front.sc/cam/realmonitor?channel=1&subtype=2
+
+    garage_side_main: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-side.sc/cam/realmonitor?channel=1&subtype=0
+    garage_side_sub: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-side.sc/cam/realmonitor?channel=1&subtype=2
+
+    master_bedroom_main: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-master-br.sc/cam/realmonitor?channel=1&subtype=0
+    master_bedroom_sub: 
+      rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-master-br.sc/cam/realmonitor?channel=1&subtype=2
+
+
+################################################################################################ START MAIN CAMERA CONFIGURATION ###############################################################################
+
+cameras:
+  ########################### Camera Configuration Office-Front START #######################
+  Office_Front:
+    enabled: true
+    webui_url: https://camera-office-front.sc.home/    # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
+    ffmpeg:
+      inputs:
+      - path: rtsp://127.0.0.1:8554/office_front_main
+        roles:    # Valid values : audio,detect,record
+        - record
+      - path: rtsp://127.0.0.1:8554/office_front_sub
+        roles:    # Valid values : audio,detect,record
+        - detect
+    best_image_timeout: 60 # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
+    motion:
+      mask:
+      - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
+      - 1280,0,1280,271,863,0   # front road drive & walk way
+      - 1280,720,1280,293,864,575,426,639,441,720 # front flower bed at sanjeev office side
+      - 542,201,559,107,626,112,617,204
+      - 674,66,719,77,726,0,681,0
+      - 646,85,671,89,674,70,646,67
+      - 455,306,484,306,488,276,457,279
+      - 814,190,923,253,953,80,866,71
+      - 1191,247,1134,230,1143,154,1218,166
+    zones:
+      zone_office_front_person:
+        coordinates: 0,720,444,720,423,643,898,549,1159,431,1280,344,1219,222,1043,91,866,0,707,0,363,306,355,56,0,268
+        objects:
+          - person
+    mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
+      enabled: true         # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: true       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true            # Optional: crop the snapshot (default: true)
+      height: 270           # Optional: height to resize the snapshot to (default: 270)
+      quality: 70           # Optional: jpeg encode quality (default: 70)
+      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+    ui:                     # Optional: Configuration for how camera is handled in the GUI.
+      order: 1              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
+      dashboard: true       # Optional: Whether or not to show the camera in the Frigate UI (default: true)
+    birdseye:               # Optional: Configuration for how to sort the cameras in the Birdseye view.
+      order: 1              # Optional: Adjust sort order of cameras in the Birdseye view. Larger numbers come later (default: 0) By default the cameras are sorted alphabetically.
+      mode: objects         # Optional  - Values : continuous,motion,objects
+      enabled: true         # Optional - nclude a camera in Birdseye view only 
+    live:
+      stream_name: office_front_sub # sub stream for live view
+  ########################### Camera Configuration Office-Front END #######################
+  ########################### Camera Configuration Porch-Front START #######################
+  Porch_Front:
+    enabled: true
+    webui_url: https://camera-porch-front.sc.home/      # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
+    ffmpeg:
+      inputs:
+      - path: rtsp://127.0.0.1:8554/porch_front_main
+        roles:      # Valid values : audio,detect,record
+        - record
+      - path: rtsp://127.0.0.1:8554/porch_front_sub
+        roles:      # Valid values : audio,detect,record
+        - detect
+    best_image_timeout: 60   # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
+    motion:
+      mask:
+      - 1244,25,1244,62,895,58,811,65,809,21   # date & time in top right side
+      - 386,122,266,159,301,322,435,268
+      - 785,48,768,154,652,180,643,44
+      - 804,151,814,82,969,52,1009,111
+      - 241,0,1045,0,1031,37,247,42
+    zones:
+      zone_porch_front_person:
+        coordinates: 56,720,1280,720,1280,36,1028,0,778,0,759,103,591,133,288,209,230,29
+        objects:
+        - person
+    mqtt:     # Optional: Configuration for the jpg snapshots published via MQTT
+      enabled: true           # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: true         # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: true      # Optional: draw bounding box on the snapshots (default: true)
+      crop: true              # Optional: crop the snapshot (default: true)
+      height: 270             # Optional: height to resize the snapshot to (default: 270)
+      quality: 70             # Optional: jpeg encode quality (default: 70)
+      required_zones: []      # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+    ui:                       # Optional: Configuration for how camera is handled in the GUI.
+      order: 2                # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
+      dashboard: true         # Optional: Whether or not to show the camera in the Frigate UI (default: true)
+    birdseye:                 # Optional: Configuration for how to sort the cameras in the Birdseye view.
+      order: 2                # Optional: Adjust sort order of cameras in the Birdseye view. Larger numbers come later (default: 0) By default the cameras are sorted alphabetically.
+      mode: objects           # Optional  - Values : continuous,motion,objects
+      enabled: true           # Optional - nclude a camera in Birdseye view only 
+    live:
+      stream_name: porch_front_sub   # sub stream for live view
+  ########################### Camera Configuration Porch-Front END #######################
+  ######################### Camera Configuration Dining-Rom START #####################
+  Dining_Front:
+    enabled: true
+    webui_url: https://camera-dining-front.sc.home/      # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
+    ffmpeg:
+      inputs:
+      - path: rtsp://127.0.0.1:8554/dining_front_main
+        roles:      # Valid values : audio,detect,record
+        - record
+      - path: rtsp://127.0.0.1:8554/dining_front_sub
+        roles:      # Valid values : audio,detect,record
+        - detect
+    best_image_timeout: 60   # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
+    motion:
+      mask:
+      - 1244,25,1244,62,895,58,811,65,809,21   # date & time in top right side
+      - 1210,132,920,42,924,0,1280,0,1280,257
+      - 1257,720,1139,720,908,294,920,66
+      - 736,106,817,112,824,32,744,29
+      - 1280,286,1218,288,1222,384,1280,394
+      - 998,80,936,82,943,0,1003,0
+    zones:
+      zone_dining_front_porch_person:
+        coordinates: 1109,720,669,720,655,661,490,141,539,0,741,0,870,29,871,282
+        objects:
+        - person
+      zone_dining_front_garden_person:
+        coordinates: 
+          1048,277,1163,438,1259,632,1280,622,1280,357,1280,266,1221,162,1075,94,918,48,919,154
+        objects:
+        - person
+    mqtt:     # Optional: Configuration for the jpg snapshots published via MQTT
+      enabled: true           # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: true         # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: true      # Optional: draw bounding box on the snapshots (default: true)
+      crop: true              # Optional: crop the snapshot (default: true)
+      height: 270             # Optional: height to resize the snapshot to (default: 270)
+      quality: 70             # Optional: jpeg encode quality (default: 70)
+      required_zones: []      # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+    ui:                       # Optional: Configuration for how camera is handled in the GUI.
+      order: 3                # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
+      dashboard: true         # Optional: Whether or not to show the camera in the Frigate UI (default: true)
+    birdseye:                 # Optional: Configuration for how to sort the cameras in the Birdseye view.
+      order: 3                # Optional: Adjust sort order of cameras in the Birdseye view. Larger numbers come later (default: 0) By default the cameras are sorted alphabetically.
+      mode: objects           # Optional  - Values : continuous,motion,objects
+      enabled: true           # Optional - nclude a camera in Birdseye view only 
+    live:
+      stream_name: dining_front_sub   # sub stream for live view
+  ######################### Camera Configuration Dining-Room END #####################
+  ########################## Camera Configuration Garage-Front START #####################
+  Garage_Front:
+    enabled: true
+    webui_url: https://camera-garage-front.sc.home/    # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
+    ffmpeg:
+      inputs:
+      - path: rtsp://127.0.0.1:8554/garage_front_main
+        roles:    # Valid values : audio,detect,record
+        - record
+      - path: rtsp://127.0.0.1:8554/garage_front_sub
+        roles:    # Valid values : audio,detect,record
+        - detect
+    best_image_timeout: 60 # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
+    motion:
+      mask:
+      - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
+      - 994,532,1168,525,1151,354,960,341
+      - 933,165,996,159,986,100,927,110
+      - 1234,0,1236,68,420,91,364,91,333,79,192,177,137,111,274,0
+    zones:
+      zone_garage_front_person_car:
+        coordinates: 1183,417,1229,573,1248,720,518,720,128,720,96,621,211,419,464,81,663,42,823,22,929,21,1091,208
+        objects:
+        - person
+        - car
+    mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
+      enabled: true         # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: true       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true            # Optional: crop the snapshot (default: true)
+      height: 270           # Optional: height to resize the snapshot to (default: 270)
+      quality: 70           # Optional: jpeg encode quality (default: 70)
+      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+    ui:                     # Optional: Configuration for how camera is handled in the GUI.
+      order: 4              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
+      dashboard: true       # Optional: Whether or not to show the camera in the Frigate UI (default: true)
+    birdseye:               # Optional: Configuration for how to sort the cameras in the Birdseye view.
+      order: 4              # Optional: Adjust sort order of cameras in the Birdseye view. Larger numbers come later (default: 0) By default the cameras are sorted alphabetically.
+      mode: objects         # Optional  - Values : continuous,motion,objects
+      enabled: true         # Optional - nclude a camera in Birdseye view only 
+    live:
+      stream_name: garage_front_sub # sub stream for live view
+  ########################## Camera Configuration Garage-Front END #####################
+  ####################### Camera Configuration Garage-Side START #####################
+  Garage_Side:
+    enabled: true
+    webui_url: https://camera-garage-side.sc.home/    # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
+    ffmpeg:
+      inputs:
+      - path: rtsp://127.0.0.1:8554/garage_side_main
+        roles:    # Valid values : audio,detect,record
+        - record
+      - path: rtsp://127.0.0.1:8554/garage_side_sub
+        roles:    # Valid values : audio,detect,record
+        - detect
+    best_image_timeout: 60 # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
+    motion:
+      mask:
+      - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
+      - 210,304,211,259,745,22,876,52,895,0,405,0,0,0,0,497
+      - 1280,720,1280,0,893,0,673,720
+    zones:
+      zone_garage_side_person:
+        coordinates: 767,404,868,52,754,29,583,84,251,249,250,302,0,522,0,720,658,720
+        objects:
+        - person
+    mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
+      enabled: true         # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: true       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true            # Optional: crop the snapshot (default: true)
+      height: 270           # Optional: height to resize the snapshot to (default: 270)
+      quality: 70           # Optional: jpeg encode quality (default: 70)
+      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+    ui:                     # Optional: Configuration for how camera is handled in the GUI.
+      order: 5              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
+      dashboard: true       # Optional: Whether or not to show the camera in the Frigate UI (default: true)
+    birdseye:               # Optional: Configuration for how to sort the cameras in the Birdseye view.
+      order: 5              # Optional: Adjust sort order of cameras in the Birdseye view. Larger numbers come later (default: 0) By default the cameras are sorted alphabetically.
+      mode: objects         # Optional  - Values : continuous,motion,objects
+      enabled: true         # Optional - nclude a camera in Birdseye view only 
+    live:
+      stream_name: garage_side_sub # sub stream for live view
+  ####################### Camera Configuration Garage-Side END #####################
+  ########################## Camera Configuration Patio-Back START #####################
+  Patio_Back:
+    enabled: true
+    webui_url: https://camera-patio-back.sc.home/      # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
+    ffmpeg:
+      inputs:
+      - path: rtsp://127.0.0.1:8554/patio_back_main
+        roles:      # Valid values : audio,detect,record
+        - record
+      - path: rtsp://127.0.0.1:8554/patio_back_sub
+        roles:      # Valid values : audio,detect,record
+        - detect
+    best_image_timeout: 60   # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
+    motion:
+      mask:
+      - 1244,25,1244,62,895,58,811,65,809,21   # date & time in top right side
+    zones:
+      zone_patio_back_person:
+        coordinates: 719,41,499,78,295,119,123,192,0,252,0,538,0,720,985,720,1133,448,1081,64
+        objects:
+        - person
+    mqtt:     # Optional: Configuration for the jpg snapshots published via MQTT
+      enabled: true           # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: true         # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: true      # Optional: draw bounding box on the snapshots (default: true)
+      crop: true              # Optional: crop the snapshot (default: true)
+      height: 270             # Optional: height to resize the snapshot to (default: 270)
+      quality: 70             # Optional: jpeg encode quality (default: 70)
+      required_zones: []      # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+    ui:                       # Optional: Configuration for how camera is handled in the GUI.
+      order: 6                # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
+      dashboard: true         # Optional: Whether or not to show the camera in the Frigate UI (default: true)
+    birdseye:                 # Optional: Configuration for how to sort the cameras in the Birdseye view.
+      order: 6                # Optional: Adjust sort order of cameras in the Birdseye view. Larger numbers come later (default: 0) By default the cameras are sorted alphabetically.
+      mode: objects           # Optional  - Values : continuous,motion,objects
+      enabled: true           # Optional - nclude a camera in Birdseye view only 
+    live:
+      stream_name: patio_back_sub   # sub stream for live view
+  ########################## Camera Configuration Patio-Back END #####################
+  #################### Camera Configuration Master-Bedroom START ###################
+  Master_Bedroom:
+    enabled: true
+    webui_url: https://camera-master-br.sc.home/    # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
+    ffmpeg:
+      inputs:
+      - path: rtsp://127.0.0.1:8554/master_bedroom_main
+        roles:    # Valid values : audio,detect,record
+        - record
+      - path: rtsp://127.0.0.1:8554/master_bedroom_sub
+        roles:    # Valid values : audio,detect,record
+        - detect
+    best_image_timeout: 60 # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
+    motion:
+      mask:
+      - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
+      - 1280,168,1079,103,887,66,707,65,480,98,98,207,0,276,0,0,1280,0
+    zones:
+      zone_master_bedroom_person:
+        coordinates: 1280,720,1280,168,993,93,769,61,515,92,264,149,100,214,33,258,0,272,0,403,0,544,78,646,131,592,320,720
+        objects:
+        - person
+    mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
+      enabled: true         # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: true       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true            # Optional: crop the snapshot (default: true)
+      height: 270           # Optional: height to resize the snapshot to (default: 270)
+      quality: 70           # Optional: jpeg encode quality (default: 70)
+      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+    ui:                     # Optional: Configuration for how camera is handled in the GUI.
+      order: 7              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
+      dashboard: true       # Optional: Whether or not to show the camera in the Frigate UI (default: true)
+    birdseye:               # Optional: Configuration for how to sort the cameras in the Birdseye view.
+      order: 7              # Optional: Adjust sort order of cameras in the Birdseye view. Larger numbers come later (default: 0) By default the cameras are sorted alphabetically.
+      mode: objects         # Optional  - Values : continuous,motion,objects
+      enabled: true         # Optional - nclude a camera in Birdseye view only 
+    live:
+      stream_name: master_bedroom_sub # sub stream for live view
+  ####################### Camera Configuration Master-Bedroom END #####################
+  ########################## Camera Configuration Office-Side START #####################
+  Office_Side:
+    enabled: true
+    webui_url: https://camera-office-side.sc.home/    # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
+    ffmpeg:
+      inputs:
+      - path: rtsp://127.0.0.1:8554/office_side_main
+        roles:    # Valid values : audio,detect,record
+        - record
+      - path: rtsp://127.0.0.1:8554/office_side_sub
+        roles:    # Valid values : audio,detect,record
+        - detect
+    best_image_timeout: 60 # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
+    motion:
+      mask:
+      - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
+      - 1049,118,704,0,996,97,659,43,396,42,0,222,0,0,296,0,799,0,1280,0,1280,222
+    mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
+      enabled: true         # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: true       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true            # Optional: crop the snapshot (default: true)
+      height: 270           # Optional: height to resize the snapshot to (default: 270)
+      quality: 70           # Optional: jpeg encode quality (default: 70)
+      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+    ui:                     # Optional: Configuration for how camera is handled in the GUI.
+      order: 8              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
+      dashboard: true       # Optional: Whether or not to show the camera in the Frigate UI (default: true)
+    birdseye:               # Optional: Configuration for how to sort the cameras in the Birdseye view.
+      order: 8              # Optional: Adjust sort order of cameras in the Birdseye view. Larger numbers come later (default: 0) By default the cameras are sorted alphabetically.
+      mode: objects         # Optional  - Values : continuous,motion,objects
+      enabled: true         # Optional - nclude a camera in Birdseye view only 
+    live:
+      stream_name: office_side_sub # sub stream for live view
+  ########################## Camera Configuration Office-Side END #####################
+################################################################################################ END MAIN CAMERA CONFIGURATION ###############################################################################
