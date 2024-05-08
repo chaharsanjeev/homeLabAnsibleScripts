@@ -2,7 +2,7 @@ version: "3.9"
 services:
   frigate:
     container_name: frigate
-    privileged: true # This may not be necessary for all setups
+    privileged: true
     restart: unless-stopped
     image: ghcr.io/blakeblackshear/frigate:stable
     deploy:
@@ -13,13 +13,14 @@ services:
               #device_ids: ['0'] # this is only needed when using multiple GPUs
               count: 1 # number of GPUs
               capabilities: [gpu]    
-    shm_size: "256mb" # update for your cameras based on calculation above
+    shm_size: "256mb" # update for your cameras based on the calculation above
     devices:
       - /dev/bus/usb:/dev/bus/usb  # Passes the USB Coral, needs to be modified for other versions
       - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
+      #- /dev/dri/card0:/dev/dri/card0
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /opt/frigate/config:/config:rw
+      - /opt/frigate/config:/config:rw # Used to store the Frigate config file and sqlite database. You will also see a few files alongside the database file while Frigate is running.
       - /NVR_Storage_20TB:/media/frigate:rw
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
         target: /tmp/cache
@@ -31,4 +32,9 @@ services:
       - "8555:8555/tcp" # WebRTC over tcp
       - "8555:8555/udp" # WebRTC over udp
     environment:
-      FRIGATE_RTSP_PASSWORD: "password"
+      FRIGATE_RTSP_PASSWORD: "Tuhina0404"
+      FRIGATE_AMCREST_USERNAME: "frigate"
+      FRIGATE_AMCREST_PASSWORD: "frigate0404"
+      FRIGATE_MQTT_USERNAME: "mqtt_user"
+      FRIGATE_MQTT_PASSWORD: "Tuhina@0404"
+      PLUS_API_KEY: "de53cb94-a7d1-49c3-9d2e-647f6d4a5381:2f6880ead11f32bc37f2ab46f963cb3fc023beca"
