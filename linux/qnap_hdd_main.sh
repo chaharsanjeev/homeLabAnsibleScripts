@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # below added to QNAP crontab at location "/etc/config/crontab"
-# */30 * * * * curl -sKL https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/linux/qnap_hdd_main.sh  | sudo bash >> /dev/null 2>&1 #below added by sanjeev to send HDD details to node-red, run every 30 mins
+# */30 * * * * curl -sL https://raw.githubusercontent.com/chaharsanjeev/homeLabAnsibleScripts/main/linux/qnap_hdd_main.sh  | sudo bash >> /dev/null 2>&1 #below added by sanjeev to send HDD details to node-red, run every 30 mins
 # Commond to restart cronjobs for QMAP:  crontab /etc/config/crontab && /etc/init.d/crond.sh restart
 
 
