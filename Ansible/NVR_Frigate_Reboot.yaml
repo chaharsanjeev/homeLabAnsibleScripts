@@ -7,11 +7,8 @@
       name: docker
       state: stopped
   - name: Reboot Proxmox Container - Frigate/NVR
-    community.general.shutdown:
-      delay: 10
+    ansible.builtin.reboot:
+      msg: "Reboot initiated by Ansible Patch Server - Scheduled Daily Reboot"
+       reboot_timeout: 3600
     delegate_to: nvr.sc
-  #- name: Reboot Proxmox Container - Frigate/NVR
-  #  ansible.builtin.reboot:
-  #    msg: "Rebooting machine in 5 seconds"
-  #  delegate_to: nvr.sc
   
