@@ -2,12 +2,16 @@
 - hosts: all
   become: true
   tasks:
-  - name: Stop service cron on debian, if running
+  - name: Stop Docker for Proxmox Container - Frigate/NVR
     ansible.builtin.systemd_service:
       name: docker
       state: stopped
-  - name: reboot 
-    ansible.builtin.reboot:
-      msg: "Rebooting machine in 5 seconds"
+  - name: Reboot Proxmox Container - Frigate/NVR
+    community.general.shutdown:
+      delay: 10
     delegate_to: nvr.sc
+  #- name: Reboot Proxmox Container - Frigate/NVR
+  #  ansible.builtin.reboot:
+  #    msg: "Rebooting machine in 5 seconds"
+  #  delegate_to: nvr.sc
   
