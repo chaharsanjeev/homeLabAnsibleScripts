@@ -11,6 +11,6 @@
       vmid: 260
       api_user: root@pam
       api_password: Tuhina@0404
-      api_host: frigate.sc
+      api_host: vm.sc
       state: stopped
   
