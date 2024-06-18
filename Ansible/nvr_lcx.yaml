@@ -9,5 +9,5 @@
   - name: reboot 
     ansible.builtin.reboot:
       msg: "Rebooting machine in 5 seconds"
-      delegate_to: nvr.sc
+    delegate_to: nvr.sc
   
