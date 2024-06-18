@@ -2,13 +2,8 @@
 - hosts: all
   become: true
   tasks:
-  - name: Update Secondary DNS Server(Raspberry Pi - dns-s.sc) with Primary DNS Server(Proxmox - dns.sc)
-    register: reg_gravity_pull
-    ignore_errors: True
-    retries: 3
-    delay: 3
-    shell: /bin/bash -c "systemctl docker stop" 2>/dev/null
-    args:
-      executable: /bin/bash
-    environment:
-      PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+  - name: Stop service cron on debian, if running
+  ansible.builtin.systemd_service:
+    name: docker
+    state: stopped
+    
