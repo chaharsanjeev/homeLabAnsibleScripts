@@ -6,11 +6,8 @@
     ansible.builtin.systemd_service:
       name: docker
       state: stopped
-  - name: Stop container
-    community.general.proxmox:
-      vmid: 260
-      api_user: root@pam
-      api_password: Tuhina@0404
-      api_host: vm.sc
-      state: stopped
+  - name: reboot 
+    ansible.builtin.reboot:
+      msg: "Rebooting machine in 5 seconds"
+      delegate_to: nvr.sc
   
