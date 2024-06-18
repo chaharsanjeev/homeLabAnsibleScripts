@@ -1,15 +1,14 @@
 ---
-- hosts: localhost
-  gather_facts: false
-
+- hosts: all
+  become: true
   tasks:
-    - name: Get running containers
-      docker_host_info:
-        containers: yes
-      register: docker_info
-
-    - name: Stop running containers
-      docker_container:
-        name: "{{ item }}"
-        state: stopped
-      loop: "{{ docker_info.containers | map(attribute='Id') | list }}"
+  - name: Update Secondary DNS Server(Raspberry Pi - dns-s.sc) with Primary DNS Server(Proxmox - dns.sc)
+    register: reg_gravity_pull
+    ignore_errors: True
+    retries: 3
+    delay: 3
+    shell: /bin/bash -c "systemctl docker stop" -s 103 111 >>/var/log/gravity-pull.log 2>/dev/null
+    args:
+      executable: /bin/bash
+    environment:
+      PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
