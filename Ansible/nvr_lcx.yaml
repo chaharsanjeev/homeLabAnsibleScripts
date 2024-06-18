@@ -3,7 +3,7 @@
   become: true
   tasks:
   - name: Stop service cron on debian, if running
-  ansible.builtin.systemd_service:
-    name: docker
-    state: stopped
+    ansible.builtin.systemd_service:
+      name: docker
+      state: stopped
     
