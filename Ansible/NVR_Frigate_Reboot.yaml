@@ -9,6 +9,6 @@
   - name: Reboot Proxmox Container - Frigate/NVR
     ansible.builtin.reboot:
       msg: "Reboot initiated by Ansible Patch Server - Scheduled Daily Reboot"
-       reboot_timeout: 3600
+      reboot_timeout: 3600
     delegate_to: nvr.sc
   
