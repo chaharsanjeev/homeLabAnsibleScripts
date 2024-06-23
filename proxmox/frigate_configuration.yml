@@ -1,10 +1,9 @@
----
 # yaml-language-server: $schema=http://frigate.sc:5000/api/config/schema.json
 
 ############################### MQTT  ############################
 mqtt:
-  enabled: True
-  host: mqtt.sc 
+  enabled: true
+  host: mqtt.sc
   port: 1883
   topic_prefix: frigate
   client_id: frigate
@@ -36,6 +35,7 @@ database:
 ############################### START MODEL SECTION ################################
 # Optional: model modifications
 model:
+  path: plus://20b0db7b86d7d960cb0d471af2d5b1bc
   # path: /edgetpu_model.tflite       # Optional: path to the model (default: automatic based on detector)
   # labelmap_path: /labelmap.txt      # Optional: path to the labelmap
   width: 320                          # Required: Object detection model input width
@@ -96,11 +96,12 @@ detect:
 ### Optional: Object configuration
 ### NOTE: Can be overridden at the camera level
 objects:
+  ## https://docs.frigate.video/configuration/objects
   ### Optional: list of objects to track from labelmap.txt (default: person)
   track:
   - person
   - car
-  - dog
+  #- dog
   ### Optional: mask to prevent all object types from being detected in certain areas (default: no mask)
   ### Checks based on the bottom center of the bounding box of the object.
   ### NOTE: This mask is COMBINED with the object type specific mask below
@@ -215,7 +216,7 @@ snapshots:
   timestamp: true       # Optional: print a timestamp on the snapshots (default: false)
   bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
   crop: false           # Optional: crop the snapshot (default: false)
-  height: 175           # Optional: height to resize the snapshot to (default: original size)
+  #height: 175           # Optional: height to resize the snapshot to (default: original size)
   #required_zones: []    # Optional: Restrict snapshots to objects that entered any of the listed zones (default: no required zones)
   retain:               # Optional: Camera override for retention settings (default: global values)
     default: 120        # Required: Default retention days (default: 10)
@@ -318,9 +319,6 @@ logger:
   # ffmpeg.<camera_name>.<sorted_roles> : debug
 
 
-
-
-
 ######################### START ENVIRONMENT VARIABLE SECTION ########################
 
 # Optional: set environment variables
@@ -334,14 +332,14 @@ logger:
 birdseye:
   enabled: true                   # Optional: Enable birdseye view
   restream: false                 # Optional: Restream birdseye via RTSP. NOTE: Enabling this will set birdseye to run 24/7 which may increase CPU usage somewhat.
-  width: 1280                     # Optional: Width of the output resolution
-  height: 720                     # Optional: Height of the output resolution
+  #width: 1280                    # Optional: Width of the output resolution
+  #height: 720                    # Optional: Height of the output resolution
   quality: 8                      # Optional: Encoding quality of the mpeg1 feed. 1 is the highest quality, and 31 is the lowest. Lower quality feeds utilize less CPU resources.
   mode: objects                   # Optional: Mode of the view. Available options are: objects, motion, and continuous
   inactivity_threshold: 30        # Optional: Threshold for camera activity to stop showing camera
   layout:                         # Optional: Configure the birdseye layout
     scaling_factor: 2.0           # Optional: Scaling factor for the layout calculator
-    max_cameras: 1                # Optional: Maximum number of cameras to show at one time, showing the most recent (default: show all cameras)
+    max_cameras: 8                # Optional: Maximum number of cameras to show at one time, showing the most recent (default: show all cameras)
 
 ############################### START GO-2-RTC SECTION  ############################
 ###  access the go2rtc stream info at http://frigate_ip:5000/api/go2rtc/streams which can be helpful to debug as well as provide useful information about your camera streams.
@@ -351,46 +349,47 @@ go2rtc:
     - 192.168.30.5:8555
     - stun:8555
   streams:
-    office_front_main: 
+    office_front_main:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-front.sc/cam/realmonitor?channel=1&subtype=0
-    office_front_sub: 
+    office_front_sub:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-front.sc/cam/realmonitor?channel=1&subtype=2
 
-    porch_front_main: 
+    porch_front_main:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-porch-front.sc/cam/realmonitor?channel=1&subtype=0
-    porch_front_sub: 
+    porch_front_sub:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-porch-front.sc/cam/realmonitor?channel=1&subtype=2
 
-    garage_front_main: 
+    garage_front_main:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-front.sc/cam/realmonitor?channel=1&subtype=0
-    garage_front_sub: 
+    garage_front_sub:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-front.sc/cam/realmonitor?channel=1&subtype=2
 
-    patio_back_main: 
+    patio_back_main:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-patio-back.sc/cam/realmonitor?channel=1&subtype=0
-    patio_back_sub: 
+    patio_back_sub:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-patio-back.sc/cam/realmonitor?channel=1&subtype=2
 
-    office_side_main: 
+    office_side_main:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-side.sc/cam/realmonitor?channel=1&subtype=0
-    office_side_sub: 
+    office_side_sub:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-side.sc/cam/realmonitor?channel=1&subtype=2
 
-    dining_front_main: 
+    dining_front_main:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-dining-front.sc/cam/realmonitor?channel=1&subtype=0
-    dining_front_sub: 
+    dining_front_sub:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-dining-front.sc/cam/realmonitor?channel=1&subtype=2
 
-    garage_side_main: 
+    garage_side_main:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-side.sc/cam/realmonitor?channel=1&subtype=0
-    garage_side_sub: 
+    garage_side_sub:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-side.sc/cam/realmonitor?channel=1&subtype=2
 
-    master_bedroom_main: 
+    master_bedroom_main:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-master-br.sc/cam/realmonitor?channel=1&subtype=0
-    master_bedroom_sub: 
+    master_bedroom_sub:
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-master-br.sc/cam/realmonitor?channel=1&subtype=2
-
+    tuhina_bedroom_main:
+      rtsp://Kc0BAsTgHmIC:Cm6tzZJpYBHl@192.168.40.41/live0
 
 ################################################################################################ START MAIN CAMERA CONFIGURATION ###############################################################################
 
@@ -419,18 +418,29 @@ cameras:
       - 455,306,484,306,488,276,457,279
       - 814,190,923,253,953,80,866,71
       - 1191,247,1134,230,1143,154,1218,166
+      - 704,0,344,0,364,336
     zones:
       zone_office_front_person:
-        coordinates: 0,720,444,720,423,643,898,549,1159,431,1280,344,1219,222,1043,91,866,0,707,0,363,306,355,56,0,268
+        coordinates: 0,242,0,720,444,720,423,643,898,549,1159,431,1280,344,1219,222,1043,91,866,0,800,0,420,482,374,306,346,53
         objects:
-          - person
+        - person
+    objects:
+      filters:
+        person:
+          mask:
+          - 1280,0,1280,271,863,0
+          - 704,0,344,0,364,336
+          - 1280,0,1280,271,863,0
+          - 542,201,559,107,626,112,617,204
+          - 674,66,719,77,726,0,681,0
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
-      enabled: true         # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
-      timestamp: true       # Optional: print a timestamp on the snapshots (default: true)
-      bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
-      crop: true            # Optional: crop the snapshot (default: true)
-      height: 270           # Optional: height to resize the snapshot to (default: 270)
-      quality: 70           # Optional: jpeg encode quality (default: 70)
+      # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
+      enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: false       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: false    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true             # Optional: crop the snapshot (default: true)
+      height: 500            # Optional: height to resize the snapshot to (default: 270)
+      quality: 100           # Optional: jpeg encode quality (default: 70)
       required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
     ui:                     # Optional: Configuration for how camera is handled in the GUI.
       order: 1              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
@@ -467,14 +477,15 @@ cameras:
         coordinates: 56,720,1280,720,1280,36,1028,0,778,0,759,103,591,133,288,209,230,29
         objects:
         - person
-    mqtt:     # Optional: Configuration for the jpg snapshots published via MQTT
-      enabled: true           # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
-      timestamp: true         # Optional: print a timestamp on the snapshots (default: true)
-      bounding_box: true      # Optional: draw bounding box on the snapshots (default: true)
-      crop: true              # Optional: crop the snapshot (default: true)
-      height: 270             # Optional: height to resize the snapshot to (default: 270)
-      quality: 70             # Optional: jpeg encode quality (default: 70)
-      required_zones: []      # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+    mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
+      # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
+      enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: false       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: false    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true             # Optional: crop the snapshot (default: true)
+      height: 500            # Optional: height to resize the snapshot to (default: 270)
+      quality: 100           # Optional: jpeg encode quality (default: 70)
+      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
     ui:                       # Optional: Configuration for how camera is handled in the GUI.
       order: 2                # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
       dashboard: true         # Optional: Whether or not to show the camera in the Frigate UI (default: true)
@@ -516,14 +527,20 @@ cameras:
           1048,277,1163,438,1259,632,1280,622,1280,357,1280,266,1221,162,1075,94,918,48,919,154
         objects:
         - person
-    mqtt:     # Optional: Configuration for the jpg snapshots published via MQTT
-      enabled: true           # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
-      timestamp: true         # Optional: print a timestamp on the snapshots (default: true)
-      bounding_box: true      # Optional: draw bounding box on the snapshots (default: true)
-      crop: true              # Optional: crop the snapshot (default: true)
-      height: 270             # Optional: height to resize the snapshot to (default: 270)
-      quality: 70             # Optional: jpeg encode quality (default: 70)
-      required_zones: []      # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+    objects:
+      filters:
+        person:
+          mask:
+          - 1210,132,920,42,924,0,1280,0,1280,257
+    mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
+      # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
+      enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: false       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: false    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true             # Optional: crop the snapshot (default: true)
+      height: 500            # Optional: height to resize the snapshot to (default: 270)
+      quality: 100           # Optional: jpeg encode quality (default: 70)
+      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
     ui:                       # Optional: Configuration for how camera is handled in the GUI.
       order: 3                # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
       dashboard: true         # Optional: Whether or not to show the camera in the Frigate UI (default: true)
@@ -553,19 +570,30 @@ cameras:
       - 994,532,1168,525,1151,354,960,341
       - 933,165,996,159,986,100,927,110
       - 1234,0,1236,68,420,91,364,91,333,79,192,177,137,111,274,0
+      - 1280,0,1280,693,1209,438,1105,240,997,82,944,0
     zones:
-      zone_garage_front_person_car:
-        coordinates: 1183,417,1229,573,1248,720,518,720,128,720,96,621,211,419,464,81,663,42,823,22,929,21,1091,208
+      zone_garage_front_car:
+        coordinates: 957,624,1229,573,1248,720,518,720,128,720,81,580,194,245,388,89,663,42,823,22,877,28,932,252
+        objects:
+        - car
+      zone_garage_front_person:
+        coordinates: 949,378,958,610,1225,568,1248,720,518,720,206,720,0,720,0,550,169,358,388,89,663,42,890,25,948,41,1056,164,1150,341   
         objects:
         - person
-        - car
+    objects:
+      filters:
+        person:
+          mask:
+            - 1234,0,1236,68,420,91,364,91,333,79,192,177,137,111,274,0
+            - 1280,0,1280,693,1209,438,1105,240,997,82,944,0
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
-      enabled: true         # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
-      timestamp: true       # Optional: print a timestamp on the snapshots (default: true)
-      bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
-      crop: true            # Optional: crop the snapshot (default: true)
-      height: 270           # Optional: height to resize the snapshot to (default: 270)
-      quality: 70           # Optional: jpeg encode quality (default: 70)
+      # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
+      enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: false       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: false    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true             # Optional: crop the snapshot (default: true)
+      height: 500            # Optional: height to resize the snapshot to (default: 270)
+      quality: 100           # Optional: jpeg encode quality (default: 70)
       required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
     ui:                     # Optional: Configuration for how camera is handled in the GUI.
       order: 4              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
@@ -600,13 +628,20 @@ cameras:
         coordinates: 767,404,868,52,754,29,583,84,251,249,250,302,0,522,0,720,658,720
         objects:
         - person
+    objects:
+      filters:
+        person:
+          mask:
+            - 210,304,211,259,745,22,876,52,895,0,405,0,0,0,0,497
+            - 1280,720,1280,0,893,0,673,720
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
-      enabled: true         # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
-      timestamp: true       # Optional: print a timestamp on the snapshots (default: true)
-      bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
-      crop: true            # Optional: crop the snapshot (default: true)
-      height: 270           # Optional: height to resize the snapshot to (default: 270)
-      quality: 70           # Optional: jpeg encode quality (default: 70)
+      # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
+      enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: false       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: false    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true             # Optional: crop the snapshot (default: true)
+      height: 500            # Optional: height to resize the snapshot to (default: 270)
+      quality: 100           # Optional: jpeg encode quality (default: 70)
       required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
     ui:                     # Optional: Configuration for how camera is handled in the GUI.
       order: 5              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
@@ -639,14 +674,15 @@ cameras:
         coordinates: 719,41,499,78,295,119,123,192,0,252,0,538,0,720,985,720,1133,448,1081,64
         objects:
         - person
-    mqtt:     # Optional: Configuration for the jpg snapshots published via MQTT
-      enabled: true           # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
-      timestamp: true         # Optional: print a timestamp on the snapshots (default: true)
-      bounding_box: true      # Optional: draw bounding box on the snapshots (default: true)
-      crop: true              # Optional: crop the snapshot (default: true)
-      height: 270             # Optional: height to resize the snapshot to (default: 270)
-      quality: 70             # Optional: jpeg encode quality (default: 70)
-      required_zones: []      # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+    mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
+      # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
+      enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: false       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: false    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true             # Optional: crop the snapshot (default: true)
+      height: 500            # Optional: height to resize the snapshot to (default: 270)
+      quality: 100           # Optional: jpeg encode quality (default: 70)
+      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
     ui:                       # Optional: Configuration for how camera is handled in the GUI.
       order: 6                # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
       dashboard: true         # Optional: Whether or not to show the camera in the Frigate UI (default: true)
@@ -676,16 +712,26 @@ cameras:
       - 1280,168,1079,103,887,66,707,65,480,98,98,207,0,276,0,0,1280,0
     zones:
       zone_master_bedroom_person:
-        coordinates: 1280,720,1280,168,993,93,769,61,515,92,264,149,100,214,33,258,0,272,0,403,0,544,78,646,131,592,320,720
+        coordinates: 
+          1280,720,1280,168,993,93,769,61,515,92,264,149,100,214,33,258,0,272,0,403,0,544,78,646,131,592,320,720
         objects:
         - person
+    objects:
+      filters:
+        person:
+          mask:
+            - 1280,168,1079,103,887,66,707,65,480,98,98,207,0,276,0,0,1280,0
+        car:
+          mask:
+            - 1280,168,1079,103,887,66,707,65,480,98,98,207,0,276,0,0,1280,0    
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
-      enabled: true         # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
-      timestamp: true       # Optional: print a timestamp on the snapshots (default: true)
-      bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
-      crop: true            # Optional: crop the snapshot (default: true)
-      height: 270           # Optional: height to resize the snapshot to (default: 270)
-      quality: 70           # Optional: jpeg encode quality (default: 70)
+      # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
+      enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: false       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: false    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true             # Optional: crop the snapshot (default: true)
+      height: 500            # Optional: height to resize the snapshot to (default: 270)
+      quality: 100           # Optional: jpeg encode quality (default: 70)
       required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
     ui:                     # Optional: Configuration for how camera is handled in the GUI.
       order: 7              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
@@ -714,13 +760,22 @@ cameras:
       mask:
       - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
       - 1049,118,704,0,996,97,659,43,396,42,0,222,0,0,296,0,799,0,1280,0,1280,222
+    zones:
+      zone_office_side_person:
+        coordinates: 1259,720,72,720,0,628,0,229,217,113,422,40,740,62,1020,141
+    objects:
+      filters:
+        person:
+          mask:
+          - 1049,118,704,0,996,97,659,43,396,42,0,222,0,0,296,0,799,0,1280,0,1280,222
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
-      enabled: true         # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
-      timestamp: true       # Optional: print a timestamp on the snapshots (default: true)
-      bounding_box: true    # Optional: draw bounding box on the snapshots (default: true)
-      crop: true            # Optional: crop the snapshot (default: true)
-      height: 270           # Optional: height to resize the snapshot to (default: 270)
-      quality: 70           # Optional: jpeg encode quality (default: 70)
+      # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
+      enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
+      timestamp: false       # Optional: print a timestamp on the snapshots (default: true)
+      bounding_box: false    # Optional: draw bounding box on the snapshots (default: true)
+      crop: true             # Optional: crop the snapshot (default: true)
+      height: 500            # Optional: height to resize the snapshot to (default: 270)
+      quality: 100           # Optional: jpeg encode quality (default: 70)
       required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
     ui:                     # Optional: Configuration for how camera is handled in the GUI.
       order: 8              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
@@ -732,4 +787,25 @@ cameras:
     live:
       stream_name: office_side_sub # sub stream for live view
   ########################## Camera Configuration Office-Side END #####################
+  ########################### Camera Configuration Tuhina Bedroom START #######################
+  tuhina_bedroom:
+    enabled: true  ## If disabled: config is used but no live stream and no capture etc.
+    ffmpeg:
+      inputs:
+      - path: rtsp://127.0.0.1:8554/tuhina_bedroom_main
+        roles:    # Valid values : audio,detect,record,rtmp
+        - detect
+    ui:                     # Optional: Configuration for how camera is handled in the GUI.
+      order: 0              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
+      dashboard: false       # Optional: Whether or not to show the camera in the Frigate UI
+  #   live:
+  #     stream_name: tuhina_bedroom_main # stream for live view
+    birdseye:  
+      enabled: false         # Optional - nclude a camera in Birdseye view only 
+  ########################### Camera Configuration Tuhina Bedroom END #######################
+
+
+
+
+
 ################################################################################################ END MAIN CAMERA CONFIGURATION ###############################################################################
