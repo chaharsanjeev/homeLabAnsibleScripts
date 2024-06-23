@@ -11,7 +11,8 @@ services:
           devices:
             - driver: nvidia
               #device_ids: ['0'] # this is only needed when using multiple GPUs
-              count: 1 # number of GPUs
+              #count: 1 # number of GPUs
+              count: all
               capabilities: [gpu]    
     shm_size: "256mb" # update for your cameras based on the calculation above
     devices:
@@ -38,3 +39,5 @@ services:
       FRIGATE_MQTT_USERNAME: "mqtt_user"
       FRIGATE_MQTT_PASSWORD: "Tuhina@0404"
       PLUS_API_KEY: "de53cb94-a7d1-49c3-9d2e-647f6d4a5381:2f6880ead11f32bc37f2ab46f963cb3fc023beca"
+
+      
