@@ -3,13 +3,13 @@
   become: true
   tasks:
   - debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address']
-  - name: Update DDNS for Gateway
+  - name: Update Cloudflare DDNS for gateway.sanjeevchahar.com
     community.general.cloudflare_dns:
-      account_api_key: 4a61db88b8eeef6f8a9c357d3976cddd
-      account_email: chahar.sanjeev@gmail.com
-      api_token: MBo05lKbw4CZdPThxX7LAvra3Ku_qZ5dQgkt5oIB
+      account_api_key: "{{cloudflare_account_api_key}}"
+      account_email: "{{cloudflare_account_email}}"
+      api_token: "{{cloudflare_api_token}}"
       zone: sanjeevchahar.com
-      record: home
+      record: gateway
       type: A
       value: "{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}"
     register: record
