@@ -2,6 +2,7 @@
 - hosts: all
   become: true
   tasks:
+  - debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address']
   - name: Update DDNS for Gateway
     community.general.cloudflare_dns:
       account_api_key: 4a61db88b8eeef6f8a9c357d3976cddd
