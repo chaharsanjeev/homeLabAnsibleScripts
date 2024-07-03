@@ -10,6 +10,7 @@
       api_token: "{{cloudflare_api_token}}"
       zone: sanjeevchahar.com
       record: gateway.sanjeevchahar.com
+      state: "present"
       type: A
       value: "{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}"
     register: record
