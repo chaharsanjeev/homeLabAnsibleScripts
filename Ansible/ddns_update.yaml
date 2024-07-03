@@ -11,6 +11,6 @@
       zone: sanjeevchahar.com
       record: test
       type: A
-      value: hostvars[inventory_hostname]['ansible_default_ipv4']['address']
+      value: '{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}'
     register: record
   
