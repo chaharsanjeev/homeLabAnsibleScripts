@@ -1,1 +1,13 @@
-ddd
+version: '3.9'
+services:
+  cloudflare-ddns:
+    image: oznu/cloudflare-ddns:latest
+    privileged: true
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - API_KEY=MBo05lKbw4CZdPThxX7LAvra3Ku_qZ5dQgkt5oIB
+      - ZONE=sanjeevchahar.com
+      - SUBDOMAIN=gateway
+      - PROXIED=false
