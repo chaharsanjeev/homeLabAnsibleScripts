@@ -10,6 +10,6 @@
       zone: sanjeevchahar.com
       record: test
       type: A
-      value: 127.0.0.1
+      value: 128.0.0.1
     register: record
   
