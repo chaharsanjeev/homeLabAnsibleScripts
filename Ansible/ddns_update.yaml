@@ -4,11 +4,12 @@
   tasks:
   - name: Update DDNS for Gateway
     community.general.cloudflare_dns:
+      account_api_key: 4a61db88b8eeef6f8a9c357d3976cddd
+      account_email: chahar.sanjeev@gmail.com
+      api_token: MBo05lKbw4CZdPThxX7LAvra3Ku_qZ5dQgkt5oIB
       zone: sanjeevchahar.com
       record: test
       type: A
       value: 127.0.0.1
-      account_email: chahar.sanjeev@gmail.com
-      account_api_key: MBo05lKbw4CZdPThxX7LAvra3Ku_qZ5dQgkt5oIB
-    register: record
+     register: record
   
