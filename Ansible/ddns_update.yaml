@@ -1,1 +1,14 @@
-s
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: Update DDNS for Gateway
+    community.general.cloudflare_dns:
+    zone: sanjeevchahar.com
+    record: test
+    type: A
+    value: 127.0.0.1
+    account_email: chahar.sanjeev@gmail.com
+    account_api_key: MBo05lKbw4CZdPThxX7LAvra3Ku_qZ5dQgkt5oIB
+  register: record
+  
