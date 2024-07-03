@@ -11,5 +11,5 @@
       record: test
       type: A
       value: 127.0.0.1
-     register: record
+    register: record
   
