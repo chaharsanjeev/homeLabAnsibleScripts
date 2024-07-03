@@ -9,7 +9,7 @@
       account_email: chahar.sanjeev@gmail.com
       api_token: MBo05lKbw4CZdPThxX7LAvra3Ku_qZ5dQgkt5oIB
       zone: sanjeevchahar.com
-      record: test
+      record: home
       type: A
       value: "{{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}"
     register: record
