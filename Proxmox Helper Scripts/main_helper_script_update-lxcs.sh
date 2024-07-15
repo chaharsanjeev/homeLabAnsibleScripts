@@ -120,8 +120,8 @@ for container in $(pct list | awk '{if(NR>1) print $1}'); do
     container_name=$(pct exec "$container" hostname)
     echo -e ""
     echo -e ""
-    echo -e "--------------------------------------------------------------------"
-    echo -e "${BL}[Info]${GN} Start with Execute on Container : ${BL}$container_name${CL}/${BL}$container${CL}"
+    echo -e "_______________________________________________________________________________________________________________________________________"
+    echo -e "${BL}[Info]${GN} Start with Container : ${BL}$container_name${CL}/${BL}$container${CL}"
     
     status=$(pct status $container)
     template=$(pct config $container | grep -q "template:" && echo "true" || echo "false")
@@ -143,7 +143,8 @@ for container in $(pct list | awk '{if(NR>1) print $1}'); do
     fi
   fi
 
-  echo -e "-------------End----------------------"
+  echo -e ""
+  echo -e ""
 done
 wait
 
