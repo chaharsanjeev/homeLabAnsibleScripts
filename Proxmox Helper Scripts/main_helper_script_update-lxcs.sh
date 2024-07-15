@@ -117,7 +117,11 @@ for container in $(pct list | awk '{if(NR>1) print $1}'); do
     echo -e "${BL}[Info]${GN} Skipping ${BL}$container${CL}"
     sleep 1
   else
-    echo -e "${BL}[Info]${GN} Execute on Machine - ${BL}$container${CL}"
+    container_name=$(pct exec "$container" hostname)
+    echo -e ""
+    echo -e ""
+    echo -e "--------------------------------------------------------------------"
+    echo -e "${BL}[Info]${GN} Start with Execute on Container : ${BL}$container_name${CL}/${BL}$container${CL}"
     
     status=$(pct status $container)
     template=$(pct config $container | grep -q "template:" && echo "true" || echo "false")
@@ -138,6 +142,8 @@ for container in $(pct list | awk '{if(NR>1) print $1}'); do
         containers_needing_reboot+=("$container ($container_hostname)")
     fi
   fi
+
+  echo -e "-------------End----------------------"
 done
 wait
 
