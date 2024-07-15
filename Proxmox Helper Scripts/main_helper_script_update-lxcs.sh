@@ -117,6 +117,8 @@ for container in $(pct list | awk '{if(NR>1) print $1}'); do
     echo -e "${BL}[Info]${GN} Skipping ${BL}$container${CL}"
     sleep 1
   else
+    echo -e "${BL}[Info]${GN} Execute on Machine - ${BL}$container${CL}"
+    
     status=$(pct status $container)
     template=$(pct config $container | grep -q "template:" && echo "true" || echo "false")
     if [ "$template" == "false" ] && [ "$status" == "status: stopped" ]; then
