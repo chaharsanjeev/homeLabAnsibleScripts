@@ -346,7 +346,8 @@ birdseye:
 go2rtc:
   webrtc:
     candidates:
-    - 192.168.30.5:8555
+    - 192.168.30.5:8555 #frigate server
+    - 192.168.10.9:8555 #Sanjeev Office Laptop
     - stun:8555
   streams:
     office_front_main:
@@ -409,16 +410,17 @@ cameras:
     best_image_timeout: 60 # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
     motion:
       mask:
-      - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
-      - 1280,0,1280,271,863,0   # front road drive & walk way
-      - 1280,720,1280,293,864,575,426,639,441,720 # front flower bed at sanjeev office side
+      - 1244,25,1244,62,895,58,811,65,809,21
+      - 1280,0,1280,271,863,0
+      - 1280,720,1280,293,864,575,426,639,441,720
       - 542,201,559,107,626,112,617,204
       - 674,66,719,77,726,0,681,0
       - 646,85,671,89,674,70,646,67
       - 455,306,484,306,488,276,457,279
-      - 814,190,923,253,953,80,866,71
-      - 1191,247,1134,230,1143,154,1218,166
+      - 773,243,968,280,1003,0,820,0
+      - 1216,290,1080,252,1128,100,1280,152
       - 704,0,344,0,364,336
+      - 700,319,835,342,1037,355,1042,0,808,0
     zones:
       zone_office_front_person:
         coordinates: 0,242,0,720,444,720,423,643,898,549,1159,431,1280,344,1219,222,1043,91,866,0,800,0,420,482,374,306,346,53
@@ -433,6 +435,9 @@ cameras:
           - 1280,0,1280,271,863,0
           - 542,201,559,107,626,112,617,204
           - 674,66,719,77,726,0,681,0
+          - 776,284,842,294,986,306,1042,0,808,0
+          - 1112,246,1238,286,1280,136,1120,106  
+          - 700,319,835,342,1037,355,1042,0,808,0
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -467,16 +472,24 @@ cameras:
     best_image_timeout: 60   # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
     motion:
       mask:
-      - 1244,25,1244,62,895,58,811,65,809,21   # date & time in top right side
+      - 1244,25,1244,62,895,58,811,65,809,21
       - 386,122,266,159,301,322,435,268
       - 785,48,768,154,652,180,643,44
-      - 804,151,814,82,969,52,1009,111
+      - 848,160,740,182,656,192,634,66,802,56,1058,26,1030,134
       - 241,0,1045,0,1031,37,247,42
     zones:
       zone_porch_front_person:
-        coordinates: 56,720,1280,720,1280,36,1028,0,778,0,759,103,591,133,288,209,230,29
+        #coordinates: 56,720,1280,720,1280,36,1028,0,778,0,759,103,591,133,288,209,230,29
+        coordinates: 958,720,1280,720,1280,36,1028,0,778,0,793,64,788,161,689,194,566,92,386,142,434,270,316,320,257,113,0,720,654,720,1040,430,1144,546
         objects:
         - person
+    objects:
+      filters:
+        person:
+          mask:
+          - 927,720,532,720,1038,427,1153,523
+          - 226,82,320,92,316,0,236,0
+          - 688,202,802,168,1022,146,1050,22,780,32,664,44,636,168
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -511,12 +524,12 @@ cameras:
     best_image_timeout: 60   # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
     motion:
       mask:
-      - 1244,25,1244,62,895,58,811,65,809,21   # date & time in top right side
-      - 1210,132,920,42,924,0,1280,0,1280,257
-      - 1257,720,1139,720,908,294,920,66
-      - 736,106,817,112,824,32,744,29
-      - 1280,286,1218,288,1222,384,1280,394
-      - 998,80,936,82,943,0,1003,0
+      - 1244,25,1244,62,895,58,811,65,809,21
+      - 1210,132,814,24,810,0,1280,0,1280,257
+      - 1280,586,1280,720,1257,720,1102,720,878,330,920,66
+      - 734,140,826,142,824,32,744,29
+      - 1280,240,1182,230,1184,556,1280,584
+      - 1016,116,922,116,920,0,1024,0
     zones:
       zone_dining_front_porch_person:
         coordinates: 1109,720,669,720,655,661,490,141,539,0,741,0,870,29,871,282
@@ -532,6 +545,7 @@ cameras:
         person:
           mask:
           - 1210,132,920,42,924,0,1280,0,1280,257
+          - 1280,614,1154,476,1188,170,1280,216
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -760,6 +774,10 @@ cameras:
       mask:
       - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
       - 1049,118,704,0,996,97,659,43,396,42,0,222,0,0,296,0,799,0,1280,0,1280,222
+      - 168,502,226,538,298,633,233,720,91,589
+      - 0,557,51,609,115,528,37,432,0,478
+      #- 682,720,921,720,956,416,976,116,893,72,709,65,500,66,42,305,58,418,314,530,397,576
+      - 682,720,1280,720,1280,576,1236,452,1156,264,1052,116,893,72,709,41,521,28,42,305,0,373,0,720,405,720
     zones:
       zone_office_side_person:
         coordinates: 1259,720,72,720,0,628,0,229,217,113,422,40,740,62,1020,141
@@ -768,6 +786,8 @@ cameras:
         person:
           mask:
           - 1049,118,704,0,996,97,659,43,396,42,0,222,0,0,296,0,799,0,1280,0,1280,222
+          - 168,502,226,538,298,633,233,720,91,589
+          - 0,557,51,609,115,528,37,432,0,478
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -788,20 +808,20 @@ cameras:
       stream_name: office_side_sub # sub stream for live view
   ########################## Camera Configuration Office-Side END #####################
   ########################### Camera Configuration Tuhina Bedroom START #######################
-  tuhina_bedroom:
-    enabled: true  ## If disabled: config is used but no live stream and no capture etc.
-    ffmpeg:
-      inputs:
-      - path: rtsp://127.0.0.1:8554/tuhina_bedroom_main
-        roles:    # Valid values : audio,detect,record,rtmp
-        - detect
-    ui:                     # Optional: Configuration for how camera is handled in the GUI.
-      order: 0              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
-      dashboard: false       # Optional: Whether or not to show the camera in the Frigate UI
+  #tuhina_bedroom:
+  #  enabled: false  ## If disabled: config is used but no live stream and no capture etc.
+  #  ffmpeg:
+  #    inputs:
+  #    - path: rtsp://127.0.0.1:8554/tuhina_bedroom_main
+  #      roles:    # Valid values : audio,detect,record,rtmp
+  #      - detect
+  #  ui:                     # Optional: Configuration for how camera is handled in the GUI.
+  #    order: 0              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
+  #    dashboard: false       # Optional: Whether or not to show the camera in the Frigate UI
   #   live:
   #     stream_name: tuhina_bedroom_main # stream for live view
-    birdseye:  
-      enabled: false         # Optional - nclude a camera in Birdseye view only 
+  #  birdseye:  
+  #    enabled: false         # Optional - nclude a camera in Birdseye view only 
   ########################### Camera Configuration Tuhina Bedroom END #######################
 
 
