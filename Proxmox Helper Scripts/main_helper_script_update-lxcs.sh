@@ -104,6 +104,7 @@ for container in $(pct list | awk '{if(NR>1) print $1}'); do
     sleep 1
   else
     container_name=$(pct exec "$container" hostname)
+    echo -e "\n"
     echo -e "\n\n_______________________________________________________________________________________________________________________________________"
     echo -e "${BL}[Info]${GN} Start with Container : ${BL}$container_name${CL}/${BL}$container${CL}"
     
