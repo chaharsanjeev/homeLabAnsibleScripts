@@ -1,11 +1,6 @@
-# Proxmox VE LXC Updater
-# This script has been created to simplify and speed up the process of updating all LXC containers across various Linux distributions, such as Ubuntu, Debian, Devuan, Alpine Linux, CentOS-Rocky-Alma, Fedora, and ArchLinux. It's designed to automatically skip templates and specific containers during the update, enhancing its convenience and usability.
-# Run the command below in the Proxmox VE Shell.
-# bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/update-lxcs.sh)"
-
 #!/usr/bin/env bash
 
-# Below for  URL encoding - sanjeev
+# Function to URL encode a string (Sanjeev)
 rawurlencode() {
   local string="${1}"
   local strlen=${#string}
@@ -20,24 +15,19 @@ rawurlencode() {
      esac
      encoded+="${o}"
   done
-  echo "${encoded}"    # You can either set a return variable (FASTER)
-  REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
+  echo "${encoded}"  # Echo the encoded result
 } # end function
 
+# Function to send a message via Telegram
 sendtelegram () {
-  local data="Proxmox Server __NEWLINE____NEWLINE__Below Proxmox Containers need restart since their Kernal was updated__NEWLINE____NEWLINE__ ${1} __NEWLINE__"
-  # echo "${data}"
-  curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=$( rawurlencode "$data" )
+  local data="Proxmox Server __NEWLINE____NEWLINE__Below Proxmox Containers need restart since their Kernel was updated__NEWLINE____NEWLINE__ ${1} __NEWLINE__"
+  curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=$(rawurlencode "$data")
 } # end function
-
-
-
 
 # Copyright (c) 2021-2023 tteck
 # Author: tteck (tteckster)
 # License: MIT
 # https://github.com/tteck/Proxmox/raw/main/LICENSE
-
 
 set -eEuo pipefail
 YW=$(echo "\033[33m")
@@ -48,8 +38,6 @@ GN=$(echo "\033[1;92m")
 CL=$(echo "\033[m")
 
 echo "Loading..."
-# whiptail --title "Proxmox VE Helper Scripts - Proxmox VE LXC Updater" --infobox "This Will Update LXC Containers." 8 78
-
 
 NODE=$(hostname)
 EXCLUDE_MENU=()
@@ -59,9 +47,9 @@ while read -r TAG ITEM; do
   ((${#ITEM} + OFFSET > MSG_MAX_LENGTH)) && MSG_MAX_LENGTH=${#ITEM}+OFFSET
   EXCLUDE_MENU+=("$TAG" "$ITEM " "OFF")
 done < <(pct list | awk 'NR>1')
-# excluded_containers=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Containers on $NODE" --checklist "\nSelect containers to skip from updates:\n" 16 $((MSG_MAX_LENGTH + 23)) 6 "${EXCLUDE_MENU[@]}" 3>&1 1>&2 2>&3 | tr -d '"') || exit
 
-function needs_reboot() {
+# Function to check if a container needs a reboot
+needs_reboot() {
     local container=$1
     local os=$(pct config "$container" | awk '/^ostype/ {print $2}')
     local reboot_required_file="/var/run/reboot-required.pkgs"
@@ -75,11 +63,12 @@ function needs_reboot() {
     return 1
 } # end function
 
-function update_container() {
+# Function to update a container
+update_container() {
   container=$1
-
   name=$(pct exec "$container" hostname)
   os=$(pct config "$container" | awk '/^ostype/ {print $2}')
+  
   if [[ "$os" == "ubuntu" || "$os" == "debian" || "$os" == "fedora" ]]; then
     disk_info=$(pct exec "$container" df /boot | awk 'NR==2{gsub("%","",$5); printf "%s %.1fG %.1fG %.1fG", $5, $3/1024/1024, $2/1024/1024, $4/1024/1024 }')
     read -ra disk_info_array <<<"$disk_info"
@@ -89,18 +78,15 @@ function update_container() {
     maxallowed=70
 
     if [ "$usedspace" -gt "$maxallowed" ]; then
-       echo "Send telegram - continer running out of space"
-       msg="Proxmox Server__NEWLINE____NEWLINE__Below Proxmox Containers running out of HDD space __NEWLINE____NEWLINE__Id: ${container} __NEWLINE__Name: ${name}.sc __NEWLINE__Total HDD Capicity: ${disk_info_array[2]}b __NEWLINE__Used Space: ${disk_info_array[1]}b [${disk_info_array[0]}% used] __NEWLINE__Free Space: ${disk_info_array[3]}b __NEWLINE__Alert Threshold Percentage: ${maxallowed}% __NEWLINE____NEWLINE__"
-       echo "$msg"
-       curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=$( rawurlencode "$msg" )
+       echo "Send telegram - container running out of space"
+       msg="Proxmox Server__NEWLINE____NEWLINE__Below Proxmox Containers running out of HDD space __NEWLINE____NEWLINE__Id: ${container} __NEWLINE__Name: ${name}.sc __NEWLINE__Total HDD Capacity: ${disk_info_array[2]}b __NEWLINE__Used Space: ${disk_info_array[1]}b [${disk_info_array[0]}% used] __NEWLINE__Free Space: ${disk_info_array[3]}b __NEWLINE__Alert Threshold Percentage: ${maxallowed}% __NEWLINE____NEWLINE__"
+       curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=$(rawurlencode "$msg")
        sleep 5
     fi
-
-
-
   else
     echo -e "${BL}[Info]${GN} Updating ${BL}$container${CL} : ${GN}$name${CL} - ${YW}[No disk info for ${os}]${CL}\n"
   fi
+
   case "$os" in
   alpine) pct exec "$container" -- ash -c "apk update && apk upgrade" ;;
   archlinux) pct exec "$container" -- bash -c "pacman -Syyu --noconfirm" ;;
@@ -111,40 +97,41 @@ function update_container() {
 
 containers_needing_reboot=()
 
+# Loop through all containers
 for container in $(pct list | awk '{if(NR>1) print $1}'); do
   if [[ " ${excluded_containers[@]} " =~ " $container " ]]; then
-
     echo -e "${BL}[Info]${GN} Skipping ${BL}$container${CL}"
     sleep 1
   else
     container_name=$(pct exec "$container" hostname)
-    echo -e ""
-    echo -e ""
-    echo -e "_______________________________________________________________________________________________________________________________________"
+    echo -e "\n\n_______________________________________________________________________________________________________________________________________"
     echo -e "${BL}[Info]${GN} Start with Container : ${BL}$container_name${CL}/${BL}$container${CL}"
     
     status=$(pct status $container)
     template=$(pct config $container | grep -q "template:" && echo "true" || echo "false")
-    if [ "$template" == "false" ] && [ "$status" == "status: stopped" ]; then
-      echo -e "${BL}[Info]${GN} Starting${BL} $container ${CL} \n"
-      pct start $container
-      echo -e "${BL}[Info]${GN} Waiting For${BL} $container${CL}${GN} To Start ${CL} \n"
-      sleep 5
-      update_container $container
-      echo -e "${BL}[Info]${GN} Shutting down${BL} $container ${CL} \n"
-      pct shutdown $container &
-    elif [ "$status" == "status: running" ]; then
-      update_container $container
-    fi
-    if pct exec "$container" -- [ -e "/var/run/reboot-required" ]; then
-        # Get the container's hostname and add it to the list
+
+    if [ "$template" == "false" ]; then
+      if [ "$status" == "status: stopped" ]; then
+        echo -e "${BL}[Info]${GN} Starting${BL} $container ${CL} \n"
+        pct start $container || { echo "${RD}[Error] Failed to start container ${BL}$container${CL}. Skipping..."; continue; }
+        echo -e "${BL}[Info]${GN} Waiting For${BL} $container${CL}${GN} To Start ${CL} \n"
+        sleep 5
+        update_container $container
+        echo -e "${BL}[Info]${GN} Shutting down${BL} $container ${CL} \n"
+        pct shutdown $container &
+      elif [ "$status" == "status: running" ]; then
+        update_container $container
+      else
+        echo "${RD}[Error] Container ${BL}$container${CL} is in an unknown state. Skipping..."
+      fi
+
+      if pct exec "$container" -- [ -e "/var/run/reboot-required" ]; then
         container_hostname=$(pct exec "$container" hostname)
         containers_needing_reboot+=("$container ($container_hostname)")
+      fi
     fi
   fi
-
-  echo -e ""
-  echo -e ""
+  echo -e "\n\n"
 done
 wait
 
@@ -152,21 +139,14 @@ echo -e "${GN}The process is complete, and the selected containers have been upd
 if [ "${#containers_needing_reboot[@]}" -gt 0 ]; then
     cntname=""
     counter=1
-
     echo -e "${RD}The following containers require a reboot:${CL}"
     for container_name in "${containers_needing_reboot[@]}"; do
         echo "$counter - $container_name"
         cntname+="$counter - $container_name __NEWLINE__"
-
         ((counter++))
-
     done
-
     sendtelegram "$cntname"
-
 fi
 
 echo "Process Completed"
-
 exit 0
-
