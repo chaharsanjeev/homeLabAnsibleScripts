@@ -104,7 +104,7 @@ update_all_containers() {
      status=$(pct status $container 2>/dev/null)
   
     if [[ "$status" != "status: running" ]]; then
-      echo -e "\n\n_______________________________________________________________________________________________________________________________________"
+      echo -e "\n_______________________________________________________________________________________________________________________________________"
       echo -e "${BL}[Info]${GN} Skipping container ${BL}$container${CL} as it is not running."
       echo -e "\n"
       continue
@@ -115,7 +115,7 @@ update_all_containers() {
       sleep 1
     else
       container_name=$(pct exec "$container" hostname)
-      echo -e "\n\n_______________________________________________________________________________________________________________________________________"
+      echo -e "\n_______________________________________________________________________________________________________________________________________"
       echo -e "${BL}[Info]${GN} Start with Container : ${BL}$container_name${CL}/${BL}$container${CL}"
       
       # status=$(pct status $container)
