@@ -7,6 +7,7 @@ rawurlencode() {
   local encoded=""
   local pos c o
 
+
   for (( pos=0 ; pos<strlen ; pos++ )); do
      c=${string:$pos:1}
      case "$c" in
