@@ -101,13 +101,12 @@ update_all_containers() {
   local containers_needing_reboot=()
 
   for container in $(pct list | awk '{if(NR>1) print $1}'); do
-    echo -e "\n"
-        status=$(pct status $container 2>/dev/null)
+     status=$(pct status $container 2>/dev/null)
   
     if [[ "$status" != "status: running" ]]; then
       echo -e "\n\n_______________________________________________________________________________________________________________________________________"
       echo -e "${BL}[Info]${GN} Skipping container ${BL}$container${CL} as it is not running."
-      echo -e "\n\n"
+      echo -e "\n"
       continue
     fi
         
