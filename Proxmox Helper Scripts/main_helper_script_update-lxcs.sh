@@ -101,6 +101,13 @@ update_all_containers() {
   local containers_needing_reboot=()
 
   for container in $(pct list | awk '{if(NR>1) print $1}'); do
+    status=$(pct status $container 2>/dev/null)
+
+    if [[ "$status" != "status: not running" ]]; then
+      echo -e "${BL}[Info]${GN} Skipping container ${BL}$container${CL} as it is not running."
+      continue
+    fi
+        
     if [[ " ${excluded_containers[@]} " =~ " $container " ]]; then
       echo -e "${BL}[Info]${GN} Skipping ${BL}$container${CL}"
       sleep 1
@@ -109,7 +116,7 @@ update_all_containers() {
       echo -e "\n\n_______________________________________________________________________________________________________________________________________"
       echo -e "${BL}[Info]${GN} Start with Container : ${BL}$container_name${CL}/${BL}$container${CL}"
       
-      status=$(pct status $container)
+      # status=$(pct status $container)
       template=$(pct config $container | grep -q "template:" && echo "true" || echo "false")
 
       if [ "$template" == "false" ]; then
