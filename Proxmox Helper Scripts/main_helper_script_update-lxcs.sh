@@ -113,16 +113,21 @@ for container in $(pct list | awk '{if(NR>1) print $1}'); do
     if [ "$template" == "false" ]; then
       if [ "$status" == "status: stopped" ]; then
         echo -e "${BL}[Info]${GN} Starting${BL} $container ${CL} \n"
-        pct start $container || { echo "${RD}[Error] Failed to start container ${BL}$container${CL}. Skipping..."; continue; }
-        echo -e "${BL}[Info]${GN} Waiting For${BL} $container${CL}${GN} To Start ${CL} \n"
-        sleep 5
-        update_container $container
-        echo -e "${BL}[Info]${GN} Shutting down${BL} $container ${CL} \n"
-        pct shutdown $container &
+        if pct start $container; then
+          echo -e "${BL}[Info]${GN} Waiting For${BL} $container${CL}${GN} To Start ${CL} \n"
+          sleep 5
+          update_container $container
+          echo -e "${BL}[Info]${GN} Shutting down${BL} $container ${CL} \n"
+          pct shutdown $container &
+        else
+          echo -e "${RD}[Error] Failed to start container ${BL}$container${CL}. Skipping..."
+          continue
+        fi
       elif [ "$status" == "status: running" ]; then
         update_container $container
       else
         echo "${RD}[Error] Container ${BL}$container${CL} is in an unknown state. Skipping..."
+        continue
       fi
 
       if pct exec "$container" -- [ -e "/var/run/reboot-required" ]; then
