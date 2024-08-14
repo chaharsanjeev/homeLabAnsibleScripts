@@ -35,7 +35,7 @@ database:
 ############################### START MODEL SECTION ################################
 # Optional: model modifications
 model:
-  path: plus://20b0db7b86d7d960cb0d471af2d5b1bc
+  path: plus://b3effffab96c6145223a0ad2ee7c94b9
   # path: /edgetpu_model.tflite       # Optional: path to the model (default: automatic based on detector)
   # labelmap_path: /labelmap.txt      # Optional: path to the labelmap
   width: 320                          # Required: Object detection model input width
@@ -99,8 +99,16 @@ objects:
   ## https://docs.frigate.video/configuration/objects
   ### Optional: list of objects to track from labelmap.txt (default: person)
   track:
-  - person
-  - car
+    - person
+    - car
+    - face
+    - license_plate
+    - dog
+    - cat
+    - amazon
+    - fedex
+    - ups
+    - package
   #- dog
   ### Optional: mask to prevent all object types from being detected in certain areas (default: no mask)
   ### Checks based on the bottom center of the bounding box of the object.
@@ -182,16 +190,16 @@ motion:
 ### As of Frigate 0.12 if there is less than an hour left of storage, the oldest 2 hours of recordings will be deleted.
 record:
   enabled: true               # Optional: Enable recording (default: false). If recording is disabled in the config, turning it on via the UI or MQTT later will have no effect.
-  expire_interval: 60         # Optional: Number of minutes to wait between cleanup runs (default: 60). This can be used to reduce the frequency of deleting recording segments from disk if you want to minimize i/o
+  expire_interval: 90         # Optional: Number of minutes to wait between cleanup runs (default: 60). This can be used to reduce the frequency of deleting recording segments from disk if you want to minimize i/o
   sync_recordings: true       # Optional: Sync recordings with disk on startup and once a day (default: false).
   retain:                     # Optional: Retention settings for recording
-    days: 30                  # Optional: Number of days to retain recordings regardless of events.This should be set to 0 and retention should be defined in events section below if you only want to retain recordings of events.
+    days: 60                  # Optional: Number of days to retain recordings regardless of events.This should be set to 0 and retention should be defined in events section below if you only want to retain recordings of events.
     mode: motion              # Optional: Mode for retention. Available options are: all, motion, and active_objects. this mode only applies when the days setting above is greater than 0
   events:                     # Optional: Event recording settings
-    pre_capture: 3            # Optional: Number of seconds before the event to include (default: 5)
-    post_capture: 3           # Optional: Number of seconds after the event to include (default: 5)
+    pre_capture: 5            # Optional: Number of seconds before the event to include (default: 5)
+    post_capture: 5           # Optional: Number of seconds after the event to include (default: 5)
     # objects:                  # Optional: Objects to save recordings for. (default: all tracked objects) : https://docs.frigate.video/configuration/objects
-    required_zones: []  # Optional: Restrict recordings to objects that entered any of the listed zones (default: no required zones)
+    ## required_zones: []  # Optional: Restrict recordings to objects that entered any of the listed zones (default: no required zones)
     retain:     # Optional: Retention settings for recordings of events
       default: 120          # Required: Default retention days (default: 10)
       mode: motion          # Optional: Mode for retention. Values - all, motion,active_objects
@@ -257,15 +265,8 @@ timestamp_style:
 
 
 ############################### START RTPM SECTION ################################
-rtmp:
-  enabled: false # obslete
-
-############################### START UI SECTION ################################
-# Optional
 ui:
-  live_mode: webrtc             # Optional: Set the default live mode for cameras in the UI (default: mse); VALUES: jsmpeg,mse,webrtc
-  # timezone: America/Denver    # Optional: Set a timezone to use in the UI (default: use browser local time)
-  use_experimental: false       # Optional: Use an experimental recordings / camera view UI (default: shown below)
+  #use_experimental: false       # Optional: Use an experimental recordings / camera view UI (default: shown below)
   time_format: browser          # Optional: Set the time format used. Options are browser, 12hour, or 24hour (default: shown below)
   ### Optional: Set the date style for a specified length.
   ### Options are: full, long, medium, short
@@ -292,12 +293,12 @@ ui:
 # Optional: Telemetry configuration
 telemetry:
   network_interfaces:   # Optional: Enabled network interfaces for bandwidth stats monitoring (default: empty list, let nethogs search all)
-  - eth
-  - enp
-  - eno
-  - ens
-  - wl
-  - lo
+    - eth
+    - enp
+    - eno
+    - ens
+    - wl
+    - lo
   stats:            # Optional: Configure system stats
     #amd_gpu_stats: True         # Enable AMD GPU stats (default: true)
     intel_gpu_stats: true       # Enable Intel GPU stats (default: true)
@@ -308,7 +309,7 @@ telemetry:
 ############################### START LOGGER SECTION ################################
 # Optional: logger verbosity settings
 logger:
-  default: info         # Optional: Default log verbosity; Available log levels are: debug, info, warning, error, critical
+  default: warning       # Optional: Default log verbosity; Available log levels are: debug, info, warning, error, critical
   #logs:                 # Optional: Component specific logger overrides
   #  frigate.event: debug
   # frigate.app : debug
@@ -346,51 +347,50 @@ birdseye:
 go2rtc:
   webrtc:
     candidates:
-    - 192.168.30.5:8555 #frigate server
-    - 192.168.10.9:8555 #Sanjeev Office Laptop
-    - stun:8555
+      - 192.168.30.5:8555 #frigate server
+      - 192.168.10.9:8555 #Sanjeev Office Laptop
+      - stun:8555
   streams:
-    office_front_main:
+    office_front_main: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-front.sc/cam/realmonitor?channel=1&subtype=0
-    office_front_sub:
+    office_front_sub: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-front.sc/cam/realmonitor?channel=1&subtype=2
 
-    porch_front_main:
+    porch_front_main: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-porch-front.sc/cam/realmonitor?channel=1&subtype=0
-    porch_front_sub:
+    porch_front_sub: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-porch-front.sc/cam/realmonitor?channel=1&subtype=2
 
-    garage_front_main:
+    garage_front_main: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-front.sc/cam/realmonitor?channel=1&subtype=0
-    garage_front_sub:
+    garage_front_sub: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-front.sc/cam/realmonitor?channel=1&subtype=2
 
-    patio_back_main:
+    patio_back_main: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-patio-back.sc/cam/realmonitor?channel=1&subtype=0
-    patio_back_sub:
+    patio_back_sub: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-patio-back.sc/cam/realmonitor?channel=1&subtype=2
 
-    office_side_main:
+    office_side_main: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-side.sc/cam/realmonitor?channel=1&subtype=0
-    office_side_sub:
+    office_side_sub: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-office-side.sc/cam/realmonitor?channel=1&subtype=2
 
-    dining_front_main:
+    dining_front_main: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-dining-front.sc/cam/realmonitor?channel=1&subtype=0
-    dining_front_sub:
+    dining_front_sub: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-dining-front.sc/cam/realmonitor?channel=1&subtype=2
 
-    garage_side_main:
+    garage_side_main: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-side.sc/cam/realmonitor?channel=1&subtype=0
-    garage_side_sub:
+    garage_side_sub: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-garage-side.sc/cam/realmonitor?channel=1&subtype=2
 
-    master_bedroom_main:
+    master_bedroom_main: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-master-br.sc/cam/realmonitor?channel=1&subtype=0
-    master_bedroom_sub:
+    master_bedroom_sub: 
       rtsp://{FRIGATE_AMCREST_USERNAME}:{FRIGATE_AMCREST_PASSWORD}@camera-master-br.sc/cam/realmonitor?channel=1&subtype=2
-    tuhina_bedroom_main:
-      rtsp://Kc0BAsTgHmIC:Cm6tzZJpYBHl@192.168.40.41/live0
+    tuhina_bedroom_main: rtsp://Kc0BAsTgHmIC:Cm6tzZJpYBHl@192.168.40.41/live0
 
 ################################################################################################ START MAIN CAMERA CONFIGURATION ###############################################################################
 
@@ -401,43 +401,28 @@ cameras:
     webui_url: https://camera-office-front.sc.home/    # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
     ffmpeg:
       inputs:
-      - path: rtsp://127.0.0.1:8554/office_front_main
-        roles:    # Valid values : audio,detect,record
-        - record
-      - path: rtsp://127.0.0.1:8554/office_front_sub
-        roles:    # Valid values : audio,detect,record
-        - detect
+        - path: rtsp://127.0.0.1:8554/office_front_main
+          roles:  # Valid values : audio,detect,record
+            - record
+        - path: rtsp://127.0.0.1:8554/office_front_sub
+          roles:  # Valid values : audio,detect,record
+            - detect
     best_image_timeout: 60 # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
     motion:
-      mask:
-      - 1244,25,1244,62,895,58,811,65,809,21
-      - 1280,0,1280,271,863,0
-      - 1280,720,1280,293,864,575,426,639,441,720
-      - 542,201,559,107,626,112,617,204
-      - 674,66,719,77,726,0,681,0
-      - 646,85,671,89,674,70,646,67
-      - 455,306,484,306,488,276,457,279
-      - 773,243,968,280,1003,0,820,0
-      - 1216,290,1080,252,1128,100,1280,152
-      - 704,0,344,0,364,336
-      - 700,319,835,342,1037,355,1042,0,808,0
+      mask: 
+        1,0,1,0.384,1,0.723,1,1,1,1,0.345,1,0.332,0.897,0.706,0.76,0.906,0.599,1,0.481,0.976,0.379,0.795,0.348,0.727,0.412,0.555,0.244,0.405,0.639,0.288,0.416,0.285,0.314,0.277,0.195,0.274,0.059,0,0.332,0,0
     zones:
       zone_office_front_person:
-        coordinates: 0,242,0,720,444,720,423,643,898,549,1159,431,1280,344,1219,222,1043,91,866,0,800,0,420,482,374,306,346,53
-        objects:
-        - person
+        coordinates: 
+          0,0.336,0,1,0.347,1,0.33,0.893,0.702,0.762,0.905,0.599,1,0.478,0.971,0.385,0.795,0.35,0.727,0.42,0.554,0.246,0.403,0.65,0.292,0.425,0.27,0.074
+        objects: person
+        inertia: 3
+        loitering_time: 1
     objects:
       filters:
-        person:
-          mask:
-          - 1280,0,1280,271,863,0
-          - 704,0,344,0,364,336
-          - 1280,0,1280,271,863,0
-          - 542,201,559,107,626,112,617,204
-          - 674,66,719,77,726,0,681,0
-          - 776,284,842,294,986,306,1042,0,808,0
-          - 1112,246,1238,286,1280,136,1120,106  
-          - 700,319,835,342,1037,355,1042,0,808,0
+        person: {}
+      mask: 
+        0,0,0,0.334,0.274,0.066,0.292,0.423,0.405,0.639,0.556,0.247,0.726,0.41,0.795,0.345,0.974,0.381,0.998,0.481,0.903,0.602,0.709,0.758,0.332,0.898,0.346,0.995,0.999,0.996,0.999,0.001,0.263,0
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -446,7 +431,8 @@ cameras:
       crop: true             # Optional: crop the snapshot (default: true)
       height: 500            # Optional: height to resize the snapshot to (default: 270)
       quality: 100           # Optional: jpeg encode quality (default: 70)
-      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+      required_zones:       #[]    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+        - zone_office_front_person
     ui:                     # Optional: Configuration for how camera is handled in the GUI.
       order: 1              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
       dashboard: true       # Optional: Whether or not to show the camera in the Frigate UI (default: true)
@@ -456,40 +442,41 @@ cameras:
       enabled: true         # Optional - nclude a camera in Birdseye view only 
     live:
       stream_name: office_front_sub # sub stream for live view
-  ########################### Camera Configuration Office-Front END #######################
-  ########################### Camera Configuration Porch-Front START #######################
+    review:
+      alerts:
+        required_zones: zone_office_front_person
+      detections: {}
   Porch_Front:
     enabled: true
     webui_url: https://camera-porch-front.sc.home/      # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
     ffmpeg:
       inputs:
-      - path: rtsp://127.0.0.1:8554/porch_front_main
-        roles:      # Valid values : audio,detect,record
-        - record
-      - path: rtsp://127.0.0.1:8554/porch_front_sub
-        roles:      # Valid values : audio,detect,record
-        - detect
+        - path: rtsp://127.0.0.1:8554/porch_front_main
+          roles:    # Valid values : audio,detect,record
+            - record
+        - path: rtsp://127.0.0.1:8554/porch_front_sub
+          roles:    # Valid values : audio,detect,record
+            - detect
     best_image_timeout: 60   # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
     motion:
       mask:
-      - 1244,25,1244,62,895,58,811,65,809,21
-      - 386,122,266,159,301,322,435,268
-      - 785,48,768,154,652,180,643,44
-      - 848,160,740,182,656,192,634,66,802,56,1058,26,1030,134
-      - 241,0,1045,0,1031,37,247,42
+        - 0,0.992,0.001,0.001,1,0,1,0.084,0.929,0.107,0.893,0.273,0.85,0.438,0.805,0.362,0.854,0.087,0.803,0.099,0.792,0.187,0.689,0.238,0.532,0.287,0.505,0.246,0.479,0.197,0.441,0.128,0.302,0.198,0.337,0.369,0.249,0.436,0.2,0.157
+        - 0.516,0.992,0.75,0.999,0.893,0.756,0.813,0.598
     zones:
       zone_porch_front_person:
         #coordinates: 56,720,1280,720,1280,36,1028,0,778,0,759,103,591,133,288,209,230,29
-        coordinates: 958,720,1280,720,1280,36,1028,0,778,0,793,64,788,161,689,194,566,92,386,142,434,270,316,320,257,113,0,720,654,720,1040,430,1144,546
-        objects:
-        - person
+        coordinates: 
+          0.748,1,1,1,1,0.549,1,0.089,0.932,0.11,0.853,0.439,0.8,0.367,0.852,0.091,0.807,0.095,0.793,0.187,0.69,0.238,0.609,0.269,0.531,0.292,0.442,0.128,0.302,0.197,0.339,0.375,0.247,0.444,0.201,0.157,0,1,0.511,1,0.812,0.597,0.894,0.758
+        objects: person
+        inertia: 3
+        loitering_time: 1
     objects:
       filters:
-        person:
-          mask:
-          - 927,720,532,720,1038,427,1153,523
-          - 226,82,320,92,316,0,236,0
-          - 688,202,802,168,1022,146,1050,22,780,32,664,44,636,168
+        person: 
+          min_area: 5000    # Minimum area in pixels for a person object
+      mask:
+        - 0,0.995,0,0,0.997,0,0.997,0.088,0.929,0.107,0.853,0.438,0.801,0.369,0.852,0.088,0.804,0.104,0.791,0.192,0.695,0.236,0.534,0.29,0.509,0.256,0.491,0.227,0.472,0.181,0.44,0.128,0.303,0.197,0.336,0.369,0.249,0.436,0.2,0.162
+        - 0.513,0.992,0.751,0.996,0.894,0.755,0.811,0.595,0.513,0.99
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -498,7 +485,8 @@ cameras:
       crop: true             # Optional: crop the snapshot (default: true)
       height: 500            # Optional: height to resize the snapshot to (default: 270)
       quality: 100           # Optional: jpeg encode quality (default: 70)
-      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+      required_zones:       # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+        - zone_porch_front_person
     ui:                       # Optional: Configuration for how camera is handled in the GUI.
       order: 2                # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
       dashboard: true         # Optional: Whether or not to show the camera in the Frigate UI (default: true)
@@ -508,44 +496,40 @@ cameras:
       enabled: true           # Optional - nclude a camera in Birdseye view only 
     live:
       stream_name: porch_front_sub   # sub stream for live view
-  ########################### Camera Configuration Porch-Front END #######################
-  ######################### Camera Configuration Dining-Rom START #####################
+    review:
+      alerts:
+        required_zones: zone_porch_front_person
+      detections: {}
   Dining_Front:
     enabled: true
     webui_url: https://camera-dining-front.sc.home/      # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
     ffmpeg:
       inputs:
-      - path: rtsp://127.0.0.1:8554/dining_front_main
-        roles:      # Valid values : audio,detect,record
-        - record
-      - path: rtsp://127.0.0.1:8554/dining_front_sub
-        roles:      # Valid values : audio,detect,record
-        - detect
+        - path: rtsp://127.0.0.1:8554/dining_front_main
+          roles:    # Valid values : audio,detect,record
+            - record
+        - path: rtsp://127.0.0.1:8554/dining_front_sub
+          roles:    # Valid values : audio,detect,record
+            - detect
     best_image_timeout: 60   # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
     motion:
       mask:
-      - 1244,25,1244,62,895,58,811,65,809,21
-      - 1210,132,814,24,810,0,1280,0,1280,257
-      - 1280,586,1280,720,1257,720,1102,720,878,330,920,66
-      - 734,140,826,142,824,32,744,29
-      - 1280,240,1182,230,1184,556,1280,584
-      - 1016,116,922,116,920,0,1024,0
+        - 0.626,1,1,0.999,1,0,0.579,0,0.336,0,0.239,0,0.241,0.049,0.243,0.121,0.244,0.192,0.329,0.425,0.677,0.958
+        - 0.089,0,0,0.001,0.002,0.999,0.257,0.996,0.208,0.892,0.158,0.705,0.059,0.325,0.077,0.134
     zones:
       zone_dining_front_porch_person:
-        coordinates: 1109,720,669,720,655,661,490,141,539,0,741,0,870,29,871,282
-        objects:
-        - person
-      zone_dining_front_garden_person:
         coordinates: 
-          1048,277,1163,438,1259,632,1280,622,1280,357,1280,266,1221,162,1075,94,918,48,919,154
-        objects:
-        - person
+          0.677,0.96,0.632,0.99,0.259,1,0.208,0.895,0.058,0.325,0.091,0,0.238,0,0.24,0.076,0.243,0.133,0.244,0.192,0.327,0.419
+        objects: person
+        inertia: 3
+        loitering_time: 1
     objects:
       filters:
         person:
-          mask:
-          - 1210,132,920,42,924,0,1280,0,1280,257
-          - 1280,614,1154,476,1188,170,1280,216
+          min_area: 8000    # Minimum area in pixels for a person object
+      mask:
+        - 0.245,0.194,0.327,0.421,0.678,0.957,0.631,1,0.999,0.995,0.999,0,0.335,0,0.239,0,0.241,0.052,0.245,0.107
+        - 0.087,0.004,0.001,0.001,0.001,0.999,0.258,0.997,0.211,0.899,0.055,0.33
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -554,7 +538,8 @@ cameras:
       crop: true             # Optional: crop the snapshot (default: true)
       height: 500            # Optional: height to resize the snapshot to (default: 270)
       quality: 100           # Optional: jpeg encode quality (default: 70)
-      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+      required_zones:       # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+        - zone_dining_front_porch_person
     ui:                       # Optional: Configuration for how camera is handled in the GUI.
       order: 3                # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
       dashboard: true         # Optional: Whether or not to show the camera in the Frigate UI (default: true)
@@ -564,42 +549,52 @@ cameras:
       enabled: true           # Optional - nclude a camera in Birdseye view only 
     live:
       stream_name: dining_front_sub   # sub stream for live view
-  ######################### Camera Configuration Dining-Room END #####################
-  ########################## Camera Configuration Garage-Front START #####################
+    review:
+      alerts:
+        required_zones: zone_dining_front_porch_person
+      detections: {}
   Garage_Front:
     enabled: true
     webui_url: https://camera-garage-front.sc.home/    # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
     ffmpeg:
       inputs:
-      - path: rtsp://127.0.0.1:8554/garage_front_main
-        roles:    # Valid values : audio,detect,record
-        - record
-      - path: rtsp://127.0.0.1:8554/garage_front_sub
-        roles:    # Valid values : audio,detect,record
-        - detect
+        - path: rtsp://127.0.0.1:8554/garage_front_main
+          roles:  # Valid values : audio,detect,record
+            - record
+        - path: rtsp://127.0.0.1:8554/garage_front_sub
+          roles:  # Valid values : audio,detect,record
+            - detect
     best_image_timeout: 60 # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
     motion:
       mask:
-      - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
-      - 994,532,1168,525,1151,354,960,341
-      - 933,165,996,159,986,100,927,110
-      - 1234,0,1236,68,420,91,364,91,333,79,192,177,137,111,274,0
-      - 1280,0,1280,693,1209,438,1105,240,997,82,944,0
+        - 0.975,0.992,0.955,0.793,0.75,0.857,0.734,0.412,0.702,0.089,0.629,0.098,0.626,0.034,0.394,0.104,0.342,0.177,0.275,0.316,0.233,0.192,0.145,0.268,0.004,0.495,0.001,0.001,1,0.004,1,0.999
+        - 0.217,0.503,0.124,0.84,0.018,0.72,0.153,0.432
     zones:
       zone_garage_front_car:
-        coordinates: 957,624,1229,573,1248,720,518,720,128,720,81,580,194,245,388,89,663,42,823,22,877,28,932,252
-        objects:
-        - car
+        coordinates: 
+          0.748,0.867,0.96,0.796,0.975,1,0.405,1,0.1,1,0,0.506,0.144,0.272,0.234,0.19,0.273,0.323,0.341,0.18,0.398,0.106,0.626,0.036,0.628,0.099,0.702,0.092,0.728,0.35
+        objects: car
+        inertia: 3
+        loitering_time: 1
       zone_garage_front_person:
-        coordinates: 949,378,958,610,1225,568,1248,720,518,720,206,720,0,720,0,550,169,358,388,89,663,42,890,25,948,41,1056,164,1150,341   
-        objects:
-        - person
+        coordinates: 
+          0.741,0.519,0.748,0.864,0.953,0.802,0.975,0.994,0.405,0.994,0.161,0.994,0,0.994,0,0.758,0.132,0.491,0.244,0.227,0.276,0.316,0.341,0.176,0.376,0.113,0.55,0.064,0.626,0.034,0.628,0.098,0.7,0.094,0.726,0.345
+        objects: person
+        inertia: 3
+        loitering_time: 1
     objects:
+      track:
+        - person
+        - car
       filters:
         person:
-          mask:
-            - 1234,0,1236,68,420,91,364,91,333,79,192,177,137,111,274,0
-            - 1280,0,1280,693,1209,438,1105,240,997,82,944,0
+          min_area: 8000    # Minimum area in pixels for a person object
+        car:
+          min_area: 28000    # Minimum area in pixels for a car object
+
+      mask:
+        - 0.976,0.992,0.954,0.793,0.75,0.86,0.747,0.58,0.734,0.393,0.7,0.089,0.629,0.098,0.626,0.034,0.395,0.104,0.341,0.179,0.275,0.315,0.23,0.191,0.144,0.268,0.002,0.494,0,0.001,0.999,0.001,0.999,0.996
+        - 0.152,0.432,0.216,0.5,0.124,0.839,0.019,0.722
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -608,7 +603,9 @@ cameras:
       crop: true             # Optional: crop the snapshot (default: true)
       height: 500            # Optional: height to resize the snapshot to (default: 270)
       quality: 100           # Optional: jpeg encode quality (default: 70)
-      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+      required_zones:       # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+        - zone_garage_front_car
+        - zone_garage_front_person
     ui:                     # Optional: Configuration for how camera is handled in the GUI.
       order: 4              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
       dashboard: true       # Optional: Whether or not to show the camera in the Frigate UI (default: true)
@@ -618,36 +615,41 @@ cameras:
       enabled: true         # Optional - nclude a camera in Birdseye view only 
     live:
       stream_name: garage_front_sub # sub stream for live view
-  ########################## Camera Configuration Garage-Front END #####################
-  ####################### Camera Configuration Garage-Side START #####################
+    review:
+      alerts:
+        required_zones:
+          - zone_garage_front_car
+          - zone_garage_front_person
+      detections:
+        labels:
+          - person
   Garage_Side:
     enabled: true
     webui_url: https://camera-garage-side.sc.home/    # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
     ffmpeg:
       inputs:
-      - path: rtsp://127.0.0.1:8554/garage_side_main
-        roles:    # Valid values : audio,detect,record
-        - record
-      - path: rtsp://127.0.0.1:8554/garage_side_sub
-        roles:    # Valid values : audio,detect,record
-        - detect
+        - path: rtsp://127.0.0.1:8554/garage_side_main
+          roles:  # Valid values : audio,detect,record
+            - record
+        - path: rtsp://127.0.0.1:8554/garage_side_sub
+          roles:  # Valid values : audio,detect,record
+            - detect
     best_image_timeout: 60 # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
     motion:
-      mask:
-      - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
-      - 210,304,211,259,745,22,876,52,895,0,405,0,0,0,0,497
-      - 1280,720,1280,0,893,0,673,720
+      mask: 
+        0.139,0.675,0.125,0.605,0.282,0.2,0.404,0.01,0.513,0,0.546,0.055,0.582,0.262,0.583,0.468,0.6,0.546,0.619,0.778,0.639,1,1,1,0.995,0,0.316,0,0,0,0,1,0.072,1
     zones:
       zone_garage_side_person:
-        coordinates: 767,404,868,52,754,29,583,84,251,249,250,302,0,522,0,720,658,720
-        objects:
-        - person
+        coordinates: 
+          0.599,0.561,0.582,0.448,0.58,0.27,0.545,0.06,0.511,0,0.402,0.01,0.297,0.181,0.123,0.603,0.141,0.672,0.074,1,0.638,1
+        objects: person
+        inertia: 3
+        loitering_time: 1
     objects:
       filters:
         person:
-          mask:
-            - 210,304,211,259,745,22,876,52,895,0,405,0,0,0,0,497
-            - 1280,720,1280,0,893,0,673,720
+          mask: 
+            1,1,1,0,0,0,0,1,0.073,1,0.139,0.667,0.123,0.61,0.267,0.238,0.398,0.009,0.521,0,0.546,0.058,0.573,0.199,0.583,0.261,0.584,0.476,0.599,0.543,0.639,1
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -656,7 +658,8 @@ cameras:
       crop: true             # Optional: crop the snapshot (default: true)
       height: 500            # Optional: height to resize the snapshot to (default: 270)
       quality: 100           # Optional: jpeg encode quality (default: 70)
-      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+      required_zones:       # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+        - zone_garage_side_person
     ui:                     # Optional: Configuration for how camera is handled in the GUI.
       order: 5              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
       dashboard: true       # Optional: Whether or not to show the camera in the Frigate UI (default: true)
@@ -666,28 +669,32 @@ cameras:
       enabled: true         # Optional - nclude a camera in Birdseye view only 
     live:
       stream_name: garage_side_sub # sub stream for live view
-  ####################### Camera Configuration Garage-Side END #####################
-  ########################## Camera Configuration Patio-Back START #####################
+    review:
+      alerts:
+        required_zones: zone_garage_side_person
+      detections: {}
   Patio_Back:
     enabled: true
     webui_url: https://camera-patio-back.sc.home/      # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
     ffmpeg:
       inputs:
-      - path: rtsp://127.0.0.1:8554/patio_back_main
-        roles:      # Valid values : audio,detect,record
-        - record
-      - path: rtsp://127.0.0.1:8554/patio_back_sub
-        roles:      # Valid values : audio,detect,record
-        - detect
+        - path: rtsp://127.0.0.1:8554/patio_back_main
+          roles:    # Valid values : audio,detect,record
+            - record
+        - path: rtsp://127.0.0.1:8554/patio_back_sub
+          roles:    # Valid values : audio,detect,record
+            - detect
     best_image_timeout: 60   # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
     motion:
-      mask:
-      - 1244,25,1244,62,895,58,811,65,809,21   # date & time in top right side
+      mask: 
+        0.775,1,1,1,1,0,0,0,0,0.353,0.229,0.165,0.39,0.106,0.561,0.052,0.629,0.103,0.847,0.097,0.889,0.622
     zones:
       zone_patio_back_person:
-        coordinates: 719,41,499,78,295,119,123,192,0,252,0,538,0,720,985,720,1133,448,1081,64
-        objects:
-        - person
+        coordinates: 
+          0.562,0.057,0.39,0.108,0.23,0.165,0.096,0.267,0,0.35,0,0.747,0,1,0.77,1,0.885,0.622,0.845,0.099,0.629,0.103
+        objects: person
+        inertia: 3
+        loitering_time: 1
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -696,7 +703,8 @@ cameras:
       crop: true             # Optional: crop the snapshot (default: true)
       height: 500            # Optional: height to resize the snapshot to (default: 270)
       quality: 100           # Optional: jpeg encode quality (default: 70)
-      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+      required_zones:       # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+        - zone_patio_back_person
     ui:                       # Optional: Configuration for how camera is handled in the GUI.
       order: 6                # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
       dashboard: true         # Optional: Whether or not to show the camera in the Frigate UI (default: true)
@@ -706,38 +714,43 @@ cameras:
       enabled: true           # Optional - nclude a camera in Birdseye view only 
     live:
       stream_name: patio_back_sub   # sub stream for live view
-  ########################## Camera Configuration Patio-Back END #####################
-  #################### Camera Configuration Master-Bedroom START ###################
+    objects:
+      mask: 
+        0,0.348,0.095,0.271,0.226,0.166,0.382,0.097,0.561,0.049,0.629,0.101,0.847,0.098,0.889,0.62,0.776,0.999,1,0.995,0.998,0.004,0.003,0.003
+    review:
+      alerts:
+        required_zones: zone_patio_back_person
+      detections: {}
   Master_Bedroom:
     enabled: true
     webui_url: https://camera-master-br.sc.home/    # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
     ffmpeg:
       inputs:
-      - path: rtsp://127.0.0.1:8554/master_bedroom_main
-        roles:    # Valid values : audio,detect,record
-        - record
-      - path: rtsp://127.0.0.1:8554/master_bedroom_sub
-        roles:    # Valid values : audio,detect,record
-        - detect
+        - path: rtsp://127.0.0.1:8554/master_bedroom_main
+          roles:  # Valid values : audio,detect,record
+            - record
+        - path: rtsp://127.0.0.1:8554/master_bedroom_sub
+          roles:  # Valid values : audio,detect,record
+            - detect
     best_image_timeout: 60 # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
     motion:
       mask:
-      - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
-      - 1280,168,1079,103,887,66,707,65,480,98,98,207,0,276,0,0,1280,0
+        - 1,0.233,0.848,0.159,0.75,0.12,0.642,0.095,0.552,0.09,0.375,0.136,0.208,0.205,0.077,0.287,0,0.383,0,0,1,0
+        - 0.002,0.678,0.017,0.678,0.251,1,0,1
     zones:
       zone_master_bedroom_person:
         coordinates: 
-          1280,720,1280,168,993,93,769,61,515,92,264,149,100,214,33,258,0,272,0,403,0,544,78,646,131,592,320,720
-        objects:
-        - person
+          1,1,1,0.233,0.776,0.129,0.601,0.085,0.402,0.128,0.206,0.207,0.078,0.297,0.026,0.358,0,0.378,0,0.56,0,0.683,0.02,0.677,0.115,0.814,0.25,1
+        objects: person
+        inertia: 3
+        loitering_time: 1
     objects:
       filters:
-        person:
-          mask:
-            - 1280,168,1079,103,887,66,707,65,480,98,98,207,0,276,0,0,1280,0
-        car:
-          mask:
-            - 1280,168,1079,103,887,66,707,65,480,98,98,207,0,276,0,0,1280,0    
+        person: {}
+        car: {}
+      mask:
+        - 0,0.376,0.076,0.291,0.208,0.204,0.374,0.134,0.56,0.086,0.617,0.086,0.729,0.111,0.834,0.143,0.937,0.195,0.998,0.233,0.999,0.001,0.001,0.001
+        - 0.001,0.679,0.016,0.677,0.249,0.997,0.003,0.994
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -746,7 +759,8 @@ cameras:
       crop: true             # Optional: crop the snapshot (default: true)
       height: 500            # Optional: height to resize the snapshot to (default: 270)
       quality: 100           # Optional: jpeg encode quality (default: 70)
-      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+      required_zones:       # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+        - zone_master_bedroom_person
     ui:                     # Optional: Configuration for how camera is handled in the GUI.
       order: 7              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
       dashboard: true       # Optional: Whether or not to show the camera in the Frigate UI (default: true)
@@ -756,38 +770,37 @@ cameras:
       enabled: true         # Optional - nclude a camera in Birdseye view only 
     live:
       stream_name: master_bedroom_sub # sub stream for live view
-  ####################### Camera Configuration Master-Bedroom END #####################
-  ########################## Camera Configuration Office-Side START #####################
+    review:
+      alerts:
+        required_zones: zone_master_bedroom_person
+      detections: {}
   Office_Side:
     enabled: true
     webui_url: https://camera-office-side.sc.home/    # Optional: URL to visit the camera web UI directly from the system page. Might not be available on every camera.
     ffmpeg:
       inputs:
-      - path: rtsp://127.0.0.1:8554/office_side_main
-        roles:    # Valid values : audio,detect,record
-        - record
-      - path: rtsp://127.0.0.1:8554/office_side_sub
-        roles:    # Valid values : audio,detect,record
-        - detect
+        - path: rtsp://127.0.0.1:8554/office_side_main
+          roles:  # Valid values : audio,detect,record
+            - record
+        - path: rtsp://127.0.0.1:8554/office_side_sub
+          roles:  # Valid values : audio,detect,record
+            - detect
     best_image_timeout: 60 # Optional: timeout for highest scoring image before allowing it to be replaced by a newer image. (default: shown below)
     motion:
-      mask:
-      - 1244,25,1244,62,895,58,811,65,809,21 # date & time in top right side
-      - 1049,118,704,0,996,97,659,43,396,42,0,222,0,0,296,0,799,0,1280,0,1280,222
-      - 168,502,226,538,298,633,233,720,91,589
-      - 0,557,51,609,115,528,37,432,0,478
-      #- 682,720,921,720,956,416,976,116,893,72,709,65,500,66,42,305,58,418,314,530,397,576
-      - 682,720,1280,720,1280,576,1236,452,1156,264,1052,116,893,72,709,41,521,28,42,305,0,373,0,720,405,720
+      mask: 
+        1,1,0,1,0,0.62,0.09,0.546,0.064,0.429,0.179,0.331,0.27,0.251,0.322,0.187,0.386,0.06,0.309,0.058,0.142,0.162,0,0.308,0,0,0.231,0,0.624,0,1,0,1,0.308
     zones:
       zone_office_side_person:
-        coordinates: 1259,720,72,720,0,628,0,229,217,113,422,40,740,62,1020,141
+        coordinates: 
+          0.32,0.187,0.226,0.29,0.065,0.429,0.089,0.549,0,0.619,0,0.306,0.139,0.167,0.308,0.057,0.383,0.062,0.361,0.12
+        inertia: 3
+        loitering_time: 1
+        objects: person
     objects:
       filters:
-        person:
-          mask:
-          - 1049,118,704,0,996,97,659,43,396,42,0,222,0,0,296,0,799,0,1280,0,1280,222
-          - 168,502,226,538,298,633,233,720,91,589
-          - 0,557,51,609,115,528,37,432,0,478
+        person: {}
+      mask: 
+        0.001,0.307,0.002,0.001,1,0.001,0.999,0.999,0.001,0.997,0,0.619,0.089,0.545,0.065,0.427,0.172,0.338,0.268,0.251,0.321,0.187,0.384,0.061,0.306,0.055,0.142,0.162,0.074,0.224
     mqtt:   # Optional: Configuration for the jpg snapshots published via MQTT
       # below settings as per double-take recommendation , ref: https://github.com/jakowenko/double-take
       enabled: true          # Optional: Enable publishing snapshot via mqtt for camera (default: true).Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.All other messages will still be published.
@@ -796,7 +809,8 @@ cameras:
       crop: true             # Optional: crop the snapshot (default: true)
       height: 500            # Optional: height to resize the snapshot to (default: 270)
       quality: 100           # Optional: jpeg encode quality (default: 70)
-      required_zones: []    # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+      required_zones:       # Optional: Restrict mqtt messages to objects that entered any of the listed zones (default: no required zones)
+        - zone_office_side_person
     ui:                     # Optional: Configuration for how camera is handled in the GUI.
       order: 8              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
       dashboard: true       # Optional: Whether or not to show the camera in the Frigate UI (default: true)
@@ -806,26 +820,8 @@ cameras:
       enabled: true         # Optional - nclude a camera in Birdseye view only 
     live:
       stream_name: office_side_sub # sub stream for live view
-  ########################## Camera Configuration Office-Side END #####################
-  ########################### Camera Configuration Tuhina Bedroom START #######################
-  #tuhina_bedroom:
-  #  enabled: false  ## If disabled: config is used but no live stream and no capture etc.
-  #  ffmpeg:
-  #    inputs:
-  #    - path: rtsp://127.0.0.1:8554/tuhina_bedroom_main
-  #      roles:    # Valid values : audio,detect,record,rtmp
-  #      - detect
-  #  ui:                     # Optional: Configuration for how camera is handled in the GUI.
-  #    order: 0              # Optional: Adjust sort order of cameras in the UI. Larger numbers come later (default: 0)By default the cameras are sorted alphabetically.
-  #    dashboard: false       # Optional: Whether or not to show the camera in the Frigate UI
-  #   live:
-  #     stream_name: tuhina_bedroom_main # stream for live view
-  #  birdseye:  
-  #    enabled: false         # Optional - nclude a camera in Birdseye view only 
-  ########################### Camera Configuration Tuhina Bedroom END #######################
-
-
-
-
-
-################################################################################################ END MAIN CAMERA CONFIGURATION ###############################################################################
+    review:
+      alerts:
+        required_zones: zone_office_side_person
+      detections: {}
+version: 0.14
