@@ -56,10 +56,18 @@ if [[ $machine_name = 'backup.sc.home' ]] ; then
    # Patch Server - Ansible - NEW UPDATE - xxxxxxxxxxxxxxxxxxxxxxxx
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("semaphore,9VbNQJ5Zf2")
- elif [[ $machine_name = 'nodered.sc' ]] ; then
-   # Node-Red  - NEW UPDATE 
+ # elif [[ $machine_name = 'nodered.sc' ]] ; then
+ #  # Node-Red  - NEW UPDATE 
+ #  echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
+ #  AllServices=("nodered,WaMnPbkAmx")
+ elif [[ $machine_name = 'nodered-1.sc' ]] ; then
+   # Node-Red-1  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("nodered,WaMnPbkAmx")
+ elif [[ $machine_name = 'nodered-2.sc' ]] ; then
+   # Node-Red-2  - NEW UPDATE 
+   echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
+   AllServices=("nodered,s6bJ2REZ6y")
  # elif [[ $machine_name = 'mqtt.sc' ]] ; then
    # MQTT Server
    # echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
