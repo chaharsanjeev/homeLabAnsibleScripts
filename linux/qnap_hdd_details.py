@@ -5,7 +5,7 @@ import json
 # this program will get NAS HDD details and post these details to NODE-RED Server
 QNAP_UID = 'schahar'
 QNAP_PWD = 'Tuhina@0404'
-NODE_RED_ENPOINT_URL = 'http://nodered.sc:1880/nas_hdd_details'
+NODE_RED_ENPOINT_URL = 'http://nodered-2.sc:1880/nas_hdd_details'
 ARRAY_SEPERATOR = '__##__##__'
 #####################################
 
