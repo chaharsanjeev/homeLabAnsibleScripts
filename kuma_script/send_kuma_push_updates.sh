@@ -69,19 +69,19 @@ if [[ $machine_name = 'backup.sc.home' ]] ; then
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("nodered,s6bJ2REZ6y")
  elif [[ $machine_name = 'nodered-3.sc' ]] ; then
-   # Node-Red-2  - NEW UPDATE 
+   # Node-Red-3  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("nodered,DDEc8MsSTh")
  elif [[ $machine_name = 'nodered-4.sc' ]] ; then
-   # Node-Red-2  - NEW UPDATE 
+   # Node-Red-4  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("nodered,f3WQXDNtFW")
  elif [[ $machine_name = 'nodered-5.sc' ]] ; then
-   # Node-Red-2  - NEW UPDATE 
+   # Node-Red-5  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("nodered,a96nI30tq7")
  elif [[ $machine_name = 'nodered-dash.sc' ]] ; then
-   # Node-Red-2  - NEW UPDATE 
+   # Node-Red-Dashboard  - NEW UPDATE 
    echo "${current_date_time} : [Host: $(hostname -f)/${machine_name} ] - Start Push For Services"
    AllServices=("nodered,FR8EXewGsI")
   # elif [[ $machine_name = 'mqtt.sc' ]] ; then
