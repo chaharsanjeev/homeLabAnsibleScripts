@@ -80,7 +80,7 @@ update_container() {
 
     if [ "$usedspace" -gt "$maxallowed" ]; then
        echo "Send telegram - container running out of space"
-       msg="Proxmox Server__NEWLINE____NEWLINE__Below Proxmox Containers running out of HDD space __NEWLINE____NEWLINE__Id: ${container} __NEWLINE__Name: ${name}.sc __NEWLINE__Total HDD Capacity: ${disk_info_array[2]}b __NEWLINE__Used Space: ${disk_info_array[1]}b [${disk_info_array[0]}% used] __NEWLINE__Free Space: ${disk_info_array[3]}b __NEWLINE__Alert Threshold Percentage: ${maxallowed}% __NEWLINE____NEWLINE__"
+       msg="Proxmox Server__NEWLINE____NEWLINE__Below Proxmox Containers running out of HDD space __NEWLINE____NEWLINE__Id: ${container} __NEWLINE__Name: ${name}.sc __NEWLINE__Total HDD Capacity: ${disk_info_array[2]}b __NEWLINE__Used Space: ${disk_info_array[1]}b [${disk_info_array[0]}% used] __NEWLINE__Free Space: ${disk_info_array[3]}b __NEWLINE__Alert Threshold Percentage: ${maxallowed}% __NEWLINE____NEWLINE__Source: Kuma Server Job__NEWLINE__"
        curl -k -X POST --connect-timeout 5 https://post.telegram.sc.home?msg=$(rawurlencode "$msg")
        sleep 5
     fi
