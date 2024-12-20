@@ -50,7 +50,7 @@ services:
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
         target: /tmp/cache
         tmpfs:
-          size: 2000000000
+          size: 4000000000
     ports:
       - "5000:5000"
       - "8554:8554" # RTSP feeds
