@@ -5,10 +5,10 @@ services:
     privileged: true
     restart: unless-stopped
     #image: ghcr.io/blakeblackshear/frigate:stable
-    image: ghcr.io/blakeblackshear/frigate:stable-tensorrt
+    #image: ghcr.io/blakeblackshear/frigate:stable-tensorrt
     
     # Release URL https://github.com/blakeblackshear/frigate/releases
-    #image: ghcr.io/blakeblackshear/frigate:0.14.0-rc2-tensorrt
+    image: ghcr.io/blakeblackshear/frigate:0.14.0-rc2-tensorrt
     #image: ghcr.io/blakeblackshear/frigate:0.14.1-tensorrt
     #image: ghcr.io/blakeblackshear/frigate:0.15.0-beta2-tensorrt
     
