@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   frigate:
-    container_name: frigate
+    container_name: nvr-frigate
     privileged: true
     restart: unless-stopped
     #image: ghcr.io/blakeblackshear/frigate:stable
