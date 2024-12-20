@@ -6,15 +6,16 @@ services:
     container_name: ultralytics_yolo
     privileged: true
     restart: unless-stopped
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              #device_ids: ['0'] # this is only needed when using multiple GPUs
-              #count: 1 # number of GPUs
-              count: all
-              capabilities: [gpu]    
+    runtime: nvidia  # Add this line for NVIDIA GPU runtime support
+    #deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #        - driver: nvidia
+    #          #device_ids: ['0'] # this is only needed when using multiple GPUs
+    #          #count: 1 # number of GPUs
+    #          count: all
+    #          capabilities: [gpu]    
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
@@ -24,28 +25,35 @@ services:
       retries: 5
       timeout: 5s
     devices:
-      - /dev/bus/usb:/dev/bus/usb  # Passes the USB Coral, needs to be modified for other versions
       - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
+      - /dev/dri:/dev/dri  # For hardware acceleration
+      - /dev/nvidia0:/dev/nvidia0  # NVIDIA device
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-uvm:/dev/nvidia-uvm
     volumes:
       - /opt/yolo_workspace/input:/workspace/input:rw
       - /opt/yolo_workspace/results:/workspace/results:rw
       - /etc/localtime:/etc/localtime:ro
     command: bash -c "echo 'YOLO Engine Ready' && sleep infinity"
-
+    environment:
+      NVIDIA_VISIBLE_DEVICES: "all"  # Makes all GPUs available
+      NVIDIA_DRIVER_CAPABILITIES: "compute,video,utility"  # Enables video encoding/decoding
+      
   yolo_api:
     image: ultralytics/ultralytics:latest
     container_name: yolo_api_service
     privileged: true
     restart: unless-stopped
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              #device_ids: ['0'] # this is only needed when using multiple GPUs
-              #count: 1 # number of GPUs
-              count: all
-              capabilities: [gpu]    
+    runtime: nvidia  # Add this line for NVIDIA GPU runtime support
+    #deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #        - driver: nvidia
+    #          #device_ids: ['0'] # this is only needed when using multiple GPUs
+    #          #count: 1 # number of GPUs
+    #          count: all
+    #          capabilities: [gpu]    
     ports:
       - "8042:8000"
     environment:
@@ -55,8 +63,14 @@ services:
       yolo_engine:
         condition: service_healthy
     devices:
-      - /dev/bus/usb:/dev/bus/usb  # Passes the USB Coral, needs to be modified for other versions
       - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
+      - /dev/dri:/dev/dri  # For hardware acceleration
+      - /dev/nvidia0:/dev/nvidia0  # NVIDIA device
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-uvm:/dev/nvidia-uvm
+    #devices:
+    #  - /dev/bus/usb:/dev/bus/usb  # Passes the USB Coral, needs to be modified for other versions
+    #  - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /opt/yolo_workspace/input:/workspace/input:rw
@@ -67,6 +81,9 @@ services:
       - /opt/yolo_workspace/app.py:/workspace/app.py:ro  # Mount app.py file
       - /opt/yolo_workspace/trained_models:/workspace/trained_models:rw
     working_dir: /workspace
+    environment:
+      NVIDIA_VISIBLE_DEVICES: "all"  # Makes all GPUs available
+      NVIDIA_DRIVER_CAPABILITIES: "compute,video,utility"  # Enables video encoding/decoding
     command: >
         bash -c "
         echo 'Checking input folder...' &&
