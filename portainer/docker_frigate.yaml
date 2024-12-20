@@ -54,5 +54,3 @@ services:
       PLUS_API_KEY: "de53cb94-a7d1-49c3-9d2e-647f6d4a5381:2f6880ead11f32bc37f2ab46f963cb3fc023beca"
       ONNX_THREAD_COUNT: "1"
       ONNX_DISABLE_AFFINITY: "1"
-      NVIDIA_VISIBLE_DEVICES: "all"
-      NVIDIA_DRIVER_CAPABILITIES: "compute,video,utility"
