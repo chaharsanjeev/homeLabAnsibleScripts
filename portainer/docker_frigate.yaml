@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   frigate:
-    container_name: nvr-frigate
+    container_name: frigate
     privileged: true
     restart: unless-stopped
     #image: ghcr.io/blakeblackshear/frigate:stable
@@ -13,7 +13,11 @@ services:
     #image: ghcr.io/blakeblackshear/frigate:0.15.0-beta3-tensorrt
 
     runtime: nvidia  # Add this line for NVIDIA GPU runtime support
-
+    command: >
+      /bin/sh -c "
+      pip install pyyaml && 
+      frigate"
+      
     #deploy:
     #  resources:
     #    reservations:
