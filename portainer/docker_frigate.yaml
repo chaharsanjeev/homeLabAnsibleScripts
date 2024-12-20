@@ -29,14 +29,14 @@ services:
     shm_size: "512mb" # update for your cameras based on the calculation above
     devices:
       - /dev/bus/usb:/dev/bus/usb  # Passes the USB Coral, needs to be modified for other versions
-      - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
+      #- /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
       #- /dev/dri/card0:/dev/dri/card0
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /opt/frigate/config:/config:rw # Used to store the Frigate config file and sqlite database. You will also see a few files alongside the database file while Frigate is running.
       - /NVR_Storage_20TB:/media/frigate:rw
-      - /opt/ffmpeg-nvidia/ffmpeg-nvidia-binaries/bin:/usr/local/bin:ro
-      - /opt/ffmpeg-nvidia/ffmpeg-nvidia-binaries/lib:/usr/local/lib:ro
+      #- /opt/ffmpeg-nvidia/ffmpeg-nvidia-binaries/bin:/usr/local/bin:ro
+      #- /opt/ffmpeg-nvidia/ffmpeg-nvidia-binaries/lib:/usr/local/lib:ro
 
 
       #- /mnt/pve/NVR_Storage_20TB:/media/frigate:rw
