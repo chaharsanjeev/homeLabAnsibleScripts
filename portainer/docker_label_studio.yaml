@@ -7,12 +7,19 @@ services:
   label_studio:
     image: heartexlabs/label-studio:latest       # Official Label Studio Docker image from Heartex
     container_name: label_studio                 # Name of the container for easy identification
-    restart: always                              # Automatically restart the container if it crashes
+    privileged: true
+    restart: unless-stopped
     ports:
       - "8030:8080"                              # Map host port 8030 to container port 8080
       # Explanation:
       # - 8030 (host): Accessible on the host machine (e.g., http://localhost:8030)
       # - 8080 (container): Internal port where Label Studio listens
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128 # Intel hardware acceleration (update for your hardware)
+      - /dev/dri:/dev/dri                       # General hardware acceleration
+      - /dev/nvidia0:/dev/nvidia0               # NVIDIA device
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-uvm:/dev/nvidia-uvm
     environment:
       - LABEL_STUDIO_HOST=0.0.0.0                # Bind Label Studio to all network interfaces
       - LABEL_STUDIO_PORT=8080                   # Internal port for Label Studio service
@@ -23,21 +30,22 @@ services:
       - POSTGRE_HOST=postgres                    # PostgreSQL service hostname (defined in this file)
       - POSTGRE_PORT=5432                        # PostgreSQL service port
       - LABEL_STUDIO_LOG_LEVEL=INFO              # Set log level for debugging (e.g., DEBUG, INFO, WARNING)
+      - NVIDIA_VISIBLE_DEVICES= "all"  # Makes all GPUs available
+      - NVIDIA_DRIVER_CAPABILITIES= "compute,video,utility"  # Enables video encoding/decoding
     depends_on:
       postgres:                                  # Ensure PostgreSQL starts first and is ready
         condition: service_healthy               # Wait for PostgreSQL healthcheck to pass before starting
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - /opt/label_studio/label_studio_data:/label-studio/data   # Persistent storage for project data
       - /opt/label_studio/label_studio_logs:/label-studio/logs   # Persistent storage for log files
-      # Explanation:
-      # - Host folders (/opt/label_studio/label_studio_data and logs) are mapped to container paths
-      # - This ensures data and logs persist even if the container is removed or recreated
-
+  
   # PostgreSQL database service configuration
   postgres:
     image: postgres:13                           # Use PostgreSQL version 13
     container_name: label_studio_postgres        # Name of the PostgreSQL container
-    restart: always                              # Automatically restart on failure
+    restart: unless-stopped
+    privileged: true
     environment:
       POSTGRES_DB: labelstudio                   # Name of the database to be created
       POSTGRES_USER: labelstudio_user            # Username for the database
@@ -48,6 +56,7 @@ services:
       # - 5432 (host): Used for database connections on the host machine
       # - 5432 (container): Internal PostgreSQL service port
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - /opt/label_studio/postgres_data:/var/lib/postgresql/data # Persistent storage for PostgreSQL data
       # Explanation:
       # - PostgreSQL database files will persist in the host folder `/opt/label_studio/postgres_data`
