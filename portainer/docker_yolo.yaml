@@ -70,11 +70,6 @@ services:
     command: >
         bash -c "
         echo 'Checking input folder...' &&
-        if [ -z \"\$(find /workspace/input -type f)\" ]; then
-          echo 'ERROR: Input folder is empty or files are not accessible.' &&
-          ls -la /workspace/input &&
-          exit 1;
-        fi &&
         echo 'Installing FastAPI and Ultralytics dependencies...' &&
         python3 -m venv /workspace/venv &&
         echo 'Virtual environment created.' &&
