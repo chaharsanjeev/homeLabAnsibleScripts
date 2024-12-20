@@ -3,7 +3,14 @@ services:
   jellyfin:
     image: jellyfin/jellyfin:latest
     container_name: jellyfin
+    privileged: true
     runtime: nvidia
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128 # Intel hardware acceleration (update for your hardware)
+      - /dev/dri:/dev/dri                       # General hardware acceleration
+      - /dev/nvidia0:/dev/nvidia0               # NVIDIA device
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-uvm:/dev/nvidia-uvm
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
@@ -14,6 +21,4 @@ services:
     ports:
       - "8096:8096" # HTTP Web UI
       - "8920:8920" # HTTPS Web UI
-    devices:
-      - /dev/dri:/dev/dri # For hardware transcoding
     restart: unless-stopped
