@@ -7,18 +7,6 @@ services:
     privileged: true
     restart: unless-stopped
     runtime: nvidia  # Add this line for NVIDIA GPU runtime support
-    #deploy:
-    #  resources:
-    #    reservations:
-    #      devices:
-    #        - driver: nvidia
-    #          #device_ids: ['0'] # this is only needed when using multiple GPUs
-    #          #count: 1 # number of GPUs
-    #          count: all
-    #          capabilities: [gpu]    
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=all
-      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
     healthcheck:
       test: ["CMD-SHELL", "ls /workspace && echo 'YOLO Engine Ready'"]
       interval: 10s
@@ -38,27 +26,16 @@ services:
     environment:
       NVIDIA_VISIBLE_DEVICES: "all"  # Makes all GPUs available
       NVIDIA_DRIVER_CAPABILITIES: "compute,video,utility"  # Enables video encoding/decoding
-      
+      PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
+     
   yolo_api:
     image: ultralytics/ultralytics:latest
     container_name: yolo_api_service
     privileged: true
     restart: unless-stopped
     runtime: nvidia  # Add this line for NVIDIA GPU runtime support
-    #deploy:
-    #  resources:
-    #    reservations:
-    #      devices:
-    #        - driver: nvidia
-    #          #device_ids: ['0'] # this is only needed when using multiple GPUs
-    #          #count: 1 # number of GPUs
-    #          count: all
-    #          capabilities: [gpu]    
     ports:
       - "8042:8000"
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=all
-      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
     depends_on:
       yolo_engine:
         condition: service_healthy
@@ -68,9 +45,6 @@ services:
       - /dev/nvidia0:/dev/nvidia0  # NVIDIA device
       - /dev/nvidiactl:/dev/nvidiactl
       - /dev/nvidia-uvm:/dev/nvidia-uvm
-    #devices:
-    #  - /dev/bus/usb:/dev/bus/usb  # Passes the USB Coral, needs to be modified for other versions
-    #  - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /opt/yolo_workspace/input:/workspace/input:rw
@@ -84,6 +58,7 @@ services:
     environment:
       NVIDIA_VISIBLE_DEVICES: "all"  # Makes all GPUs available
       NVIDIA_DRIVER_CAPABILITIES: "compute,video,utility"  # Enables video encoding/decoding
+      PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
     command: >
         bash -c "
         echo 'Checking input folder...' &&
