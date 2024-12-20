@@ -4,18 +4,11 @@ services:
     container_name: frigate
     privileged: true
     restart: unless-stopped
+    # Release URL https://github.com/blakeblackshear/frigate/releases
     #image: ghcr.io/blakeblackshear/frigate:stable
     image: ghcr.io/blakeblackshear/frigate:stable-tensorrt
-    
-    # Release URL https://github.com/blakeblackshear/frigate/releases
-    #image: ghcr.io/blakeblackshear/frigate:0.14.0-rc2-tensorrt
-    #image: ghcr.io/blakeblackshear/frigate:0.14.1-tensorrt
-    #image: ghcr.io/blakeblackshear/frigate:0.15.0-beta3-tensorrt
+
     runtime: nvidia  # Add this line for NVIDIA GPU runtime support
-    #command: >
-    #  /bin/sh -c "
-    #  pip install pyyaml &&
-    #  frigate"
       
     #deploy:
     #  resources:
@@ -26,11 +19,12 @@ services:
     #          #count: 1 # number of GPUs
     #          count: all
     #          capabilities: [gpu]    
+    
     shm_size: "512mb" # update for your cameras based on the calculation above
     devices:
       - /dev/bus/usb:/dev/bus/usb  # Passes the USB Coral, needs to be modified for other versions
       
-      #- /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
+      - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
       ##- /dev/dri/card0:/dev/dri/card0
 
       - /dev/dri:/dev/dri  # For hardware acceleration
@@ -41,11 +35,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /opt/frigate/config:/config:rw # Used to store the Frigate config file and sqlite database. You will also see a few files alongside the database file while Frigate is running.
       - /NVR_Storage_20TB:/media/frigate:rw
-      #- /opt/ffmpeg-nvidia/ffmpeg-nvidia-binaries/bin:/usr/local/bin:ro
-      #- /opt/ffmpeg-nvidia/ffmpeg-nvidia-binaries/lib:/usr/local/lib:ro
-
-
-      #- /mnt/pve/NVR_Storage_20TB:/media/frigate:rw
 
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
         target: /tmp/cache
