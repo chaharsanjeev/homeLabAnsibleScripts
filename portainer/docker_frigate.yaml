@@ -11,7 +11,6 @@ services:
     #image: ghcr.io/blakeblackshear/frigate:0.14.0-rc2-tensorrt
     #image: ghcr.io/blakeblackshear/frigate:0.14.1-tensorrt
     #image: ghcr.io/blakeblackshear/frigate:0.15.0-beta3-tensorrt
-
     runtime: nvidia  # Add this line for NVIDIA GPU runtime support
     command: >
       /bin/sh -c "
