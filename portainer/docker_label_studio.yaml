@@ -1,0 +1,61 @@
+# Docker Compose file for Label Studio with PostgreSQL database and persistent storage
+# Version 3.8 supports all modern Docker Compose features
+version: "3.8"
+
+services:
+  # Label Studio service configuration
+  label_studio:
+    image: heartexlabs/label-studio:latest       # Official Label Studio Docker image from Heartex
+    container_name: label_studio                 # Name of the container for easy identification
+    restart: always                              # Automatically restart the container if it crashes
+    ports:
+      - "8030:8080"                              # Map host port 8030 to container port 8080
+      # Explanation:
+      # - 8030 (host): Accessible on the host machine (e.g., http://localhost:8030)
+      # - 8080 (container): Internal port where Label Studio listens
+    environment:
+      - LABEL_STUDIO_HOST=0.0.0.0                # Bind Label Studio to all network interfaces
+      - LABEL_STUDIO_PORT=8080                   # Internal port for Label Studio service
+      - DJANGO_DB=postgresql                     # Specify PostgreSQL as the database
+      - POSTGRE_NAME=labelstudio                 # PostgreSQL database name
+      - POSTGRE_USER=labelstudio_user            # PostgreSQL username
+      - POSTGRE_PASSWORD=labelstudio_password    # PostgreSQL password
+      - POSTGRE_HOST=postgres                    # PostgreSQL service hostname (defined in this file)
+      - POSTGRE_PORT=5432                        # PostgreSQL service port
+      - LABEL_STUDIO_LOG_LEVEL=INFO              # Set log level for debugging (e.g., DEBUG, INFO, WARNING)
+    depends_on:
+      postgres:                                  # Ensure PostgreSQL starts first and is ready
+        condition: service_healthy               # Wait for PostgreSQL healthcheck to pass before starting
+    volumes:
+      - /opt/label_studio/label_studio_data:/label-studio/data   # Persistent storage for project data
+      - /opt/label_studio/label_studio_logs:/label-studio/logs   # Persistent storage for log files
+      # Explanation:
+      # - Host folders (/opt/label_studio/label_studio_data and logs) are mapped to container paths
+      # - This ensures data and logs persist even if the container is removed or recreated
+
+  # PostgreSQL database service configuration
+  postgres:
+    image: postgres:13                           # Use PostgreSQL version 13
+    container_name: label_studio_postgres        # Name of the PostgreSQL container
+    restart: always                              # Automatically restart on failure
+    environment:
+      POSTGRES_DB: labelstudio                   # Name of the database to be created
+      POSTGRES_USER: labelstudio_user            # Username for the database
+      POSTGRES_PASSWORD: labelstudio_password    # Password for the database user
+    ports:
+      - "5432:5432"                              # Map host port 5432 to PostgreSQL port 5432 in the container
+      # Explanation:
+      # - 5432 (host): Used for database connections on the host machine
+      # - 5432 (container): Internal PostgreSQL service port
+    volumes:
+      - /opt/label_studio/postgres_data:/var/lib/postgresql/data # Persistent storage for PostgreSQL data
+      # Explanation:
+      # - PostgreSQL database files will persist in the host folder `/opt/label_studio/postgres_data`
+      # - Ensures database data is not lost if the container is recreated
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U labelstudio_user -d labelstudio"] # Check PostgreSQL readiness
+      interval: 5s                                # Check every 5 seconds
+      retries: 5                                  # Retry 5 times before failing
+
+# Define the volumes being used for persistence
+volumes: {}  # Empty volumes section since we are using local host folders instead of named volumes
