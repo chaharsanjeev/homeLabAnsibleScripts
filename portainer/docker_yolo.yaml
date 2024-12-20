@@ -1,0 +1,86 @@
+version: "3.8"
+
+services:
+  yolo_engine:
+    image: ultralytics/ultralytics:latest
+    container_name: ultralytics_yolo
+    privileged: true
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              #device_ids: ['0'] # this is only needed when using multiple GPUs
+              #count: 1 # number of GPUs
+              count: all
+              capabilities: [gpu]    
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+    healthcheck:
+      test: ["CMD-SHELL", "ls /workspace && echo 'YOLO Engine Ready'"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+    devices:
+      - /dev/bus/usb:/dev/bus/usb  # Passes the USB Coral, needs to be modified for other versions
+      - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
+    volumes:
+      - /opt/yolo_workspace/input:/workspace/input:rw
+      - /opt/yolo_workspace/results:/workspace/results:rw
+      - /etc/localtime:/etc/localtime:ro
+    command: bash -c "echo 'YOLO Engine Ready' && sleep infinity"
+
+  yolo_api:
+    image: ultralytics/ultralytics:latest
+    container_name: yolo_api_service
+    privileged: true
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              #device_ids: ['0'] # this is only needed when using multiple GPUs
+              #count: 1 # number of GPUs
+              count: all
+              capabilities: [gpu]    
+    ports:
+      - "8042:8000"
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+    depends_on:
+      yolo_engine:
+        condition: service_healthy
+    devices:
+      - /dev/bus/usb:/dev/bus/usb  # Passes the USB Coral, needs to be modified for other versions
+      - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/yolo_workspace/input:/workspace/input:rw
+      - /opt/yolo_workspace/results:/workspace/results:rw
+      - /opt/yolo_workspace/templates:/workspace/templates:ro  # Mount templates folder
+      - /opt/yolo_workspace/custom_models:/workspace/custom_models:rw  # Mount custom_models folder
+      - /opt/yolo_workspace/standard_models:/workspace/models:ro  # Mount OOB standard_models folder
+      - /opt/yolo_workspace/app.py:/workspace/app.py:ro  # Mount app.py file
+      - /opt/yolo_workspace/trained_models:/workspace/trained_models:rw
+    working_dir: /workspace
+    command: >
+        bash -c "
+        echo 'Checking input folder...' &&
+        if [ -z \"\$(find /workspace/input -type f)\" ]; then
+          echo 'ERROR: Input folder is empty or files are not accessible.' &&
+          ls -la /workspace/input &&
+          exit 1;
+        fi &&
+        echo 'Installing FastAPI and Ultralytics dependencies...' &&
+        python3 -m venv /workspace/venv &&
+        echo 'Virtual environment created.' &&
+        ./venv/bin/pip install --upgrade pip &&
+        ./venv/bin/pip install --no-cache-dir --root-user-action=ignore fastapi uvicorn pillow python-multipart ultralytics albumentations opencv-python-headless &&
+        echo 'Dependencies installed successfully.' &&
+        echo 'Starting FastAPI server...' &&
+        ./venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000 --workers 4 --reload
+        "
