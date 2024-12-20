@@ -16,6 +16,7 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - /opt/jellyfin/config:/config
       - /opt/jellyfin/cache:/cache
       - /NAS_Videos:/media
@@ -23,3 +24,6 @@ services:
       - "8096:8096" # HTTP Web UI
       - "8920:8920" # HTTPS Web UI
     restart: unless-stopped
+    #Optional - may be necessary for docker healthcheck to pass if running in host network mode
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
