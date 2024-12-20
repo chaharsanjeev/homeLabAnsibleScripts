@@ -15,7 +15,7 @@ services:
     runtime: nvidia  # Add this line for NVIDIA GPU runtime support
     command: >
       /bin/sh -c "
-      pip install pyyaml && 
+      pip install pyyaml &&
       frigate"
       
     #deploy:
