@@ -5,6 +5,7 @@ services:
     container_name: jellyfin
     privileged: true
     runtime: nvidia
+    network_mode: 'host'
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128 # Intel hardware acceleration (update for your hardware)
       - /dev/dri:/dev/dri                       # General hardware acceleration
