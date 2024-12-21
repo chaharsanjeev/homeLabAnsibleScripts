@@ -19,7 +19,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /opt/frigate/config:/config:rw # Used to store the Frigate config file and sqlite database. You will also see a few files alongside the database file while Frigate is running.
-      - /NVR_Storage_20TB:/media/frigate:rw
+      #- /NVR_Storage_20TB:/media/frigate:rw
+      - /Proxmox_NVR_Storage:/media/frigate:rw
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
         target: /tmp/cache
         tmpfs:
