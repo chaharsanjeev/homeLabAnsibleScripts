@@ -6,68 +6,66 @@ services:
     container_name: ultralytics_yolo
     privileged: true
     restart: unless-stopped
-    runtime: nvidia  # Add this line for NVIDIA GPU runtime support
+    runtime: nvidia  # NVIDIA GPU runtime support
     healthcheck:
-      test: ["CMD-SHELL", "ls /workspace && echo 'YOLO Engine Ready'"]
+      test: ["CMD-SHELL", "[ -d /yolo_workspace ] && echo 'YOLO Engine Ready'"]
       interval: 10s
       retries: 5
       timeout: 5s
     devices:
-      - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
-      - /dev/dri:/dev/dri  # For hardware acceleration
-      - /dev/nvidia0:/dev/nvidia0  # NVIDIA device
+      - /dev/dri/renderD128:/dev/dri/renderD128  # Intel hardware acceleration
+      - /dev/dri:/dev/dri                        # General hardware acceleration
+      - /dev/nvidia0:/dev/nvidia0                # NVIDIA device
       - /dev/nvidiactl:/dev/nvidiactl
       - /dev/nvidia-uvm:/dev/nvidia-uvm
     volumes:
-      - /opt/yolo_workspace/input:/workspace/input:rw
-      - /opt/yolo_workspace/results:/workspace/results:rw
+      - /opt/yolo_workspace/input:/yolo_workspace/input:rw
+      - /opt/yolo_workspace/results:/yolo_workspace/results:rw
       - /etc/localtime:/etc/localtime:ro
-    command: bash -c "echo 'YOLO Engine Ready' && sleep infinity"
     environment:
-      NVIDIA_VISIBLE_DEVICES: "all"  # Makes all GPUs available
-      NVIDIA_DRIVER_CAPABILITIES: "compute,video,utility"  # Enables video encoding/decoding
+      NVIDIA_VISIBLE_DEVICES: "all"  # Enable all GPUs
+      NVIDIA_DRIVER_CAPABILITIES: "compute,video,utility"
       PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
-     
+    command: bash -c "echo 'YOLO Engine Ready' && sleep infinity"
+
   yolo_api:
     image: ultralytics/ultralytics:latest
     container_name: yolo_api_service
     privileged: true
     restart: unless-stopped
-    runtime: nvidia  # Add this line for NVIDIA GPU runtime support
+    runtime: nvidia
     ports:
       - "8042:8000"
     depends_on:
       yolo_engine:
         condition: service_healthy
     devices:
-      - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
-      - /dev/dri:/dev/dri  # For hardware acceleration
-      - /dev/nvidia0:/dev/nvidia0  # NVIDIA device
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri:/dev/dri
+      - /dev/nvidia0:/dev/nvidia0
       - /dev/nvidiactl:/dev/nvidiactl
       - /dev/nvidia-uvm:/dev/nvidia-uvm
     volumes:
+      - /opt/yolo_workspace/input:/yolo_workspace/input:rw
+      - /opt/yolo_workspace/results:/yolo_workspace/results:rw
+      - /opt/yolo_workspace/templates:/yolo_workspace/templates:ro
+      - /opt/yolo_workspace/custom_models:/yolo_workspace/custom_models:rw
+      - /opt/yolo_workspace/standard_models:/yolo_workspace/models:ro
+      - /opt/yolo_workspace/app.py:/yolo_workspace/app.py:ro
+      - /opt/yolo_workspace/trained_models:/yolo_workspace/trained_models:rw
       - /etc/localtime:/etc/localtime:ro
-      - /opt/yolo_workspace/input:/workspace/input:rw
-      - /opt/yolo_workspace/results:/workspace/results:rw
-      - /opt/yolo_workspace/templates:/workspace/templates:ro  # Mount templates folder
-      - /opt/yolo_workspace/custom_models:/workspace/custom_models:rw  # Mount custom_models folder
-      - /opt/yolo_workspace/standard_models:/workspace/models:ro  # Mount OOB standard_models folder
-      - /opt/yolo_workspace/app.py:/workspace/app.py:ro  # Mount app.py file
-      - /opt/yolo_workspace/trained_models:/workspace/trained_models:rw
-    working_dir: /workspace
     environment:
-      NVIDIA_VISIBLE_DEVICES: "all"  # Makes all GPUs available
-      NVIDIA_DRIVER_CAPABILITIES: "compute,video,utility"  # Enables video encoding/decoding
+      NVIDIA_VISIBLE_DEVICES: "all"
+      NVIDIA_DRIVER_CAPABILITIES: "compute,video,utility"
       PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
+    working_dir: /yolo_workspace
     command: >
-        bash -c "
-        echo 'Checking input folder...' &&
-        echo 'Installing FastAPI and Ultralytics dependencies...' &&
-        python3 -m venv /workspace/venv &&
-        echo 'Virtual environment created.' &&
-        ./venv/bin/pip install --upgrade pip &&
-        ./venv/bin/pip install --no-cache-dir --root-user-action=ignore fastapi uvicorn pillow python-multipart ultralytics albumentations opencv-python-headless &&
-        echo 'Dependencies installed successfully.' &&
-        echo 'Starting FastAPI server...' &&
-        ./venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000 --workers 4 --reload
-        "
+      bash -c "
+      echo 'Setting up YOLO API...' &&
+      python3 -m venv /yolo_workspace/venv &&
+      /yolo_workspace/venv/bin/pip install --upgrade pip &&
+      /yolo_workspace/venv/bin/pip install --no-cache-dir fastapi uvicorn pillow python-multipart ultralytics albumentations opencv-python-headless &&
+      echo 'Dependencies installed successfully.' &&
+      echo 'Starting FastAPI server...' &&
+      /yolo_workspace/venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000 --workers 4 --reload
+      "
