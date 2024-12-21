@@ -11,3 +11,5 @@ services:
       - ZONE=sanjeevchahar.com
       - SUBDOMAIN=gateway
       - PROXIED=false
+      - TZ=America/Phoenix
+
