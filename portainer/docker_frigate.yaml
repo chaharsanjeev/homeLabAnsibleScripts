@@ -43,7 +43,7 @@ services:
     command: >
       bash -c "
       echo '#!/bin/bash
-      exec -a frigate /usr/lib/btbn-ffmpeg/bin/ffmpeg \"\$@\"' > /config/run_frigate.sh &&
+      /usr/lib/btbn-ffmpeg/bin/ffmpeg \"\$@\"' > /config/run_frigate.sh &&
       chmod +x /config/run_frigate.sh &&
       /config/run_frigate.sh
       "
