@@ -46,3 +46,4 @@ services:
       exec -a frigate /usr/bin/ffmpeg \"\$@\"' > /config/run_frigate.sh &&
       chmod +x /config/run_frigate.sh &&
       /config/run_frigate.sh
+      "
