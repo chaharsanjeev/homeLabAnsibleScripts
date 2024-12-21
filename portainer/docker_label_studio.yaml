@@ -32,6 +32,7 @@ services:
       - LABEL_STUDIO_LOG_LEVEL=INFO              # Set log level for debugging (e.g., DEBUG, INFO, WARNING)
       - NVIDIA_VISIBLE_DEVICES= "all"  # Makes all GPUs available
       - NVIDIA_DRIVER_CAPABILITIES= "compute,video,utility"  # Enables video encoding/decoding
+      - LABEL_STUDIO_HOST=http://0.0.0.0
     depends_on:
       postgres:                                  # Ensure PostgreSQL starts first and is ready
         condition: service_healthy               # Wait for PostgreSQL healthcheck to pass before starting
