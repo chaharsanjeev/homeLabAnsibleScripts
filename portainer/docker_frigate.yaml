@@ -40,10 +40,10 @@ services:
       ONNX_DISABLE_AFFINITY: "1"
       NVIDIA_VISIBLE_DEVICES: "all"  # Makes all GPUs available
       NVIDIA_DRIVER_CAPABILITIES: "compute,video,utility"  # Enables video encoding/decoding
-    #command: >
-    #  bash -c "
-    #  echo '#!/bin/bash
-    #  exec -a frigate /usr/bin/ffmpeg \"\$@\"' > /config/run_frigate.sh &&
-    #  chmod +x /config/run_frigate.sh &&
-    #  /config/run_frigate.sh
-    #  "
+    command: >
+      bash -c "
+      echo '#!/bin/bash
+      exec -a frigate /usr/lib/btbn-ffmpeg/bin/ffmpeg \"\$@\"' > /config/run_frigate.sh &&
+      chmod +x /config/run_frigate.sh &&
+      /config/run_frigate.sh
+      "
